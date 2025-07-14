@@ -120,6 +120,7 @@ const FlexibleSearch: React.FC<FlexibleSearchProps> = ({
                     onChange={(date: Date | null) => date && setFlexibleDates({ ...flexibleDates, month: date })}
                     dateFormat="MMMM yyyy"
                     showMonthYearPicker
+                    locale={fr}
                     className="w-full p-3 border border-gray-300 rounded-lg"
                   />
                 </div>
@@ -156,7 +157,7 @@ const FlexibleSearch: React.FC<FlexibleSearchProps> = ({
 
               {/* Calendrier des prix */}
               <div className="bg-gray-50 rounded-lg p-6">
-                <h4 className="font-semibold mb-4">Meilleurs prix pour {format(flexibleDates.month, 'MMMM yyyy',)}</h4>
+                <h4 className="font-semibold mb-4">Meilleurs prix pour {format(flexibleDates.month, 'MMMM yyyy', { locale: fr })}</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3">
                   {generateFlexibleDates().map((dateOption, index) => (
                     <div
@@ -174,7 +175,7 @@ const FlexibleSearch: React.FC<FlexibleSearchProps> = ({
                     >
                       <div className="text-center">
                         <div className="text-sm text-gray-600">
-                          {format(dateOption.departure, 'dd MMM', )}
+                          {format(dateOption.departure, 'dd MMM', { locale: fr })}
                         </div>
                         <div className="text-xs text-gray-500 mb-2">
                           {flexibleDates.duration} jours

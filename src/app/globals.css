@@ -60,206 +60,191 @@
   }
 
   .pulse-glow {
-    @apply animate-pulse;
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    @apply animate-pulse shadow-glow;
   }
 }
 
-.search-tab-active {
-  @apply text-blue-600 border-blue-600 bg-blue-50;
-}
+@layer utilities {
+  .search-tab-active {
+    @apply text-blue-600 border-blue-600 bg-blue-50;
+  }
 
-.search-tab-inactive {
-  @apply text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50;
-}
+  .search-tab-inactive {
+    @apply text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50;
+  }
 
-.hero-section {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(147, 51, 234, 0.8) 100%);
-  position: relative;
-}
-
-.hero-bg {
-  background-image: url('https://images.pexels.com/photos/3769138/pexels-photo-3769138.jpeg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
-}
-
-.destination-card {
-  position: relative;
-  overflow: hidden;
-}
-
-.destination-card::before {
-  content: '';
-  @apply absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 transition-opacity duration-300;
-}
-
-.destination-card:hover::before {
-  @apply opacity-80;
-}
-
-.destination-card::after {
-  content: '';
-  @apply absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 opacity-0 transition-opacity duration-300;
-}
-
-.destination-card:hover::after {
-  @apply opacity-100;
-}
-
-/* Animations optimisées */
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(1deg); }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-.shimmer {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-}
-
-/* Optimisations responsive */
-@media (max-width: 640px) {
   .hero-section {
-    background-attachment: scroll;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(147, 51, 234, 0.8) 100%);
+    position: relative;
   }
 
-  .input-field {
-    font-size: 16px; /* Prevent zoom on iOS */
+  .hero-bg {
+    background-image: url('https://images.pexels.com/photos/3769138/pexels-photo-3769138.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
   }
-  
-  .floating-animation {
-    animation: none; /* Disable animations on mobile for performance */
+
+  .destination-card {
+    position: relative;
+    overflow: hidden;
   }
-}
 
-/* Date picker optimisé */
-.react-datepicker-wrapper {
-  width: 100%;
-}
+  .destination-card::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 transition-opacity duration-300;
+  }
 
-.react-datepicker {
-  @apply font-inter border-gray-200 rounded-xl shadow-xl !important;
-}
+  .destination-card:hover::before {
+    @apply opacity-80;
+  }
 
-.react-datepicker__header {
-  @apply bg-gradient-to-r from-blue-50 to-purple-50 border-gray-200 rounded-t-xl !important;
-}
+  .destination-card::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 opacity-0 transition-opacity duration-300;
+  }
 
-.react-datepicker__day--selected {
-  @apply bg-blue-600 hover:bg-blue-700 !important;
-}
+  .destination-card:hover::after {
+    @apply opacity-100;
+  }
 
-.react-datepicker__day--keyboard-selected {
-  @apply bg-blue-100 text-blue-900 !important;
-}
+  /* Animations supplémentaires */
+  .shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
 
-.react-datepicker__day:hover {
-  @apply bg-blue-50 !important;
-}
+  .animate-in {
+    animation: fadeIn 200ms ease-out;
+  }
 
-.react-datepicker__day--today {
-  @apply bg-blue-100 text-blue-900 font-semibold !important;
-}
+  .slide-in-from-top-2 {
+    animation: slideInFromTop 200ms ease-out;
+  }
 
-/* Scrollbar optimisé */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
+  /* Optimisations responsive */
+  @media (max-width: 640px) {
+    .hero-section {
+      background-attachment: scroll;
+    }
 
-::-webkit-scrollbar-track {
-  @apply bg-gray-100 rounded-full;
-}
+    .input-field {
+      font-size: 16px; /* Prevent zoom on iOS */
+    }
+    
+    .floating-animation {
+      animation: none; /* Disable animations on mobile for performance */
+    }
+  }
 
-::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 rounded-full hover:bg-gray-400;
-}
+  /* Date picker styles */
+  .react-datepicker-wrapper {
+    width: 100%;
+  }
 
-/* Loading states optimisés */
-.skeleton {
-  @apply bg-gray-200 rounded animate-pulse;
-}
+  .react-datepicker {
+    @apply font-inter border-gray-200 rounded-xl shadow-xl !important;
+  }
 
-/* Focus styles optimisés */
-.focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
-}
+  .react-datepicker__header {
+    @apply bg-gradient-to-r from-blue-50 to-purple-50 border-gray-200 rounded-t-xl !important;
+  }
 
-/* Transitions optimisées */
-.smooth-transition {
-  @apply transition-all duration-200 ease-in-out;
-}
+  .react-datepicker__day--selected {
+    @apply bg-blue-600 hover:bg-blue-700 !important;
+  }
 
-/* Shadows optimisées */
-.shadow-soft {
-  box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
-}
+  .react-datepicker__day--keyboard-selected {
+    @apply bg-blue-100 text-blue-900 !important;
+  }
 
-.shadow-strong {
-  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
+  .react-datepicker__day:hover {
+    @apply bg-blue-50 !important;
+  }
 
-/* Éléments interactifs optimisés */
-.interactive-element {
-  @apply cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95;
-}
+  .react-datepicker__day--today {
+    @apply bg-blue-100 text-blue-900 font-semibold !important;
+  }
 
-/* Indicateurs de statut */
-.status-online {
-  @apply bg-green-500;
-  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #10b981;
-}
+  /* Scrollbar personnalisée */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
 
-.status-busy {
-  @apply bg-red-500;
-  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #ef4444;
-}
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 rounded-full;
+  }
 
-/* Highlight prix */
-.price-highlight {
-  @apply relative;
-}
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full hover:bg-gray-400;
+  }
 
-.price-highlight::before {
-  content: '';
-  @apply absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-lg opacity-20 animate-pulse;
-}
+  /* Loading states */
+  .skeleton {
+    @apply bg-gray-200 rounded animate-pulse;
+  }
 
-/* Optimisations pour les performances */
-.will-change-transform {
-  will-change: transform;
-}
+  /* Focus styles */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  }
 
-.will-change-opacity {
-  will-change: opacity;
-}
+  /* Transitions */
+  .smooth-transition {
+    @apply transition-all duration-200 ease-in-out;
+  }
 
-.gpu-accelerated {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000px;
-}
+  /* Indicateurs de statut */
+  .status-online {
+    @apply bg-green-500;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #10b981;
+  }
 
-/* Préchargement des images critiques */
-.preload-image {
-  content: url('https://images.pexels.com/photos/3769138/pexels-photo-3769138.jpeg');
-  position: absolute;
-  left: -9999px;
-  top: -9999px;
-  width: 1px;
-  height: 1px;
+  .status-busy {
+    @apply bg-red-500;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #ef4444;
+  }
+
+  /* Highlight prix */
+  .price-highlight {
+    @apply relative;
+  }
+
+  .price-highlight::before {
+    content: '';
+    @apply absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-lg opacity-20 animate-pulse;
+  }
+
+  /* Optimisations pour les performances */
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .will-change-opacity {
+    will-change: opacity;
+  }
+
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Préchargement des images critiques */
+  .preload-image {
+    content: url('https://images.pexels.com/photos/3769138/pexels-photo-3769138.jpeg');
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    width: 1px;
+    height: 1px;
+  }
 }
