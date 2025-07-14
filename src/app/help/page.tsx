@@ -1,6 +1,8 @@
 import React from 'react';
 import { Metadata } from 'next';
 import { MessageCircle, Phone, Mail, Book, CreditCard, Plane, Building, Shield, Clock, ChevronRight, Search } from 'lucide-react';
+import QuickActionCard from '@/components/QuickActionCard';
+import FAQItem from '@/components/FAQItem';
 
 export const metadata: Metadata = {
   title: 'Centre d\'Aide - Alboraq | Support 24/7',
@@ -218,32 +220,6 @@ export default function HelpPage() {
   );
 }
 
-interface QuickActionCardProps {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  action: string;
-  variant: 'primary' | 'secondary' | 'tertiary';
-}
-
-const QuickActionCard: React.FC<QuickActionCardProps> = ({ icon, title, description, action, variant }) => {
-  const variants = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700',
-    secondary: 'bg-green-600 text-white hover:bg-green-700',
-    tertiary: 'bg-purple-600 text-white hover:bg-purple-700'
-  };
-
-  return (
-    <div className={`rounded-2xl p-6 text-center shadow-lg transition-all hover:scale-105 ${variants[variant]}`}>
-      <div className="flex justify-center mb-4">{icon}</div>
-      <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <p className="mb-4 opacity-90">{description}</p>
-      <button className="bg-white/20 backdrop-blur px-6 py-2 rounded-lg font-medium hover:bg-white/30 transition-colors">
-        {action}
-      </button>
-    </div>
-  );
-};
 
 interface TopicCardProps {
   icon: React.ReactNode;
@@ -270,31 +246,6 @@ const TopicCard: React.FC<TopicCardProps> = ({ icon, title, topics }) => (
   </div>
 );
 
-interface FAQItemProps {
-  question: string;
-  answer: string;
-}
-
-const FAQItem: React.FC<FAQItemProps> = ({ question, answer }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
-
-  return (
-    <div className="border border-gray-200 rounded-lg">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
-      >
-        <span className="font-medium">{question}</span>
-        <ChevronRight className={`transform transition-transform ${isOpen ? 'rotate-90' : ''}`} size={20} />
-      </button>
-      {isOpen && (
-        <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
-          <p className="text-gray-600">{answer}</p>
-        </div>
-      )}
-    </div>
-  );
-};
 
 interface GuideCardProps {
   icon: React.ReactNode;
