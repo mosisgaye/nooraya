@@ -1,5 +1,7 @@
 'use client';
 
+'use client';
+
 import React from 'react';
 import { Key, Plane, Shield, Headphones, Clock, CreditCard } from 'lucide-react';
 

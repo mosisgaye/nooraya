@@ -1,5 +1,7 @@
 'use client';
 
+'use client';
+
 import React, { useState, useEffect, lazy, Suspense, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plane, Building, Calendar, Users, ArrowRightLeft, Search, MapPin, Sparkles, TrendingUp } from 'lucide-react';

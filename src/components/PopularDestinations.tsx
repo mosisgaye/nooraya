@@ -1,5 +1,7 @@
 'use client';
 
+'use client';
+
 import React, { useState, memo } from 'react';
 import { Map, ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';

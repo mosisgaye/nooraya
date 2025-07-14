@@ -1,5 +1,7 @@
 'use client';
 
+'use client';
+
 import React from 'react';
 import { Tag, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
