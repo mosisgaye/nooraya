@@ -21,6 +21,7 @@
     "@types/date-fns": "^2.5.3",
     "@types/node": "^20",
     "@types/react": "^19",
+    "@types/react-datepicker": "^4.19.5",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.21",
     "eslint": "^9",

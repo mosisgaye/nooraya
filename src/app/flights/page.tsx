@@ -151,7 +151,6 @@ export default function FlightsPage() {
                     onChange={(date: Date | null) => setDepartureDate(date)}
                     dateFormat="dd/MM/yyyy"
                     minDate={new Date()}
-                    
                     placeholderText="Sélectionner une date"
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
@@ -171,7 +170,6 @@ export default function FlightsPage() {
                       onChange={(date: Date | null) => setReturnDate(date)}
                       dateFormat="dd/MM/yyyy"
                       minDate={departureDate || new Date()}
-                    
                       placeholderText="Sélectionner une date"
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />

@@ -3,9 +3,8 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Plane, Filter, SortAsc, Star, Wifi, Coffee, Plus, Bell, Map, BarChart3 } from 'lucide-react';
+import { Filter, SortAsc, Bell, Map, BarChart3 } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import FlightCard from '@/components/FlightCard';
 
 // Dynamic imports pour les composants lourds
@@ -52,6 +51,23 @@ interface ComparisonItem {
   data: Flight;
 }
 
+// Interface pour les filtres (alignée avec AdvancedFilters)
+interface FilterState {
+  priceRange: [number, number];
+  stops?: number[];
+  airlines?: string[];
+  departureTime?: string[];
+  arrivalTime?: string[];
+  duration?: [number, number];
+  airports?: string[];
+  stars?: number[];
+  rating?: number;
+  amenities?: string[];
+  propertyTypes?: string[];
+  districts?: string[];
+  guestRating?: number;
+}
+
 // Composant principal avec Suspense
 export default function FlightResultsPage() {
   return (
@@ -77,7 +93,9 @@ function FlightResultsContent() {
   const [flights, setFlights] = useState<Flight[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('price');
-  const [filters, setFilters] = useState({
+  
+  // État des filtres avec le bon type
+  const [filters, setFilters] = useState<FilterState>({
     priceRange: [0, 2000],
     stops: [],
     airlines: [],
@@ -97,13 +115,15 @@ function FlightResultsContent() {
 
   // Récupérer les paramètres de recherche
   const searchData = {
-    from: searchParams.get('from'),
-    to: searchParams.get('to'),
-    departureDate: searchParams.get('departureDate'),
-    returnDate: searchParams.get('returnDate'),
-    passengers: searchParams.get('passengers'),
-    cabinClass: searchParams.get('cabinClass'),
-    tripType: searchParams.get('tripType')
+    from: searchParams.get('from') || undefined,
+    to: searchParams.get('to') || undefined,
+    departureDate: searchParams.get('departureDate') || undefined,
+    returnDate: searchParams.get('returnDate') || undefined,
+    passengers: searchParams.get('passengers') || undefined,
+    cabinClass: searchParams.get('cabinClass') || undefined,
+    tripType: searchParams.get('tripType') || undefined,
+    destination: undefined,
+    flexible: false
   };
 
   useEffect(() => {
