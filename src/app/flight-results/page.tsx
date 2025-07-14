@@ -3,8 +3,9 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Plane, Clock, ArrowRight, Filter, SortAsc, Star, Wifi, Coffee, Plus, Bell, Map, BarChart3 } from 'lucide-react';
+import { Plane, Filter, SortAsc, Star, Wifi, Coffee, Plus, Bell, Map, BarChart3 } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 
 // Dynamic imports pour les composants lourds
 const AdvancedFilters = dynamic(() => import('@/components/AdvancedFilters'), { 
@@ -44,6 +45,12 @@ interface Flight {
   amenities: string[];
 }
 
+interface ComparisonItem {
+  id: string;
+  type: "flight" | "hotel";
+  data: Flight;
+}
+
 // Composant principal avec Suspense
 export default function FlightResultsPage() {
   return (
@@ -81,7 +88,7 @@ function FlightResultsContent() {
   
   // États pour les nouvelles fonctionnalités
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-  const [comparisonItems, setComparisonItems] = useState<any[]>([]);
+  const [comparisonItems, setComparisonItems] = useState<ComparisonItem[]>([]);
   const [showComparison, setShowComparison] = useState(false);
   const [showPriceAlerts, setShowPriceAlerts] = useState(false);
   const [showFlexibleSearch, setShowFlexibleSearch] = useState(false);
@@ -387,7 +394,9 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, onAddToComparison, isIn
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
         <div className="flex-1">
           <div className="flex items-center mb-4">
-            <img src={flight.logo} alt={flight.airline} className="w-8 h-8 mr-3" />
+            <div className="relative w-8 h-8 mr-3">
+              <Image src={flight.logo} alt={flight.airline} fill className="object-contain" />
+            </div>
             <span className="font-medium text-gray-900">{flight.airline}</span>
             <span className="ml-2 text-sm text-gray-500">{flight.cabinClass}</span>
           </div>

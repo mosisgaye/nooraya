@@ -14,10 +14,18 @@ interface PriceAlert {
   notificationMethod: 'email' | 'sms' | 'both';
 }
 
+interface SearchDataProps {
+  type: 'flight' | 'hotel';
+  from?: string | null;
+  to?: string | null;
+  destination?: string | null;
+  currentPrice?: number;
+}
+
 interface PriceAlertsProps {
   isOpen: boolean;
   onClose: () => void;
-  searchData?: any;
+  searchData?: SearchDataProps;
 }
 
 const PriceAlerts: React.FC<PriceAlertsProps> = ({ isOpen, onClose, searchData }) => {
@@ -56,7 +64,7 @@ const PriceAlerts: React.FC<PriceAlertsProps> = ({ isOpen, onClose, searchData }
       id: Date.now().toString(),
       type: searchData.type || 'flight',
       route: searchData.type === 'flight' ? `${searchData.from} → ${searchData.to}` : undefined,
-      destination: searchData.type === 'hotel' ? searchData.destination : undefined,
+      destination: searchData.type === 'hotel' ? searchData.destination || undefined : undefined,
       targetPrice: Number(newAlert.targetPrice),
       currentPrice: searchData.currentPrice || 200,
       isActive: true,
@@ -133,7 +141,7 @@ const PriceAlerts: React.FC<PriceAlertsProps> = ({ isOpen, onClose, searchData }
                     onClick={handleCreateAlert}
                     className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
                   >
-                    Créer l'alerte
+                    Créer l&apos;alerte
                   </button>
                 </div>
               </div>

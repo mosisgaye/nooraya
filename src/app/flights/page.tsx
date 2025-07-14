@@ -5,12 +5,14 @@ import { useRouter } from 'next/navigation';
 import { Calendar, Users, Search, MapPin } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
 import "react-datepicker/dist/react-datepicker.css";
+import Image from 'next/image';
+
+type TripType = 'round-trip' | 'one-way' | 'multi-city';
 
 export default function FlightsPage() {
   const router = useRouter();
-  const [tripType, setTripType] = useState<'round-trip' | 'one-way' | 'multi-city'>('round-trip');
+  const [tripType, setTripType] = useState<TripType>('round-trip');
   const [departureDate, setDepartureDate] = useState<Date | null>(null);
   const [returnDate, setReturnDate] = useState<Date | null>(null);
   const [passengers, setPassengers] = useState({
@@ -35,7 +37,11 @@ export default function FlightsPage() {
     };
     
     // Créer les query params
-    const queryString = new URLSearchParams(searchParams as any).toString();
+    const queryString = new URLSearchParams(
+      Object.fromEntries(
+        Object.entries(searchParams).map(([key, value]) => [key, String(value)])
+      )
+    ).toString();
     router.push(`/flight-results?${queryString}`);
   };
 
@@ -67,7 +73,7 @@ export default function FlightsPage() {
                 name="tripType"
                 value="round-trip"
                 checked={tripType === 'round-trip'}
-                onChange={(e) => setTripType(e.target.value as 'round-trip' | 'one-way' | 'multi-city')}
+                onChange={(e) => setTripType(e.target.value as TripType)}
                 className="mr-2"
               />
               <span className="font-medium">Aller-retour</span>
@@ -78,7 +84,7 @@ export default function FlightsPage() {
                 name="tripType"
                 value="one-way"
                 checked={tripType === 'one-way'}
-                onChange={(e) => setTripType(e.target.value as 'round-trip' | 'one-way' | 'multi-city')}
+                onChange={(e) => setTripType(e.target.value as TripType)}
                 className="mr-2"
               />
               <span className="font-medium">Aller simple</span>
@@ -89,7 +95,7 @@ export default function FlightsPage() {
                 name="tripType"
                 value="multi-city"
                 checked={tripType === 'multi-city'}
-                onChange={(e) => setTripType(e.target.value as any)}
+                onChange={(e) => setTripType(e.target.value as TripType)}
                 className="mr-2"
               />
               <span className="font-medium">Multi-destinations</span>
@@ -267,7 +273,9 @@ export default function FlightsPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {popularDestinations.map((dest) => (
             <div key={dest.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-              <img src={dest.image} alt={dest.name} className="w-full h-32 object-cover" />
+              <div className="relative h-32 w-full">
+                <Image src={dest.image} alt={dest.name} fill className="object-cover" />
+              </div>
               <div className="p-4">
                 <h3 className="font-semibold text-lg">{dest.name}</h3>
                 <p className="text-gray-600 text-sm">{dest.country}</p>

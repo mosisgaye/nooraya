@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Tag, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 interface Offer {
   id: number;
@@ -96,11 +97,14 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer }) => {
   return (
     <div className="card card-hover group">
       <div className="relative">
-        <img 
-          src={offer.image} 
-          alt={offer.destination} 
-          className="w-full h-48 object-cover"
-        />
+        <div className="relative w-full h-48">
+          <Image 
+            src={offer.image} 
+            alt={offer.destination} 
+            fill
+            className="object-cover"
+          />
+        </div>
         <div className="absolute top-3 left-3 bg-green-500 text-white text-sm font-bold px-2 py-1 rounded">
           -{offer.discount}%
         </div>
@@ -121,4 +125,4 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer }) => {
   );
 };
 
-export default SpecialOffers;  
+export default SpecialOffers;

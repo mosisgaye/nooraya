@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import SpecialOffers from '@/components/SpecialOffers';
 import { Tag, Clock, TrendingUp, Star } from 'lucide-react';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'Offres Spéciales - Alboraq | Économisez jusqu\'à 70%',
@@ -170,7 +171,7 @@ interface CategoryCardProps {
 const CategoryCard: React.FC<CategoryCardProps> = ({ title, description, image, count, discount }) => (
   <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
     <div className="relative h-48">
-      <img src={image} alt={title} className="w-full h-full object-cover" />
+      <Image src={image} alt={title} fill className="object-cover" />
       <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
         -{discount}%
       </div>

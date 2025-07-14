@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import { Calendar, Users, Search, MapPin, Star } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
 import "react-datepicker/dist/react-datepicker.css";
+import Image from 'next/image';
 
 export default function HotelsPage() {
   const router = useRouter();
@@ -28,7 +28,7 @@ export default function HotelsPage() {
       children: guests.children.toString()
     };
     
-    const queryString = new URLSearchParams().toString();
+    const queryString = new URLSearchParams(searchParams as Record<string, string>).toString();
     router.push(`/hotel-results?${queryString}`);
   };
 
@@ -190,7 +190,9 @@ export default function HotelsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {featuredHotels.map((hotel) => (
             <div key={hotel.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-              <img src={hotel.image} alt={hotel.name} className="w-full h-48 object-cover" />
+              <div className="relative h-48 w-full">
+                <Image src={hotel.image} alt={hotel.name} fill className="object-cover" />
+              </div>
               <div className="p-6">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="font-semibold text-lg">{hotel.name}</h3>

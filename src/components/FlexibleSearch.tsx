@@ -4,12 +4,22 @@ import { Calendar, MapPin, TrendingDown, ArrowRight } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import { format, addDays, startOfMonth, endOfMonth } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import Image from 'next/image';
+
+interface SearchData {
+  from?: string;
+  to?: string;
+  departureDate?: string;
+  returnDate?: string;
+  destination?: string;
+  flexible?: boolean;
+}
 
 interface FlexibleSearchProps {
   isOpen: boolean;
   onClose: () => void;
-  onSearch: (searchData: any) => void;
-  initialData?: any;
+  onSearch: (searchData: SearchData) => void;
+  initialData?: SearchData;
 }
 
 const FlexibleSearch: React.FC<FlexibleSearchProps> = ({
@@ -107,10 +117,9 @@ const FlexibleSearch: React.FC<FlexibleSearchProps> = ({
                   </label>
                   <DatePicker
                     selected={flexibleDates.month}
-                    onChange={(date: Date) => setFlexibleDates({ ...flexibleDates, month: date })}
+                    onChange={(date: Date | null) => date && setFlexibleDates({ ...flexibleDates, month: date })}
                     dateFormat="MMMM yyyy"
                     showMonthYearPicker
-                    locale={fr}
                     className="w-full p-3 border border-gray-300 rounded-lg"
                   />
                 </div>
@@ -147,7 +156,7 @@ const FlexibleSearch: React.FC<FlexibleSearchProps> = ({
 
               {/* Calendrier des prix */}
               <div className="bg-gray-50 rounded-lg p-6">
-                <h4 className="font-semibold mb-4">Meilleurs prix pour {format(flexibleDates.month, 'MMMM yyyy', { locale: fr })}</h4>
+                <h4 className="font-semibold mb-4">Meilleurs prix pour {format(flexibleDates.month, 'MMMM yyyy',)}</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3">
                   {generateFlexibleDates().map((dateOption, index) => (
                     <div
@@ -165,7 +174,7 @@ const FlexibleSearch: React.FC<FlexibleSearchProps> = ({
                     >
                       <div className="text-center">
                         <div className="text-sm text-gray-600">
-                          {format(dateOption.departure, 'dd MMM', { locale: fr })}
+                          {format(dateOption.departure, 'dd MMM', )}
                         </div>
                         <div className="text-xs text-gray-500 mb-2">
                           {flexibleDates.duration} jours
@@ -250,11 +259,14 @@ const FlexibleSearch: React.FC<FlexibleSearchProps> = ({
                       onClose();
                     }}
                   >
-                    <img 
-                      src={destination.image} 
-                      alt={destination.city}
-                      className="w-full h-32 object-cover"
-                    />
+                    <div className="relative h-32 w-full">
+                      <Image 
+                        src={destination.image} 
+                        alt={destination.city}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                     <div className="p-4">
                       <div className="flex justify-between items-start mb-2">
                         <div>
@@ -282,7 +294,7 @@ const FlexibleSearch: React.FC<FlexibleSearchProps> = ({
                 <div className="text-center py-8 text-gray-500">
                   <MapPin size={48} className="mx-auto mb-4 opacity-50" />
                   <p>Aucune destination trouvée avec ces critères</p>
-                  <p className="text-sm">Essayez d'augmenter le rayon de recherche ou le budget</p>
+                  <p className="text-sm">Essayez d&apos;augmenter le rayon de recherche ou le budget</p>
                 </div>
               )}
             </div>

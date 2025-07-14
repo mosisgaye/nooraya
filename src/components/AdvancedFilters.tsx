@@ -1,13 +1,29 @@
 'use client'
 import React, { useState } from 'react';
-import { Filter, X, Clock, Plane, Building, Star, Wifi, Car, Coffee, Dumbbell, MapPin } from 'lucide-react';
+import { Filter, X, Building, Star, Wifi, Car, Coffee, Dumbbell } from 'lucide-react';
+
+interface FilterState {
+  priceRange: [number, number];
+  stops?: number[];
+  airlines?: string[];
+  departureTime?: string[];
+  arrivalTime?: string[];
+  duration?: [number, number];
+  airports?: string[];
+  stars?: number[];
+  rating?: number;
+  amenities?: string[];
+  propertyTypes?: string[];
+  districts?: string[];
+  guestRating?: number;
+}
 
 interface AdvancedFiltersProps {
   type: 'flights' | 'hotels';
   isOpen: boolean;
   onClose: () => void;
-  onApplyFilters: (filters: any) => void;
-  currentFilters: any;
+  onApplyFilters: (filters: FilterState) => void;
+  currentFilters: FilterState;
 }
 
 const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
@@ -17,7 +33,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   onApplyFilters,
   currentFilters
 }) => {
-  const [filters, setFilters] = useState(currentFilters);
+  const [filters, setFilters] = useState<FilterState>(currentFilters);
 
   const handleApply = () => {
     onApplyFilters(filters);
@@ -25,7 +41,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   };
 
   const handleReset = () => {
-    const resetFilters = type === 'flights' 
+    const resetFilters: FilterState = type === 'flights' 
       ? { 
           priceRange: [0, 2000],
           stops: [],
@@ -97,7 +113,12 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   );
 };
 
-const FlightFilters: React.FC<{ filters: any; setFilters: any }> = ({ filters, setFilters }) => {
+interface FlightFiltersProps {
+  filters: FilterState;
+  setFilters: React.Dispatch<React.SetStateAction<FilterState>>;
+}
+
+const FlightFilters: React.FC<FlightFiltersProps> = ({ filters, setFilters }) => {
   const airlines = [
     'Air France', 'British Airways', 'Lufthansa', 'KLM', 'Ryanair', 'EasyJet', 'Emirates', 'Qatar Airways'
   ];
@@ -164,17 +185,17 @@ const FlightFilters: React.FC<{ filters: any; setFilters: any }> = ({ filters, s
             <label key={stop} className="flex items-center">
               <input
                 type="checkbox"
-                checked={filters.stops.includes(index)}
+                checked={filters.stops?.includes(index) || false}
                 onChange={(e) => {
                   if (e.target.checked) {
                     setFilters({
                       ...filters,
-                      stops: [...filters.stops, index]
+                      stops: [...(filters.stops || []), index]
                     });
                   } else {
                     setFilters({
                       ...filters,
-                      stops: filters.stops.filter((s: number) => s !== index)
+                      stops: filters.stops?.filter((s: number) => s !== index) || []
                     });
                   }
                 }}
@@ -194,17 +215,17 @@ const FlightFilters: React.FC<{ filters: any; setFilters: any }> = ({ filters, s
             <label key={airline} className="flex items-center">
               <input
                 type="checkbox"
-                checked={filters.airlines.includes(airline)}
+                checked={filters.airlines?.includes(airline) || false}
                 onChange={(e) => {
                   if (e.target.checked) {
                     setFilters({
                       ...filters,
-                      airlines: [...filters.airlines, airline]
+                      airlines: [...(filters.airlines || []), airline]
                     });
                   } else {
                     setFilters({
                       ...filters,
-                      airlines: filters.airlines.filter((a: string) => a !== airline)
+                      airlines: filters.airlines?.filter((a: string) => a !== airline) || []
                     });
                   }
                 }}
@@ -229,17 +250,17 @@ const FlightFilters: React.FC<{ filters: any; setFilters: any }> = ({ filters, s
             <label key={time.value} className="flex items-center">
               <input
                 type="checkbox"
-                checked={filters.departureTime.includes(time.value)}
+                checked={filters.departureTime?.includes(time.value) || false}
                 onChange={(e) => {
                   if (e.target.checked) {
                     setFilters({
                       ...filters,
-                      departureTime: [...filters.departureTime, time.value]
+                      departureTime: [...(filters.departureTime || []), time.value]
                     });
                   } else {
                     setFilters({
                       ...filters,
-                      departureTime: filters.departureTime.filter((t: string) => t !== time.value)
+                      departureTime: filters.departureTime?.filter((t: string) => t !== time.value) || []
                     });
                   }
                 }}
@@ -259,7 +280,7 @@ const FlightFilters: React.FC<{ filters: any; setFilters: any }> = ({ filters, s
             type="range"
             min="0"
             max="24"
-            value={filters.duration[1]}
+            value={filters.duration?.[1] || 24}
             onChange={(e) => setFilters({
               ...filters,
               duration: [0, Number(e.target.value)]
@@ -267,7 +288,7 @@ const FlightFilters: React.FC<{ filters: any; setFilters: any }> = ({ filters, s
             className="w-full"
           />
           <div className="text-sm text-gray-600">
-            Jusqu'à {filters.duration[1]} heures
+            Jusqu&apos;à {filters.duration?.[1] || 24} heures
           </div>
         </div>
       </div>
@@ -280,17 +301,17 @@ const FlightFilters: React.FC<{ filters: any; setFilters: any }> = ({ filters, s
             <label key={airport.code} className="flex items-center">
               <input
                 type="checkbox"
-                checked={filters.airports.includes(airport.code)}
+                checked={filters.airports?.includes(airport.code) || false}
                 onChange={(e) => {
                   if (e.target.checked) {
                     setFilters({
                       ...filters,
-                      airports: [...filters.airports, airport.code]
+                      airports: [...(filters.airports || []), airport.code]
                     });
                   } else {
                     setFilters({
                       ...filters,
-                      airports: filters.airports.filter((a: string) => a !== airport.code)
+                      airports: filters.airports?.filter((a: string) => a !== airport.code) || []
                     });
                   }
                 }}
@@ -306,7 +327,12 @@ const FlightFilters: React.FC<{ filters: any; setFilters: any }> = ({ filters, s
   );
 };
 
-const HotelFilters: React.FC<{ filters: any; setFilters: any }> = ({ filters, setFilters }) => {
+interface HotelFiltersProps {
+  filters: FilterState;
+  setFilters: React.Dispatch<React.SetStateAction<FilterState>>;
+}
+
+const HotelFilters: React.FC<HotelFiltersProps> = ({ filters, setFilters }) => {
   const amenities = [
     { icon: <Wifi size={16} />, label: 'Wi-Fi gratuit', value: 'wifi' },
     { icon: <Car size={16} />, label: 'Parking', value: 'parking' },
@@ -365,23 +391,23 @@ const HotelFilters: React.FC<{ filters: any; setFilters: any }> = ({ filters, se
 
       {/* Étoiles */}
       <div>
-        <h3 className="text-lg font-semibold mb-4">Nombre d'étoiles</h3>
+        <h3 className="text-lg font-semibold mb-4">Nombre d&apos;étoiles</h3>
         <div className="space-y-2">
           {[5, 4, 3, 2, 1].map(star => (
             <label key={star} className="flex items-center">
               <input
                 type="checkbox"
-                checked={filters.stars.includes(star)}
+                checked={filters.stars?.includes(star) || false}
                 onChange={(e) => {
                   if (e.target.checked) {
                     setFilters({
                       ...filters,
-                      stars: [...filters.stars, star]
+                      stars: [...(filters.stars || []), star]
                     });
                   } else {
                     setFilters({
                       ...filters,
-                      stars: filters.stars.filter((s: number) => s !== star)
+                      stars: filters.stars?.filter((s: number) => s !== star) || []
                     });
                   }
                 }}
@@ -405,17 +431,17 @@ const HotelFilters: React.FC<{ filters: any; setFilters: any }> = ({ filters, se
             <label key={amenity.value} className="flex items-center">
               <input
                 type="checkbox"
-                checked={filters.amenities.includes(amenity.value)}
+                checked={filters.amenities?.includes(amenity.value) || false}
                 onChange={(e) => {
                   if (e.target.checked) {
                     setFilters({
                       ...filters,
-                      amenities: [...filters.amenities, amenity.value]
+                      amenities: [...(filters.amenities || []), amenity.value]
                     });
                   } else {
                     setFilters({
                       ...filters,
-                      amenities: filters.amenities.filter((a: string) => a !== amenity.value)
+                      amenities: filters.amenities?.filter((a: string) => a !== amenity.value) || []
                     });
                   }
                 }}
@@ -436,17 +462,17 @@ const HotelFilters: React.FC<{ filters: any; setFilters: any }> = ({ filters, se
             <label key={type} className="flex items-center">
               <input
                 type="checkbox"
-                checked={filters.propertyTypes.includes(type)}
+                checked={filters.propertyTypes?.includes(type) || false}
                 onChange={(e) => {
                   if (e.target.checked) {
                     setFilters({
                       ...filters,
-                      propertyTypes: [...filters.propertyTypes, type]
+                      propertyTypes: [...(filters.propertyTypes || []), type]
                     });
                   } else {
                     setFilters({
                       ...filters,
-                      propertyTypes: filters.propertyTypes.filter((t: string) => t !== type)
+                      propertyTypes: filters.propertyTypes?.filter((t: string) => t !== type) || []
                     });
                   }
                 }}
@@ -496,17 +522,17 @@ const HotelFilters: React.FC<{ filters: any; setFilters: any }> = ({ filters, se
             <label key={district} className="flex items-center">
               <input
                 type="checkbox"
-                checked={filters.districts.includes(district)}
+                checked={filters.districts?.includes(district) || false}
                 onChange={(e) => {
                   if (e.target.checked) {
                     setFilters({
                       ...filters,
-                      districts: [...filters.districts, district]
+                      districts: [...(filters.districts || []), district]
                     });
                   } else {
                     setFilters({
                       ...filters,
-                      districts: filters.districts.filter((d: string) => d !== district)
+                      districts: filters.districts?.filter((d: string) => d !== district) || []
                     });
                   }
                 }}

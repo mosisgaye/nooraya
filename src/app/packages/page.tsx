@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { Package, MapPin, Calendar, Users, Star, Shield, Coffee, Wifi } from 'lucide-react';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'Séjours Tout Compris - Alboraq | Vol + Hôtel',
@@ -189,7 +190,9 @@ interface PackageCardProps {
 const PackageCard: React.FC<PackageCardProps> = ({ package: pkg }) => (
   <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
     <div className="relative">
-      <img src={pkg.image} alt={pkg.destination} className="w-full h-48 object-cover" />
+      <div className="relative h-48 w-full">
+        <Image src={pkg.image} alt={pkg.destination} fill className="object-cover" />
+      </div>
       <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
         -{Math.round((1 - pkg.price / pkg.originalPrice) * 100)}%
       </div>
@@ -244,11 +247,14 @@ interface ThemeCardProps {
 
 const ThemeCard: React.FC<ThemeCardProps> = ({ title, image, count }) => (
   <div className="relative group cursor-pointer rounded-lg overflow-hidden">
-    <img 
-      src={image} 
-      alt={title} 
-      className="w-full h-32 object-cover group-hover:scale-110 transition-transform duration-300"
-    />
+    <div className="relative h-32 w-full">
+      <Image 
+        src={image} 
+        alt={title} 
+        fill
+        className="object-cover group-hover:scale-110 transition-transform duration-300"
+      />
+    </div>
     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20 flex flex-col justify-end p-4">
       <h3 className="text-white font-semibold">{title}</h3>
       <p className="text-white/80 text-sm">{count} séjours</p>

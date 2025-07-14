@@ -1,5 +1,6 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 
 interface LazyImageProps {
   src: string;
@@ -16,7 +17,7 @@ const LazyImage: React.FC<LazyImageProps> = ({
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
+  const imgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -37,15 +38,16 @@ const LazyImage: React.FC<LazyImageProps> = ({
   }, []);
 
   return (
-    <img
-      ref={imgRef}
-      src={isInView ? src : placeholder}
-      alt={alt}
-      className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className}`}
-      onLoad={() => setIsLoaded(true)}
-      loading="lazy"
-      decoding="async"
-    />
+    <div ref={imgRef} className={`relative ${className}`}>
+      <Image
+        src={isInView ? src : placeholder}
+        alt={alt}
+        fill
+        className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'} object-cover`}
+        onLoad={() => setIsLoaded(true)}
+        loading="lazy"
+      />
+    </div>
   );
 };
 

@@ -2,6 +2,7 @@
 
 import React, { useState, memo } from 'react';
 import { Map, ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 
 interface Destination {
   id: number;
@@ -145,13 +146,15 @@ interface DestinationCardProps {
 const DestinationCard: React.FC<DestinationCardProps> = memo(({ destination }) => {
   return (
     <div className="destination-card relative h-80 rounded-xl overflow-hidden group cursor-pointer will-change-transform">
-      <img 
-        src={destination.image} 
-        alt={destination.name} 
-        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110 will-change-transform"
-        loading="lazy"
-        decoding="async"
-      />
+      <div className="relative w-full h-full">
+        <Image 
+          src={destination.image} 
+          alt={destination.name} 
+          fill
+          className="object-cover transition-transform duration-300 group-hover:scale-110 will-change-transform"
+          loading="lazy"
+        />
+      </div>
       
       <div className="absolute bottom-0 left-0 right-0 p-6 text-white z-10">
         <h3 className="text-2xl font-bold mb-1">{destination.name}</h3>

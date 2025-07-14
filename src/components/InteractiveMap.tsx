@@ -1,6 +1,7 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { MapPin, Star, X, Navigation, Layers } from 'lucide-react';
+import Image from 'next/image';
 
 interface MapLocation {
   id: string;
@@ -25,7 +26,6 @@ interface InteractiveMapProps {
 const InteractiveMap: React.FC<InteractiveMapProps> = ({
   isOpen,
   onClose,
-  center,
   locations,
   onLocationSelect
 }) => {
@@ -170,11 +170,14 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
                 </div>
 
                 {selectedLocation.image && (
-                  <img
-                    src={selectedLocation.image}
-                    alt={selectedLocation.name}
-                    className="w-full h-32 object-cover rounded-lg mb-4"
-                  />
+                  <div className="relative w-full h-32 mb-4">
+                    <Image
+                      src={selectedLocation.image}
+                      alt={selectedLocation.name}
+                      fill
+                      className="object-cover rounded-lg"
+                    />
+                  </div>
                 )}
 
                 <div className="space-y-3">

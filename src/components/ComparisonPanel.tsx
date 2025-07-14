@@ -1,11 +1,46 @@
 'use client'
-import React, { useState } from 'react';
-import { X, Star, Plane, Clock, Wifi, Car, Coffee, Plus, Minus } from 'lucide-react';
+import React from 'react';
+import { X, Star } from 'lucide-react';
+import Image from 'next/image';
+
+interface Flight {
+  id: string;
+  airline: string;
+  logo: string;
+  departure: {
+    time: string;
+    airport: string;
+    code: string;
+  };
+  arrival: {
+    time: string;
+    airport: string;
+    code: string;
+  };
+  duration: string;
+  stops: number;
+  price: number;
+  cabinClass: string;
+  amenities: string[];
+}
+
+interface Hotel {
+  id: string;
+  name: string;
+  image: string;
+  location: string;
+  stars: number;
+  rating: number;
+  reviews: number;
+  price: number;
+  distance: string;
+  amenities: string[];
+}
 
 interface ComparisonItem {
   id: string;
   type: 'flight' | 'hotel';
-  data: any;
+  data: Flight | Hotel;
 }
 
 interface ComparisonPanelProps {
@@ -55,14 +90,14 @@ const ComparisonPanel: React.FC<ComparisonPanelProps> = ({
           {flightItems.length > 0 && (
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-4">Vols ({flightItems.length})</h3>
-              <FlightComparison items={flightItems} onRemoveItem={onRemoveItem} />
+              <FlightComparison items={flightItems as Array<ComparisonItem & { data: Flight }>} onRemoveItem={onRemoveItem} />
             </div>
           )}
 
           {hotelItems.length > 0 && (
             <div>
               <h3 className="text-xl font-semibold mb-4">Hôtels ({hotelItems.length})</h3>
-              <HotelComparison items={hotelItems} onRemoveItem={onRemoveItem} />
+              <HotelComparison items={hotelItems as Array<ComparisonItem & { data: Hotel }>} onRemoveItem={onRemoveItem} />
             </div>
           )}
         </div>
@@ -71,7 +106,12 @@ const ComparisonPanel: React.FC<ComparisonPanelProps> = ({
   );
 };
 
-const FlightComparison: React.FC<{ items: ComparisonItem[]; onRemoveItem: (id: string) => void }> = ({
+interface FlightComparisonProps {
+  items: Array<ComparisonItem & { data: Flight }>;
+  onRemoveItem: (id: string) => void;
+}
+
+const FlightComparison: React.FC<FlightComparisonProps> = ({
   items,
   onRemoveItem
 }) => {
@@ -176,7 +216,12 @@ const FlightComparison: React.FC<{ items: ComparisonItem[]; onRemoveItem: (id: s
   );
 };
 
-const HotelComparison: React.FC<{ items: ComparisonItem[]; onRemoveItem: (id: string) => void }> = ({
+interface HotelComparisonProps {
+  items: Array<ComparisonItem & { data: Hotel }>;
+  onRemoveItem: (id: string) => void;
+}
+
+const HotelComparison: React.FC<HotelComparisonProps> = ({
   items,
   onRemoveItem
 }) => {
@@ -195,11 +240,14 @@ const HotelComparison: React.FC<{ items: ComparisonItem[]; onRemoveItem: (id: st
                   >
                     <X size={12} />
                   </button>
-                  <img 
-                    src={item.data.image} 
-                    alt={item.data.name}
-                    className="w-full h-32 object-cover rounded-lg mb-2"
-                  />
+                  <div className="relative w-full h-32 mb-2">
+                    <Image 
+                      src={item.data.image} 
+                      alt={item.data.name}
+                      fill
+                      className="object-cover rounded-lg"
+                    />
+                  </div>
                   <div className="font-semibold text-lg">{item.data.name}</div>
                   <div className="text-sm text-gray-600">{item.data.location}</div>
                 </div>

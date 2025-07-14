@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, lazy, Suspense, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plane, Building, Calendar, Users, ArrowRightLeft, Search, MapPin, Sparkles, TrendingUp } from 'lucide-react';
 
@@ -13,11 +13,12 @@ const Hero: React.FC = () => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const router = useRouter();
 
-  const backgroundImages = [
+  // Utiliser useMemo pour éviter que backgroundImages change à chaque render
+  const backgroundImages = useMemo(() => [
     'https://images.pexels.com/photos/3769138/pexels-photo-3769138.jpeg',
     'https://images.pexels.com/photos/1008155/pexels-photo-1008155.jpeg',
     'https://images.pexels.com/photos/2034335/pexels-photo-2034335.jpeg'
-  ];
+  ], []);
 
   // Préchargement optimisé des images
   useEffect(() => {
