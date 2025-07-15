@@ -4,7 +4,6 @@
 
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
 import { format } from 'date-fns';
 import { ChevronDown, Plus, Minus, Loader2 } from 'lucide-react';
 import { Button } from '@/modules/ui';

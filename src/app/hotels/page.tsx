@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { Calendar, Users, Search, MapPin, Star } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
-import "react-datepicker/dist/react-datepicker.css";
 import Image from 'next/image';
 
 export default function HotelsPage() {
