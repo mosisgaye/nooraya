@@ -233,40 +233,25 @@ const SearchForm: React.FC<SearchFormProps> = ({ type, fields, buttonText, butto
       <div className="flex flex-wrap items-center gap-4 pt-2">
         <label className="flex items-center cursor-pointer">
           <input 
-            <Button
+            type="checkbox"
             checked={flexibleDates}
             onChange={(e) => setFlexibleDates(e.target.checked)}
-              loading={loading}
-              size="lg"
-              fullWidth={false}
-              icon={!loading ? buttonIcon : undefined}
+            className="mr-2"
+          />
+          <span className="text-sm text-gray-600">Dates flexibles</span>
         </label>
-              {loading ? 'Recherche en cours...' : buttonText}
-            </Button>
-          </div>
-        </div>
-      )}
+      </div>
 
       <div className="flex justify-center pt-4">
-        <button
+        <Button
           type="submit"
-          disabled={loading}
-          className={`btn-primary w-full sm:w-auto px-8 py-4 text-lg font-semibold flex items-center justify-center min-w-[200px] ${
-            loading ? 'opacity-75 cursor-not-allowed' : ''
-          }`}
+          loading={loading}
+          size="lg"
+          fullWidth={false}
+          icon={!loading ? buttonIcon : undefined}
         >
-          {loading ? (
-            <>
-              <Loader2 className="mr-2 animate-spin" size={20} />
-              <span>Recherche en cours...</span>
-            </>
-          ) : (
-            <>
-              {buttonIcon}
-              <span className="ml-2">{buttonText}</span>
-            </>
-          )}
-        </button>
+          {loading ? 'Recherche en cours...' : buttonText}
+        </Button>
       </div>
     </form>
   );
