@@ -1,14 +1,17 @@
 import type { Metadata } from 'next';
 import { Inter, Poppins } from 'next/font/google';
+import './critical.css';
 import './globals.css';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import { Providers } from '@/providers';
+import './accessibility.css';
+import { Header } from '@/components/layout';
+import { Footer } from '@/components/layout';
+import { generateStructuredData } from '@/lib/seo';
 
 const inter = Inter({ 
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
+  preload: true,
 });
 
 const poppins = Poppins({ 
@@ -16,32 +19,33 @@ const poppins = Poppins({
   subsets: ['latin'],
   variable: '--font-poppins',
   display: 'swap',
+  preload: true,
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://www.alboraq.com'),
-  title: 'Alboraq - Voyages Élégants | Vols, Hôtels et Séjours',
-  description: 'Découvrez le monde avec Alboraq. Réservez vos vols, hôtels et séjours au meilleur prix. Service premium et assistance 24/7.',
-  keywords: 'voyage, vols, hôtels, séjours, vacances, réservation, tourisme, Alboraq',
-  authors: [{ name: 'Alboraq' }],
-  creator: 'Alboraq',
-  publisher: 'Alboraq',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://www.noorayavoyages.com'),
+  title: 'Nooraya Voyages - Agence de Voyage Paris & Sénégal | Vols Pas Cher, Hôtels, Séjours',
+  description: 'Agence de voyage Nooraya Voyages Paris & Sénégal : réservez vos vols pas cher, hôtels discount, séjours tout compris. Spécialiste vols Paris-Dakar, voyages Sénégal, assistance 24/7.',
+  keywords: 'agence voyage Paris, agence voyage Sénégal, vols pas cher, réservation hotel, séjour tout compris, voyage sur mesure, vols Paris Dakar, voyage Sénégal, billets avion Sénégal, Nooraya Voyages, agence voyage Dakar, vols Air Sénégal, séjour Saly, voyage Casamance, vols Dakar Paris, voyage Thiès, Saint-Louis Sénégal, assistance voyage 24/7',
+  authors: [{ name: 'Nooraya Voyages' }],
+  creator: 'Nooraya Voyages',
+  publisher: 'Nooraya Voyages',
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
   openGraph: {
-    title: 'Alboraq - Voyages Élégants',
-    description: 'Découvrez le monde avec Alboraq. Réservez vos vols, hôtels et séjours au meilleur prix.',
-    url: 'https://www.alboraq.com',
-    siteName: 'Alboraq',
+    title: 'Nooraya Voyages - Agence de Voyage Paris & Sénégal | Vols Pas Cher',
+    description: 'Agence de voyage Nooraya Voyages Paris & Sénégal : réservez vos vols pas cher, hôtels discount, séjours tout compris. Spécialiste vols Paris-Dakar et voyages Sénégal.',
+    url: 'https://www.noorayavoyages.com',
+    siteName: 'Nooraya Voyages',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Alboraq - Voyages Élégants',
+        alt: 'Nooraya Voyages - Agence de Voyage Paris, Vols Pas Cher et Séjours',
       },
     ],
     locale: 'fr_FR',
@@ -49,10 +53,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Alboraq - Voyages Élégants',
-    description: 'Découvrez le monde avec Alboraq. Réservez vos vols, hôtels et séjours au meilleur prix.',
+    title: 'Nooraya Voyages - Agence de Voyage Paris & Sénégal',
+    description: 'Agence de voyage Nooraya Voyages Paris & Sénégal : réservez vos vols pas cher, hôtels discount, séjours tout compris. Spécialiste vols Paris-Dakar.',
     images: ['/twitter-image.jpg'],
-    creator: '@alboraq',
+    creator: '@noorayavoyages',
   },
   robots: {
     index: true,
@@ -71,6 +75,23 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
   },
   manifest: '/manifest.json',
+  other: {
+    'geo.region': 'FR;SN',
+    'geo.placename': 'Paris, France; Dakar, Sénégal',
+    'geo.position': '48.8566;2.3522;14.6928;-17.4467',
+    'ICBM': '48.8566, 2.3522, 14.6928, -17.4467',
+    'DC.title': 'Nooraya Voyages - Agence de Voyage Paris & Sénégal',
+    'DC.creator': 'Nooraya Voyages',
+    'DC.subject': 'Agence de voyage, vols pas cher, hôtels, séjours tout compris, voyage Sénégal, vols Paris-Dakar',
+    'DC.description': 'Agence de voyage spécialisée en vols pas cher, réservation hôtels et séjours tout compris. Spécialiste des voyages vers le Sénégal.',
+    'DC.publisher': 'Nooraya Voyages',
+    'DC.language': 'fr',
+    'DC.coverage': 'France, Sénégal, International',
+    'rating': 'general',
+    'revisit-after': '1 days',
+    'distribution': 'global',
+    'classification': 'Travel Agency, Tourism, Flight Booking, Hotel Reservation, Senegal Travel',
+  },
 };
 
 export default function RootLayout({
@@ -80,16 +101,24 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr" className={`${inter.variable} ${poppins.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={generateStructuredData('travelAgency')}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={generateStructuredData('website')}
+        />
+      </head>
       <body className={`${inter.className} antialiased`}>
-        <Providers>
-          <div className="flex flex-col min-h-screen font-sans text-gray-800">
-            <Header />
-            <main className="flex-grow">
-              {children}
-            </main>
-            <Footer />
-          </div>
-        </Providers>
+        <div className="flex flex-col min-h-screen font-sans text-gray-800">
+          <Header />
+          <main className="flex-grow">
+            {children}
+          </main>
+          <Footer />
+        </div>
       </body>
     </html>
   );

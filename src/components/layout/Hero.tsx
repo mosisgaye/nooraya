@@ -5,14 +5,14 @@
 import React, { useState, useEffect, lazy, Suspense, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plane, Building, Calendar, Users, ArrowRightLeft, Search, MapPin, Sparkles, TrendingUp } from 'lucide-react';
+import LazyImage from '../ui/LazyImage';
 
 // Lazy loading du composant SearchForm
-const SearchForm = lazy(() => import('./SearchForm'));
+const SearchForm = lazy(() => import('../search/SearchForm'));
 
 const Hero: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'flights' | 'hotels' | 'combined'>('flights');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
   const router = useRouter();
 
   // Utiliser useMemo pour éviter que backgroundImages change à chaque render
@@ -22,38 +22,13 @@ const Hero: React.FC = () => {
     'https://images.pexels.com/photos/2034335/pexels-photo-2034335.jpeg'
   ], []);
 
-  // Préchargement optimisé des images
+  // Rotation automatique des images
   useEffect(() => {
-    const preloadImages = async () => {
-      const imagePromises = backgroundImages.map((src) => {
-        return new Promise((resolve, reject) => {
-          const img = new Image();
-          img.onload = resolve;
-          img.onerror = reject;
-          img.src = src;
-        });
-      });
-
-      try {
-        await Promise.all(imagePromises);
-        setImagesLoaded(true);
-      } catch (error) {
-        console.warn('Some images failed to preload:', error);
-        setImagesLoaded(true); // Continue anyway
-      }
-    };
-
-    preloadImages();
-  }, [backgroundImages]);
-
-  useEffect(() => {
-    if (!imagesLoaded) return;
-    
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % backgroundImages.length);
     }, 8000);
     return () => clearInterval(interval);
-  }, [imagesLoaded, backgroundImages.length]);
+  }, [backgroundImages.length]);
 
   const handleSearch = (searchData: Record<string, string | number | boolean>, type: string) => {
     const queryString = new URLSearchParams(
@@ -70,38 +45,48 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="hero-section relative flex items-center justify-center min-h-[500px] sm:min-h-[600px] md:min-h-[700px] px-4 py-8 sm:py-12 md:py-16 overflow-hidden">
+    <section className="hero-section relative flex items-center justify-center min-h-[500px] sm:min-h-[600px] md:min-h-[700px] px-4 py-8 sm:py-12 md:py-16 overflow-hidden" role="banner" aria-label="Section hero avec recherche de voyage">
       {/* Background optimisé avec lazy loading */}
       <div className="absolute inset-0">
-        {imagesLoaded && backgroundImages.map((image, index) => (
+        {backgroundImages.map((image, index) => (
           <div
             key={index}
-            className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 will-change-opacity ${
+            className={`absolute inset-0 transition-opacity duration-1000 will-change-opacity ${
               index === currentImageIndex ? 'opacity-100' : 'opacity-0'
             }`}
-            style={{ 
-              backgroundImage: `url(${image})`,
-              transform: 'translateZ(0)' // GPU acceleration
-            }}
-          />
+            style={{ transform: 'translateZ(0)' }} // GPU acceleration
+          >
+            <LazyImage
+              src={image}
+              alt={`Image de fond de voyage ${index + 1} montrant une destination de rêve`}
+              fill
+              priority={index === 0} // Première image en priorité
+              quality={85}
+              objectFit="cover"
+              sizes="100vw"
+              className="w-full h-full"
+              placeholder="blur"
+              showSkeleton={false}
+            />
+          </div>
         ))}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/70 via-purple-900/60 to-blue-800/70"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/70 via-purple-900/60 to-blue-800/70" aria-hidden="true"></div>
         
         {/* Éléments décoratifs optimisés */}
-        <div className="absolute top-20 left-10 w-20 h-20 bg-white/10 rounded-full blur-xl floating-animation gpu-accelerated"></div>
-        <div className="absolute bottom-32 right-16 w-32 h-32 bg-purple-400/20 rounded-full blur-2xl floating-animation gpu-accelerated" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/3 right-1/4 w-16 h-16 bg-blue-400/20 rounded-full blur-xl floating-animation gpu-accelerated" style={{ animationDelay: '4s' }}></div>
+        <div className="absolute top-20 left-10 w-20 h-20 bg-white/10 rounded-full blur-xl floating-animation gpu-accelerated" aria-hidden="true"></div>
+        <div className="absolute bottom-32 right-16 w-32 h-32 bg-purple-400/20 rounded-full blur-2xl floating-animation gpu-accelerated" style={{ animationDelay: '2s' }} aria-hidden="true"></div>
+        <div className="absolute top-1/3 right-1/4 w-16 h-16 bg-blue-400/20 rounded-full blur-xl floating-animation gpu-accelerated" style={{ animationDelay: '4s' }} aria-hidden="true"></div>
       </div>
       
       <div className="relative z-10 w-full max-w-6xl mx-auto text-center px-4">
         {/* Badge de promotion optimisé */}
-        <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full text-sm font-medium mb-6 animate-pulse will-change-transform">
-          <Sparkles className="mr-2" size={16} />
+        <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full text-sm font-medium mb-6 animate-pulse will-change-transform" role="alert" aria-label="Promotion spéciale en cours">
+          <Sparkles className="mr-2" size={16} aria-hidden="true" />
           Offres limitées - Jusqu&apos;à 70% de réduction
-          <TrendingUp className="ml-2" size={16} />
+          <TrendingUp className="ml-2" size={16} aria-hidden="true" />
         </div>
 
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4 sm:mb-6 drop-shadow-2xl">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4 sm:mb-6 drop-shadow-2xl" role="heading" aria-level={1}>
           <span className="block">Partez l&apos;esprit</span>
           <span className="block bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 bg-clip-text text-transparent">
             léger
@@ -113,7 +98,7 @@ const Hero: React.FC = () => {
         </p>
 
         {/* Statistiques optimisées */}
-        <div className="flex flex-wrap justify-center gap-6 mb-8 sm:mb-12">
+        <div className="flex flex-wrap justify-center gap-6 mb-8 sm:mb-12" role="list" aria-label="Statistiques de notre service">
           <StatCard number="2M+" label="Destinations" />
           <StatCard number="50K+" label="Hôtels partenaires" />
           <StatCard number="1M+" label="Voyageurs satisfaits" />
@@ -121,7 +106,7 @@ const Hero: React.FC = () => {
 
         <div className="glass-effect rounded-3xl shadow-2xl overflow-hidden max-w-5xl mx-auto">
           {/* Onglets de recherche optimisés */}
-          <div className="flex overflow-x-auto sm:overflow-visible border-b border-white/20">
+          <div className="flex overflow-x-auto sm:overflow-visible border-b border-white/20" role="tablist" aria-label="Types de recherche">
             <SearchTab
               active={activeTab === 'flights'}
               onClick={() => setActiveTab('flights')}
@@ -149,10 +134,10 @@ const Hero: React.FC = () => {
           </div>
 
           {/* Formulaires de recherche avec lazy loading */}
-          <div className="p-6 sm:p-8">
+          <div className="p-6 sm:p-8" role="tabpanel" aria-label={`Formulaire de recherche ${activeTab}`}>
             <Suspense fallback={
-              <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              <div className="flex items-center justify-center py-12" role="status" aria-label="Chargement du formulaire">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" aria-hidden="true"></div>
                 <span className="ml-2 text-gray-600">Chargement...</span>
               </div>
             }>
@@ -270,19 +255,21 @@ const Hero: React.FC = () => {
         </div>
 
         {/* Boutons d'action optimisés */}
-        <div className="flex flex-col sm:flex-row justify-center mt-8 space-y-3 sm:space-y-0 sm:space-x-6">
+        <div className="flex flex-col sm:flex-row justify-center mt-8 space-y-3 sm:space-y-0 sm:space-x-6" role="group" aria-label="Actions principales">
           <button 
             onClick={() => router.push('/offers')}
             className="btn-secondary w-full sm:w-auto px-8 py-4 text-lg font-semibold will-change-transform"
+            aria-label="Découvrir toutes nos offres spéciales"
           >
-            <Sparkles className="mr-2" size={20} />
+            <Sparkles className="mr-2" size={20} aria-hidden="true" />
             Découvrir les offres
           </button>
           <button 
             onClick={() => router.push('/destinations')}
             className="btn-primary w-full sm:w-auto px-8 py-4 text-lg font-semibold will-change-transform"
+            aria-label="Voir les destinations les plus populaires"
           >
-            <TrendingUp className="mr-2" size={20} />
+            <TrendingUp className="mr-2" size={20} aria-hidden="true" />
             Destinations tendances
           </button>
         </div>
@@ -309,13 +296,17 @@ const SearchTab: React.FC<SearchTabProps> = ({ active, onClick, icon, label, des
           ? 'text-blue-600 border-blue-600 bg-blue-50/50' 
           : 'text-gray-600 border-transparent hover:text-blue-500 hover:bg-blue-50/30'
       }`}
+      role="tab"
+      aria-selected={active}
+      aria-controls={`${label.toLowerCase()}-panel`}
+      id={`${label.toLowerCase()}-tab`}
     >
       <div className="flex flex-col items-center">
         <div className="flex items-center justify-center mb-1">
-          {icon}
+          <span aria-hidden="true">{icon}</span>
           <span className="ml-2 font-semibold">{label}</span>
           {badge && (
-            <span className="ml-2 bg-gradient-to-r from-orange-400 to-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
+            <span className="ml-2 bg-gradient-to-r from-orange-400 to-red-500 text-white text-xs px-2 py-1 rounded-full font-medium" aria-label={`Badge : ${badge}`}>
               {badge}
             </span>
           )}
@@ -328,8 +319,8 @@ const SearchTab: React.FC<SearchTabProps> = ({ active, onClick, icon, label, des
 
 const StatCard: React.FC<{ number: string; label: string }> = ({ number, label }) => {
   return (
-    <div className="glass-effect px-6 py-3 rounded-2xl will-change-transform">
-      <div className="text-2xl font-bold text-white">{number}</div>
+    <div className="glass-effect px-6 py-3 rounded-2xl will-change-transform" role="listitem">
+      <div className="text-2xl font-bold text-white" aria-label={`${number} ${label}`}>{number}</div>
       <div className="text-sm text-white/80">{label}</div>
     </div>
   );

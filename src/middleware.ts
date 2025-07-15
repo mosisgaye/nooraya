@@ -41,7 +41,7 @@ export function middleware(request: NextRequest) {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "img-src 'self' data: https: blob:",
     "font-src 'self' https://fonts.gstatic.com",
-    "connect-src 'self' https://api.alboraq.com https://*.supabase.co https://www.google-analytics.com",
+    "connect-src 'self' https://api.noorayavoyages.com https://*.supabase.co https://www.google-analytics.com",
     "frame-src 'self' https://www.youtube.com",
     "object-src 'none'",
     "base-uri 'self'",
@@ -64,8 +64,8 @@ export function middleware(request: NextRequest) {
     const origin = request.headers.get('origin');
     const allowedOrigins = [
       'http://localhost:3000',
-      'https://www.alboraq.com',
-      'https://alboraq.com'
+      'https://www.noorayavoyages.com',
+      'https://noorayavoyages.com'
     ];
 
     if (origin && !allowedOrigins.includes(origin)) {

@@ -4,7 +4,7 @@ import { Calendar, MapPin, TrendingDown, ArrowRight } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import { format, addDays, startOfMonth, endOfMonth } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import Image from 'next/image';
+import LazyImage from '../ui/LazyImage';
 
 interface SearchData {
   from?: string;
@@ -261,11 +261,14 @@ const FlexibleSearch: React.FC<FlexibleSearchProps> = ({
                     }}
                   >
                     <div className="relative h-32 w-full">
-                      <Image 
+                      <LazyImage 
                         src={destination.image} 
-                        alt={destination.city}
+                        alt={`${destination.city}, ${destination.country} - Vol à partir de ${destination.price}€`}
                         fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         className="object-cover"
+                        placeholder="blur"
+                        quality={75}
                       />
                     </div>
                     <div className="p-4">

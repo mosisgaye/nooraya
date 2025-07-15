@@ -1,10 +1,10 @@
 import { Metadata } from 'next';
-import SpecialOffers from '@/components/SpecialOffers';
+import SpecialOffers from '@/components/content/SpecialOffers';
 import { Tag, Clock, TrendingUp, Star } from 'lucide-react';
 import Image from 'next/image';
 
 export const metadata: Metadata = {
-  title: 'Offres Spéciales - Alboraq | Économisez jusqu\'à 70%',
+  title: 'Offres Spéciales - Nooraya Voyages | Économisez jusqu\'à 70%',
   description: 'Découvrez nos offres exclusives et promotions sur les vols, hôtels et séjours. Économisez jusqu\'à 70% sur votre prochaine réservation.',
 };
 

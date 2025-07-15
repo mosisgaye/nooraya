@@ -4,7 +4,7 @@
 
 import React, { useState, memo } from 'react';
 import { Map, ChevronLeft, ChevronRight } from 'lucide-react';
-import Image from 'next/image';
+import LazyImage from '../ui/LazyImage';
 
 interface Destination {
   id: number;
@@ -72,36 +72,38 @@ const PopularDestinations: React.FC = () => {
   };
 
   return (
-    <section className="py-16 px-4">
+    <section className="py-16 px-4" role="region" aria-labelledby="popular-destinations-title">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div>
             <div className="flex items-center text-blue-500 font-medium mb-2">
-              <Map size={18} className="mr-2" />
+              <Map size={18} className="mr-2" aria-hidden="true" />
               <span>DESTINATIONS POPULAIRES</span>
             </div>
-            <h2 className="text-3xl font-bold text-blue-900">Inspirez-vous</h2>
+            <h2 id="popular-destinations-title" className="text-3xl font-bold text-blue-900">Inspirez-vous</h2>
             <p className="text-gray-600 mt-2">Explorez nos destinations les plus prisées</p>
           </div>
-          <div className="hidden md:flex space-x-3">
+          <div className="hidden md:flex space-x-3" role="group" aria-label="Navigation du carrousel">
             <button 
               onClick={handlePrev}
               disabled={currentIndex === 0}
-              className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 will-change-transform"
+              className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 will-change-transform focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              aria-label="Destinations précédentes"
             >
-              <ChevronLeft size={20} />
+              <ChevronLeft size={20} aria-hidden="true" />
             </button>
             <button 
               onClick={handleNext}
               disabled={currentIndex >= destinations.length - visibleCount.desktop}
-              className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 will-change-transform"
+              className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 will-change-transform focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              aria-label="Destinations suivantes"
             >
-              <ChevronRight size={20} />
+              <ChevronRight size={20} aria-hidden="true" />
             </button>
           </div>
         </div>
 
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden" role="region" aria-live="polite" aria-label="Carrousel des destinations">
           <div 
             className="flex transition-transform duration-300 ease-out will-change-transform"
             style={{ 
@@ -120,20 +122,22 @@ const PopularDestinations: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-8 flex justify-center md:hidden space-x-3">
+        <div className="mt-8 flex justify-center md:hidden space-x-3" role="group" aria-label="Navigation du carrousel mobile">
           <button 
             onClick={handlePrev}
             disabled={currentIndex === 0}
-            className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            aria-label="Destination précédente"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={20} aria-hidden="true" />
           </button>
           <button 
             onClick={handleNext}
             disabled={currentIndex >= destinations.length - 1}
-            className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            aria-label="Destination suivante"
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={20} aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -147,29 +151,37 @@ interface DestinationCardProps {
 
 const DestinationCard: React.FC<DestinationCardProps> = memo(({ destination }) => {
   return (
-    <div className="destination-card relative h-80 rounded-xl overflow-hidden group cursor-pointer will-change-transform">
-      <div className="relative w-full h-full">
-        <Image 
-          src={destination.image} 
-          alt={destination.name} 
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-110 will-change-transform"
-          loading="lazy"
-        />
-      </div>
+    <article 
+      className="destination-card relative h-80 rounded-xl overflow-hidden group cursor-pointer will-change-transform focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+      role="button"
+      tabIndex={0}
+      aria-label={`Découvrir ${destination.name}, ${destination.country} - Meilleure période: ${destination.bestTime}, Prix moyen: ${destination.averagePrice} euros`}
+    >
+      <LazyImage 
+        src={destination.image} 
+        alt={`${destination.name}, ${destination.country} - Destination populaire`}
+        fill
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        className="object-cover transition-transform duration-300 group-hover:scale-110 will-change-transform"
+        placeholder="blur"
+        quality={80}
+      />
+      
+      {/* Overlay pour améliorer le contraste */}
+      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-all duration-300" aria-hidden="true"></div>
       
       <div className="absolute bottom-0 left-0 right-0 p-6 text-white z-10">
-        <h3 className="text-2xl font-bold mb-1">{destination.name}</h3>
-        <p className="mb-2">{destination.country}</p>
+        <h3 className="text-2xl font-bold mb-1 drop-shadow-lg">{destination.name}</h3>
+        <p className="mb-2 drop-shadow-md">{destination.country}</p>
         
         <div className="overflow-hidden max-h-0 group-hover:max-h-20 transition-all duration-300">
           <div className="pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
-            <p className="text-sm">Meilleure période: {destination.bestTime}</p>
-            <p className="text-sm">Prix moyen: {destination.averagePrice}€</p>
+            <p className="text-sm drop-shadow-md" aria-label={`Meilleure période pour visiter : ${destination.bestTime}`}>Meilleure période: {destination.bestTime}</p>
+            <p className="text-sm drop-shadow-md" aria-label={`Prix moyen du voyage : ${destination.averagePrice} euros`}>Prix moyen: {destination.averagePrice}€</p>
           </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 });
 

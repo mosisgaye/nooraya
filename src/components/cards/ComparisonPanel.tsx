@@ -1,7 +1,7 @@
 'use client'
 import React from 'react';
 import { X, Star } from 'lucide-react';
-import Image from 'next/image';
+import LazyImage from '../ui/LazyImage';
 
 interface Flight {
   id: string;
@@ -241,11 +241,14 @@ const HotelComparison: React.FC<HotelComparisonProps> = ({
                     <X size={12} />
                   </button>
                   <div className="relative w-full h-32 mb-2">
-                    <Image 
+                    <LazyImage 
                       src={item.data.image} 
-                      alt={item.data.name}
+                      alt={`${item.data.name} - Hôtel ${item.data.stars} étoiles à ${item.data.location} (${item.data.price}€/nuit)`}
                       fill
+                      sizes="256px"
                       className="object-cover rounded-lg"
+                      placeholder="blur"
+                      quality={75}
                     />
                   </div>
                   <div className="font-semibold text-lg">{item.data.name}</div>

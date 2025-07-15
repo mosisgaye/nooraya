@@ -1,11 +1,11 @@
 import React from 'react';
 import { Metadata } from 'next';
 import { MessageCircle, Phone, Mail, Book, CreditCard, Plane, Building, Shield, Clock, ChevronRight, Search } from 'lucide-react';
-import QuickActionCard from '@/components/QuickActionCard';
-import FAQItem from '@/components/FAQItem';
+import QuickActionCard from '@/components/cards/QuickActionCard';
+import FAQItem from '@/components/content/FAQItem';
 
 export const metadata: Metadata = {
-  title: 'Centre d\'Aide - Alboraq | Support 24/7',
+  title: 'Centre d\'Aide - Nooraya Voyages | Support 24/7',
   description: 'Trouvez des réponses à vos questions et contactez notre équipe de support disponible 24h/24 et 7j/7.',
 };
 
@@ -57,7 +57,7 @@ export default function HelpPage() {
           <QuickActionCard
             icon={<Mail className="h-8 w-8" />}
             title="Email"
-            description="support@alboraq.com"
+            description="support@noorayavoyages.com"
             action="Envoyer un email"
             variant="tertiary"
           />

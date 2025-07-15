@@ -1,0 +1,217 @@
+/* Critical CSS pour le First Contentful Paint */
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+  }
+
+  body {
+    margin: 0;
+    line-height: inherit;
+    color: rgb(31 41 55);
+    background-color: rgb(255 255 255);
+  }
+
+  /* Header critical styles */
+  .header-container {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background-color: rgb(255 255 255);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: rgb(37 99 235);
+    text-decoration: none;
+  }
+
+  /* Navigation critical styles */
+  .nav-links {
+    display: none;
+    gap: 2rem;
+  }
+
+  @media (min-width: 1024px) {
+    .nav-links {
+      display: flex;
+    }
+  }
+
+  .nav-link {
+    color: rgb(75 85 99);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .nav-link:hover {
+    color: rgb(37 99 235);
+  }
+
+  /* Hero section critical styles */
+  .hero {
+    position: relative;
+    background: linear-gradient(135deg, rgb(37 99 235) 0%, rgb(16 185 129) 100%);
+    color: white;
+    padding: 4rem 1.5rem;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  @media (max-width: 768px) {
+    .hero h1 {
+      font-size: 2rem;
+    }
+  }
+
+  .hero p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+  }
+
+  /* Button critical styles */
+  .btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background-color: rgb(234 179 8);
+    color: rgb(0 0 0);
+  }
+
+  .btn-primary:hover {
+    background-color: rgb(202 138 4);
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: white;
+    border: 2px solid white;
+  }
+
+  .btn-secondary:hover {
+    background-color: white;
+    color: rgb(37 99 235);
+  }
+
+  /* Search form critical styles */
+  .search-form {
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    padding: 2rem;
+    max-width: 1000px;
+    margin: 2rem auto 0;
+  }
+
+  .search-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .search-tab {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background-color: transparent;
+    color: rgb(107 114 128);
+    cursor: pointer;
+    border-radius: 0.5rem;
+    font-weight: 500;
+  }
+
+  .search-tab.active {
+    background-color: rgb(37 99 235);
+    color: white;
+  }
+
+  .search-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .search-field {
+    position: relative;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgb(209 213 219);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: rgb(37 99 235);
+    box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
+  }
+
+  /* Loading skeleton */
+  .skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+  }
+
+  @keyframes loading {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Utility classes */
+  .visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+
+  .focus-visible:focus {
+    outline: 2px solid rgb(37 99 235);
+    outline-offset: 2px;
+  }

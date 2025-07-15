@@ -1,4 +1,50 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /booking/temp/
+Disallow: /*?sort=*
+Disallow: /*?filter=*
+Disallow: /search?*
+Disallow: /private/
 
-Sitemap: https://www.alboraq.com/sitemap.xml
+# Permettre les bots spécifiques
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /booking/temp/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Slurp
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# Bots de voyage spécifiques
+User-agent: kayak
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: skyscanner
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: expedia
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# Contrôle du crawl
+Crawl-delay: 1
+
+# Sitemap
+Sitemap: https://www.noorayavoyages.com/sitemap.xml

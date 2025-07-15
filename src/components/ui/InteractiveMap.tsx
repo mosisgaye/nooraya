@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import { MapPin, Star, X, Navigation, Layers } from 'lucide-react';
-import Image from 'next/image';
+import LazyImage from './LazyImage';
 
 interface MapLocation {
   id: string;
@@ -171,11 +171,14 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
 
                 {selectedLocation.image && (
                   <div className="relative w-full h-32 mb-4">
-                    <Image
+                    <LazyImage
                       src={selectedLocation.image}
-                      alt={selectedLocation.name}
+                      alt={`${selectedLocation.name} - ${selectedLocation.type} ${selectedLocation.rating ? `(${selectedLocation.rating}/10)` : ''}`}
                       fill
+                      sizes="320px"
                       className="object-cover rounded-lg"
+                      placeholder="blur"
+                      quality={75}
                     />
                   </div>
                 )}

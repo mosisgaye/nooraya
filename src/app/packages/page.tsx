@@ -3,8 +3,8 @@ import { Package, MapPin, Calendar, Users, Star, Shield, Coffee, Wifi } from 'lu
 import Image from 'next/image';
 
 export const metadata: Metadata = {
-  title: 'Séjours Tout Compris - Alboraq | Vol + Hôtel',
-  description: 'Réservez vos séjours tout compris avec Alboraq. Profitez de nos packages vol + hôtel aux meilleurs prix avec assurance annulation gratuite.',
+  title: 'Séjours Tout Compris - Nooraya Voyages | Vol + Hôtel',
+  description: 'Réservez vos séjours tout compris avec Nooraya Voyages. Profitez de nos packages vol + hôtel aux meilleurs prix avec assurance annulation gratuite.',
 };
 
 export default function PackagesPage() {

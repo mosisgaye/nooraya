@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { Tag, ArrowRight } from 'lucide-react';
-import Image from 'next/image';
+import LazyImage from '../ui/LazyImage';
 
 interface Offer {
   id: number;
@@ -98,15 +98,16 @@ interface OfferCardProps {
 const OfferCard: React.FC<OfferCardProps> = ({ offer }) => {
   return (
     <div className="card card-hover group">
-      <div className="relative">
-        <div className="relative w-full h-48">
-          <Image 
-            src={offer.image} 
-            alt={offer.destination} 
-            fill
-            className="object-cover"
-          />
-        </div>
+      <div className="relative w-full h-48">
+        <LazyImage 
+          src={offer.image} 
+          alt={`Offre spéciale ${offer.destination} - ${offer.duration} à partir de ${offer.newPrice}€ (${offer.discount}% de réduction)`}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          className="object-cover"
+          placeholder="blur"
+          quality={75}
+        />
         <div className="absolute top-3 left-3 bg-green-500 text-white text-sm font-bold px-2 py-1 rounded">
           -{offer.discount}%
         </div>
