@@ -1,12 +1,9 @@
 'use client';
 
-'use client';
-
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import { ChevronDown, Plus, Minus, Loader2 } from 'lucide-react';
-import { Button } from '@/modules/ui';
 
 interface Field {
   id: string;
@@ -37,13 +34,6 @@ const SearchForm: React.FC<SearchFormProps> = ({ type, fields, buttonText, butto
   const [showPassengersDropdown, setShowPassengersDropdown] = useState(false);
   const [flexibleDates, setFlexibleDates] = useState(false);
 
-  // Gestion des touches du clavier pour l'accessibilité
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      setShowPassengersDropdown(false);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -51,45 +41,44 @@ const SearchForm: React.FC<SearchFormProps> = ({ type, fields, buttonText, butto
 
     try {
       const formData = new FormData(e.target as HTMLFormElement);
+      const data: Record<string, string | number | boolean> = {};
       
-      if (type === 'flights') {
-        const searchData = {
-          from: formData.get('departure') as string,
-          to: formData.get('destination') as string,
-          departureDate: departureDate ? format(departureDate, 'yyyy-MM-dd') : '',
-          returnDate: returnDate ? format(returnDate, 'yyyy-MM-dd') : '',
-          passengers: passengers.adults + passengers.children + passengers.infants,
-          adults: passengers.adults,
-          children: passengers.children,
-          infants: passengers.infants,
-          flexible: flexibleDates
-        };
-        
-        if (!searchData.from || !searchData.to || !searchData.departureDate) {
-          throw new Error('Veuillez remplir tous les champs requis');
+      // Collecter les données du formulaire
+      fields.forEach((field) => {
+        if (field.id === 'dates') {
+          data.departureDate = departureDate ? format(departureDate, 'yyyy-MM-dd') : '';
+          data.returnDate = returnDate ? format(returnDate, 'yyyy-MM-dd') : '';
+        } else if (field.id === 'passengers') {
+          data.adults = passengers.adults;
+          data.children = passengers.children;
+          data.infants = passengers.infants;
+        } else {
+          const value = formData.get(field.id);
+          if (value !== null) {
+            data[field.id] = value.toString();
+          }
         }
-        
-        // Simulation d'un délai de recherche
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        onSearch(searchData, 'flights');
-      } else if (type === 'hotels') {
-        const searchData = {
-          destination: formData.get('destination') as string,
-          checkIn: departureDate ? format(departureDate, 'yyyy-MM-dd') : '',
-          checkOut: returnDate ? format(returnDate, 'yyyy-MM-dd') : '',
-          rooms: 1,
-          adults: passengers.adults,
-          children: passengers.children,
-          flexible: flexibleDates
-        };
-        
-        if (!searchData.destination || !searchData.checkIn || !searchData.checkOut) {
-          throw new Error('Veuillez remplir tous les champs requis');
+      });
+
+      // Ajouter les options supplémentaires
+      data.flexibleDates = flexibleDates;
+      data.searchType = type;
+
+      // Validation
+      const requiredFields = fields.filter(f => f.id !== 'returnDate');
+      for (const field of requiredFields) {
+        if (field.id === 'dates' && !departureDate) {
+          throw new Error('Veuillez sélectionner une date de départ');
+        } else if (field.id !== 'dates' && field.id !== 'passengers' && !data[field.id]) {
+          throw new Error(`Veuillez remplir le champ ${field.label}`);
         }
-        
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        onSearch(searchData, 'hotels');
       }
+
+      if (type === 'flights' && returnDate && departureDate && returnDate < departureDate) {
+        throw new Error('La date de retour doit être après la date de départ');
+      }
+
+      await onSearch(data, type);
     } catch (err) {
       const error = err as Error;
       setError(error.message || 'Une erreur est survenue lors de la recherche');
@@ -108,7 +97,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ type, fields, buttonText, butto
   const totalPassengers = passengers.adults + passengers.children + passengers.infants;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6" role="search" aria-label="Recherche de vols et hôtels" onKeyDown={handleKeyDown}>
+    <form onSubmit={handleSubmit} className="space-y-6" role="search" aria-label="Recherche de vols et hotels">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {fields.map((field) => {
           if (field.id === 'dates') {
@@ -123,252 +112,217 @@ const SearchForm: React.FC<SearchFormProps> = ({ type, fields, buttonText, butto
                       selected={departureDate}
                       onChange={(date: Date | null) => setDepartureDate(date)}
                       dateFormat="dd/MM/yyyy"
+                      placeholderText="Départ"
+                      className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       minDate={new Date()}
-                      placeholderText={type === 'hotels' ? 'Arrivée' : 'Départ'}
-                      className="input-field pl-10 w-full text-sm sm:text-base"
-                      aria-label={type === 'hotels' ? 'Sélectionner la date d\'arrivée' : 'Sélectionner la date de départ'}
-                      aria-describedby={`${field.id}-label`}
+                      id="departure-date"
+                      autoComplete="off"
+                      aria-labelledby="dates-label"
+                      aria-required="true"
                     />
-                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" aria-hidden="true">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       {field.icon}
-                    </span>
+                    </div>
                   </div>
-                  <div className="relative">
-                    <DatePicker
-                      selected={returnDate}
-                      onChange={(date: Date | null) => setReturnDate(date)}
-                      dateFormat="dd/MM/yyyy"
-                      minDate={departureDate || new Date()}
-                      placeholderText={type === 'hotels' ? 'Départ' : 'Retour'}
-                      className="input-field pl-10 w-full text-sm sm:text-base"
-                      aria-label={type === 'hotels' ? 'Sélectionner la date de départ' : 'Sélectionner la date de retour'}
-                      aria-describedby={`${field.id}-label`}
-                    />
-                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" aria-hidden="true">
-                      {field.icon}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            );
-          }
-
-          if (field.id === 'passengers' || field.id === 'rooms' || field.id === 'travelers') {
-            return (
-              <div key={field.id} className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2" id={`${field.id}-label`}>
-                  {field.label}
-                </label>
-                <div className="relative">
-                  <button
-                    type="button"
-                    className="input-field pl-10 pr-10 w-full text-left text-sm sm:text-base flex items-center justify-between"
-                    onClick={() => setShowPassengersDropdown(!showPassengersDropdown)}
-                    aria-label="Sélectionner le nombre de voyageurs"
-                    aria-expanded={showPassengersDropdown}
-                    aria-haspopup="true"
-                    aria-describedby={`${field.id}-label`}
-                  >
-                    <span>{totalPassengers} voyageur{totalPassengers > 1 ? 's' : ''}</span>
-                    <ChevronDown size={16} className={`transition-transform ${showPassengersDropdown ? 'rotate-180' : ''}`} aria-hidden="true" />
-                  </button>
-                  <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    {field.icon}
-                  </span>
-                  
-                  {showPassengersDropdown && (
-                    <div 
-                      className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-200 p-4 z-50 animate-in slide-in-from-top-2 duration-200"
-                      role="dialog"
-                      aria-label="Sélection du nombre de voyageurs"
-                    >
-                      <PassengerSelector
-                        type="adults"
-                        label="Adultes"
-                        subtitle="18 ans et plus"
-                        value={passengers.adults}
-                        onChange={handlePassengerChange}
-                        min={1}
+                  {type === 'flights' && (
+                    <div className="relative">
+                      <DatePicker
+                        selected={returnDate}
+                        onChange={(date: Date | null) => setReturnDate(date)}
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Retour"
+                        className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                        minDate={departureDate || new Date()}
+                        id="return-date"
+                        autoComplete="off"
+                        aria-labelledby="dates-label"
                       />
-                      <PassengerSelector
-                        type="children"
-                        label="Enfants"
-                        subtitle="2-17 ans"
-                        value={passengers.children}
-                        onChange={handlePassengerChange}
-                      />
-                      {type === 'flights' && (
-                        <PassengerSelector
-                          type="infants"
-                          label="Bébés"
-                          subtitle="0-2 ans"
-                          value={passengers.infants}
-                          onChange={handlePassengerChange}
-                        />
-                      )}
-                      <div className="pt-3 border-t border-gray-200 mt-3">
-                        <button
-                          type="button"
-                          onClick={() => setShowPassengersDropdown(false)}
-                          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                          aria-label="Confirmer la sélection des voyageurs"
-                        >
-                          Confirmer
-                        </button>
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        {field.icon}
                       </div>
                     </div>
                   )}
                 </div>
               </div>
             );
-          }
-
-          return (
-            <div key={field.id} className="relative">
-              <label htmlFor={field.id} className="block text-sm font-medium text-gray-700 mb-2">
-                {field.label}
-              </label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          } else if (field.id === 'passengers') {
+            return (
+              <div key={field.id} className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-2" id={`${field.id}-label`}>
+                  {field.label}
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowPassengersDropdown(!showPassengersDropdown)}
+                  className="w-full flex items-center justify-between pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-left"
+                  aria-label={`${totalPassengers} passager${totalPassengers > 1 ? 's' : ''}`}
+                  aria-expanded={showPassengersDropdown}
+                  aria-haspopup="true"
+                >
+                  <span>{totalPassengers} passager{totalPassengers > 1 ? 's' : ''}</span>
+                  <ChevronDown className={`transform transition-transform ${showPassengersDropdown ? 'rotate-180' : ''}`} size={16} />
+                </button>
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none mt-8">
                   {field.icon}
-                </span>
+                </div>
+                
+                {showPassengersDropdown && (
+                  <div 
+                    className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50"
+                    role="dialog"
+                    aria-label="Sélection du nombre de passagers"
+                  >
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium text-gray-900">Adultes</p>
+                          <p className="text-xs text-gray-500">12 ans et plus</p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <button
+                            type="button"
+                            onClick={() => handlePassengerChange('adults', 'subtract')}
+                            disabled={passengers.adults <= 1}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            aria-label="Diminuer le nombre d'adultes"
+                          >
+                            <Minus size={14} />
+                          </button>
+                          <span className="w-8 text-center" aria-live="polite">{passengers.adults}</span>
+                          <button
+                            type="button"
+                            onClick={() => handlePassengerChange('adults', 'add')}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100"
+                            aria-label="Augmenter le nombre d'adultes"
+                          >
+                            <Plus size={14} />
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium text-gray-900">Enfants</p>
+                          <p className="text-xs text-gray-500">2-11 ans</p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <button
+                            type="button"
+                            onClick={() => handlePassengerChange('children', 'subtract')}
+                            disabled={passengers.children <= 0}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            aria-label="Diminuer le nombre d'enfants"
+                          >
+                            <Minus size={14} />
+                          </button>
+                          <span className="w-8 text-center" aria-live="polite">{passengers.children}</span>
+                          <button
+                            type="button"
+                            onClick={() => handlePassengerChange('children', 'add')}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100"
+                            aria-label="Augmenter le nombre d'enfants"
+                          >
+                            <Plus size={14} />
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium text-gray-900">Bébés</p>
+                          <p className="text-xs text-gray-500">Moins de 2 ans</p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <button
+                            type="button"
+                            onClick={() => handlePassengerChange('infants', 'subtract')}
+                            disabled={passengers.infants <= 0}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            aria-label="Diminuer le nombre de bébés"
+                          >
+                            <Minus size={14} />
+                          </button>
+                          <span className="w-8 text-center" aria-live="polite">{passengers.infants}</span>
+                          <button
+                            type="button"
+                            onClick={() => handlePassengerChange('infants', 'add')}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100"
+                            aria-label="Augmenter le nombre de bébés"
+                          >
+                            <Plus size={14} />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          } else {
+            return (
+              <div key={field.id} className="relative">
+                <label htmlFor={field.id} className="block text-sm font-medium text-gray-700 mb-2">
+                  {field.label}
+                </label>
                 <input
                   type={field.type}
                   id={field.id}
                   name={field.id}
-                  className="input-field pl-10 w-full text-sm sm:text-base"
                   placeholder={field.placeholder}
-                  required
-                  aria-describedby={error ? `${field.id}-error` : undefined}
+                  className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  required={field.id !== 'returnDate'}
+                  autoComplete={field.id === 'origin' || field.id === 'destination' ? 'off' : undefined}
+                  aria-required={field.id !== 'returnDate' ? 'true' : 'false'}
                 />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none mt-8">
+                  {field.icon}
+                </div>
               </div>
-            </div>
-          );
+            );
+          }
         })}
       </div>
 
-      {/* Options avancées */}
-      <div className="flex flex-wrap items-center gap-4 pt-2">
-        <label className="flex items-center cursor-pointer">
-          <input 
-            type="checkbox"
-            checked={flexibleDates}
-            onChange={(e) => setFlexibleDates(e.target.checked)}
-<<<<<<< HEAD:src/components/SearchForm.tsx
-            className="mr-2"
-          />
-          <span className="text-sm text-gray-600">Dates flexibles</span>
-        </label>
-      </div>
-
-=======
-            className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500" 
-            id="flexible-dates"
-            aria-describedby="flexible-dates-description"
-          />
-          <span className="ml-2 text-sm text-gray-700" id="flexible-dates-description">Dates flexibles (±3 jours)</span>
-        </label>
-        
-        <label className="flex items-center cursor-pointer">
-          <input 
-            type="checkbox" 
-            className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500" 
-            id="direct-flights"
-            aria-describedby="direct-flights-description"
-          />
-          <span className="ml-2 text-sm text-gray-700" id="direct-flights-description">Vol direct uniquement</span>
-        </label>
-      </div>
+      {type === 'flights' && (
+        <div className="flex items-center space-x-4">
+          <label className="flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={flexibleDates}
+              onChange={(e) => setFlexibleDates(e.target.checked)}
+              className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              aria-label="Dates flexibles"
+            />
+            <span className="text-sm text-gray-700">Dates flexibles (+/- 3 jours)</span>
+          </label>
+        </div>
+      )}
 
       {error && (
-        <div 
-          className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm animate-in slide-in-from-top-2 duration-200"
-          role="alert"
-          aria-live="polite"
-          id="search-error"
-        >
-          <span className="w-2 h-2 bg-red-500 rounded-full mr-2 inline-block" aria-hidden="true"></span>
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm" role="alert">
           {error}
         </div>
       )}
 
->>>>>>> 5262ff2 (description):src/components/search/SearchForm.tsx
-      <div className="flex justify-center pt-4">
-        <Button
-          type="submit"
-<<<<<<< HEAD:src/components/SearchForm.tsx
-          loading={loading}
-          size="lg"
-          fullWidth={false}
-          icon={!loading ? buttonIcon : undefined}
-        >
-          {loading ? 'Recherche en cours...' : buttonText}
-        </Button>
-=======
-          disabled={loading}
-          className={`btn-primary w-full sm:w-auto px-8 py-4 text-lg font-semibold flex items-center justify-center min-w-[200px] ${
-            loading ? 'opacity-75 cursor-not-allowed' : ''
-          }`}
-          aria-label={loading ? 'Recherche en cours...' : buttonText}
-          aria-describedby={error ? 'search-error' : undefined}
-        >
-          {loading ? (
-            <>
-              <Loader2 className="mr-2 animate-spin" size={20} aria-hidden="true" />
-              <span>Recherche en cours...</span>
-            </>
-          ) : (
-            <>
-              <span aria-hidden="true">{buttonIcon}</span>
-              <span className="ml-2">{buttonText}</span>
-            </>
-          )}
-        </button>
->>>>>>> 5262ff2 (description):src/components/search/SearchForm.tsx
-      </div>
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 px-6 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        aria-label={loading ? 'Recherche en cours' : buttonText}
+      >
+        {loading ? (
+          <>
+            <Loader2 className="animate-spin" size={20} />
+            <span>Recherche en cours...</span>
+          </>
+        ) : (
+          <>
+            {buttonIcon}
+            <span>{buttonText}</span>
+          </>
+        )}
+      </button>
     </form>
-  );
-};
-
-interface PassengerSelectorProps {
-  type: 'adults' | 'children' | 'infants';
-  label: string;
-  subtitle: string;
-  value: number;
-  onChange: (type: 'adults' | 'children' | 'infants', operation: 'add' | 'subtract') => void;
-  min?: number;
-}
-
-const PassengerSelector: React.FC<PassengerSelectorProps> = ({ 
-  type, label, subtitle, value, onChange, min = 0 
-}) => {
-  return (
-    <div className="flex items-center justify-between py-3">
-      <div>
-        <span className="text-sm font-medium text-gray-900">{label}</span>
-        <div className="text-xs text-gray-500">{subtitle}</div>
-      </div>
-      <div className="flex items-center space-x-3">
-        <button
-          type="button"
-          onClick={() => onChange(type, 'subtract')}
-          className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500"
-          disabled={value <= min}
-          aria-label={`Diminuer le nombre de ${label.toLowerCase()}`}
-        >
-          <Minus size={14} aria-hidden="true" />
-        </button>
-        <span className="w-8 text-center font-medium" aria-label={`${value} ${label.toLowerCase()}`}>{value}</span>
-        <button
-          type="button"
-          onClick={() => onChange(type, 'add')}
-          className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-          aria-label={`Augmenter le nombre de ${label.toLowerCase()}`}
-        >
-          <Plus size={14} aria-hidden="true" />
-        </button>
-      </div>
-    </div>
   );
 };
 

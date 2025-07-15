@@ -58,7 +58,7 @@ export type PaymentStatus = 'pending' | 'completed' | 'failed' | 'refunded';
 export interface BookingItem {
   id: string;
   type: 'flight' | 'hotel' | 'transfer' | 'insurance';
-  details: any; // Flight | Hotel | etc.
+  details: unknown; // Flight | Hotel | etc.
   price: number;
   quantity: number;
 }

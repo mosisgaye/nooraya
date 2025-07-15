@@ -89,7 +89,7 @@ class AuthService {
 
       const data = await response.json();
       return data.user;
-    } catch (error) {
+    } catch {
       localStorage.removeItem('auth-token');
       return null;
     }

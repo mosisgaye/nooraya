@@ -111,7 +111,7 @@ export const useAuthState = () => {
           isLoading: false,
           error: null,
         });
-      } catch (error) {
+      } catch {
         setAuth({
           user: null,
           isAuthenticated: false,

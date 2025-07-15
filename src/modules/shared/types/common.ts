@@ -12,7 +12,7 @@ export interface SortParams {
 
 export interface SearchParams extends PaginationParams {
   query?: string;
-  filters?: Record<string, any>;
+  filters?: Record<string, unknown>;
   sort?: SortParams;
 }
 

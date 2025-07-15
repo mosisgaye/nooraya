@@ -106,7 +106,7 @@ class BookingService {
     return `ALB${result}`;
   }
 
-  calculateTotalPrice(items: any[]): number {
+  calculateTotalPrice(items: { price: number; quantity: number }[]): number {
     return items.reduce((total, item) => total + (item.price * item.quantity), 0);
   }
 }

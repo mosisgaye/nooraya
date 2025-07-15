@@ -2,12 +2,7 @@
 
 import React from 'react';
 import { Star, Wifi, Car, Coffee, Dumbbell, MapPin, Plus } from 'lucide-react';
-<<<<<<< HEAD:src/components/HotelCard.tsx
-import Image from 'next/image';
-import { Button } from '@/modules/ui';
-=======
 import LazyImage from '../ui/LazyImage';
->>>>>>> 5262ff2 (description):src/components/cards/HotelCard.tsx
 
 interface Hotel {
   id: string;
@@ -37,12 +32,12 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, onAddToComparison, isInCom
   };
 
   return (
-    <article className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow" role="article" aria-label={`Hôtel ${hotel.name} à ${hotel.location}`}>
+    <article className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow" role="article" aria-label={`Hotel ${hotel.name} a ${hotel.location}`}>
       <div className="flex flex-col lg:flex-row">
         <div className="lg:w-1/3 h-48 lg:h-auto relative">
           <LazyImage 
             src={hotel.image} 
-            alt={`${hotel.name} - Hôtel ${hotel.stars} étoiles à ${hotel.location}`}
+            alt={`${hotel.name} - Hotel ${hotel.stars} etoiles a ${hotel.location}`}
             fill
             sizes="(max-width: 1024px) 100vw, 33vw"
             className="object-cover"
@@ -52,77 +47,77 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, onAddToComparison, isInCom
         </div>
         
         <div className="flex-1 p-6">
-          <div className="flex justify-between items-start mb-2">
+          <div className="flex justify-between items-start mb-4">
             <div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-1">{hotel.name}</h3>
-              <div className="flex items-center text-sm text-gray-600 mb-2">
-                <MapPin size={14} className="mr-1" aria-hidden="true" />
-                <span aria-label={`Situé à ${hotel.location}, à ${hotel.distance}`}>{hotel.location} • {hotel.distance}</span>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">{hotel.name}</h3>
+              <div className="flex items-center text-sm text-gray-600 space-x-2">
+                <MapPin size={16} className="text-gray-400" />
+                <span aria-label={`Situe a ${hotel.location}, a ${hotel.distance}`}>{hotel.location} • {hotel.distance}</span>
               </div>
             </div>
             <div className="text-right">
-              <div className="flex items-center mb-1" role="img" aria-label={`Hôtel ${hotel.stars} étoiles`}>
-                {[...Array(hotel.stars)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" aria-hidden="true" />
+              <div className="flex items-center mb-1" role="img" aria-label={`Hotel ${hotel.stars} etoiles`}>
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    size={16}
+                    className={i < hotel.stars ? 'text-yellow-400 fill-current' : 'text-gray-200'}
+                  />
                 ))}
               </div>
-              <div className="bg-emerald-100 text-emerald-800 px-2 py-1 rounded text-sm font-medium" aria-label={`Note : ${hotel.rating} sur 10`}>
-                {hotel.rating}/10
-              </div>
-              <div className="text-xs text-gray-500 mt-1" aria-label={`Basé sur ${hotel.reviews} avis`}>{hotel.reviews} avis</div>
+              <div className="text-xs text-gray-500 mt-1" aria-label={`Base sur ${hotel.reviews} avis`}>{hotel.reviews} avis</div>
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2 mb-4" role="list" aria-label="Services disponibles">
-            {hotel.amenities.map((amenity, index) => (
-              <span key={index} className="flex items-center text-xs bg-gray-100 px-2 py-1 rounded" role="listitem">
-                <span aria-hidden="true">{amenityIcons[amenity] || <Star size={12} />}</span>
-                <span className="ml-1 capitalize">{amenity}</span>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {hotel.amenities.map((amenity) => (
+              <span
+                key={amenity}
+                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700"
+              >
+                {amenityIcons[amenity] || null}
+                <span className="ml-1">{amenity}</span>
               </span>
             ))}
           </div>
 
+          <div className="flex items-center space-x-2 mb-4">
+            <div className="flex items-center">
+              <span className="text-2xl font-bold text-green-600">{hotel.rating}</span>
+              <span className="text-sm text-gray-600 ml-1">/10</span>
+            </div>
+            <span className="text-sm text-gray-600">Excellent</span>
+          </div>
+
           <div className="flex items-center justify-between">
             <div>
-<<<<<<< HEAD:src/components/HotelCard.tsx
-              <Button variant="success" size="md">
-                <div className="text-sm text-gray-500">par nuit</div>
-              </Button>
-=======
-              <div className="text-2xl font-bold text-emerald-600" aria-label={`Prix : ${hotel.price} euros par nuit`}>{hotel.price}€</div>
-              <div className="text-sm text-gray-500">par nuit</div>
->>>>>>> 5262ff2 (description):src/components/cards/HotelCard.tsx
+              <div className="text-3xl font-bold text-gray-900">
+                {hotel.price}€
+              </div>
+              <p className="text-sm text-gray-500">par nuit</p>
             </div>
             
-            <div className="flex gap-2" role="group" aria-label="Actions pour cet hôtel">
-              <button 
-                className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
-                aria-label={`Voir les chambres disponibles pour ${hotel.name}`}
+            <div className="flex space-x-2">
+              <button
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                aria-label={`Reserver ${hotel.name} pour ${hotel.price} euros par nuit`}
               >
-                Voir les chambres
+                Réserver
               </button>
               
-              <Button
-                variant="secondary"
-                size="sm"
+              <button
+                onClick={() => onAddToComparison(hotel)}
                 disabled={isInComparison}
-<<<<<<< HEAD:src/components/HotelCard.tsx
-                icon={<Plus size={14} />}
-              >
-                <Plus size={14} className="inline mr-1" />
-              </Button>
-=======
-                className={`px-4 py-2 rounded-lg border transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${
+                className={`px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
                   isInComparison 
                     ? 'border-green-300 text-green-600 bg-green-50' 
                     : 'border-gray-300 text-gray-600 hover:bg-gray-50'
                 }`}
-                aria-label={isInComparison ? 'Hôtel ajouté à la comparaison' : 'Ajouter cet hôtel à la comparaison'}
+                aria-label={isInComparison ? 'Hotel ajoute a la comparaison' : 'Ajouter cet hotel a la comparaison'}
               >
-                <Plus size={14} className="inline mr-1" aria-hidden="true" />
-                {isInComparison ? 'Ajouté' : 'Comparer'}
+                <Plus size={20} />
+                {isInComparison ? 'Ajoute' : 'Comparer'}
               </button>
->>>>>>> 5262ff2 (description):src/components/cards/HotelCard.tsx
             </div>
           </div>
         </div>
