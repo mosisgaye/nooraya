@@ -18,6 +18,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://www.alboraq.com'),
   title: 'Alboraq - Voyages Élégants | Vols, Hôtels et Séjours',
   description: 'Découvrez le monde avec Alboraq. Réservez vos vols, hôtels et séjours au meilleur prix. Service premium et assistance 24/7.',
   keywords: 'voyage, vols, hôtels, séjours, vacances, réservation, tourisme, Alboraq',

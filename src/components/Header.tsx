@@ -62,7 +62,7 @@ const Header: React.FC = () => {
             </div>
             <div className="ml-3">
               <span className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
-                Alboraq
+                Nooraya
               </span>
               <span className="block text-xs text-gray-500 font-light tracking-wider uppercase">
                 Voyages Élégants
