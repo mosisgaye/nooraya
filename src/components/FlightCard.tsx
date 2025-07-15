@@ -3,6 +3,7 @@
 import React from 'react';
 import { Plane, Star, Wifi, Coffee, Plus } from 'lucide-react';
 import Image from 'next/image';
+import { Button } from '@/modules/ui';
 
 interface Flight {
   id: string;
@@ -92,22 +93,19 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, onAddToComparison, isIn
           <div className="text-sm text-gray-500 mb-4">par personne</div>
           
           <div className="space-y-2">
-            <button className="w-full lg:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+            <Button variant="primary" size="md">
               Sélectionner
-            </button>
+            </Button>
             
-            <button
+            <Button
+              variant="secondary"
+              size="sm"
               onClick={() => onAddToComparison(flight)}
               disabled={isInComparison}
-              className={`w-full lg:w-auto px-6 py-2 rounded-lg border transition-colors text-sm ${
-                isInComparison 
-                  ? 'border-green-300 text-green-600 bg-green-50' 
-                  : 'border-gray-300 text-gray-600 hover:bg-gray-50'
-              }`}
+              icon={<Plus size={14} />}
             >
-              <Plus size={14} className="inline mr-1" />
               {isInComparison ? 'Ajouté' : 'Comparer'}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

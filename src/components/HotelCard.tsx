@@ -3,6 +3,7 @@
 import React from 'react';
 import { Star, Wifi, Car, Coffee, Dumbbell, MapPin, Plus } from 'lucide-react';
 import Image from 'next/image';
+import { Button } from '@/modules/ui';
 
 interface Hotel {
   id: string;
@@ -76,9 +77,9 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, onAddToComparison, isInCom
 
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-2xl font-bold text-emerald-600">{hotel.price}€</div>
+            <Button variant="success" size="md">
               <div className="text-sm text-gray-500">par nuit</div>
-            </div>
+            </Button>
             
             <div className="flex gap-2">
               <button className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors font-medium">
@@ -86,18 +87,15 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, onAddToComparison, isInCom
               </button>
               
               <button
-                onClick={() => onAddToComparison(hotel)}
+            <Button
+              variant="secondary"
+              size="sm"
                 disabled={isInComparison}
                 className={`px-4 py-2 rounded-lg border transition-colors text-sm ${
-                  isInComparison 
-                    ? 'border-green-300 text-green-600 bg-green-50' 
-                    : 'border-gray-300 text-gray-600 hover:bg-gray-50'
-                }`}
-              >
+              icon={<Plus size={14} />}
                 <Plus size={14} className="inline mr-1" />
-                {isInComparison ? 'Ajouté' : 'Comparer'}
               </button>
-            </div>
+            </Button>
           </div>
         </div>
       </div>

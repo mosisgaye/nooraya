@@ -7,6 +7,7 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from 'date-fns';
 import { ChevronDown, Plus, Minus, Loader2 } from 'lucide-react';
+import { Button } from '@/modules/ui';
 
 interface Field {
   id: string;
@@ -232,25 +233,16 @@ const SearchForm: React.FC<SearchFormProps> = ({ type, fields, buttonText, butto
       <div className="flex flex-wrap items-center gap-4 pt-2">
         <label className="flex items-center cursor-pointer">
           <input 
-            type="checkbox" 
+            <Button
             checked={flexibleDates}
             onChange={(e) => setFlexibleDates(e.target.checked)}
-            className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500" 
-          />
-          <span className="ml-2 text-sm text-gray-700">Dates flexibles (±3 jours)</span>
+              loading={loading}
+              size="lg"
+              fullWidth={false}
+              icon={!loading ? buttonIcon : undefined}
         </label>
-        
-        <label className="flex items-center cursor-pointer">
-          <input type="checkbox" className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500" />
-          <span className="ml-2 text-sm text-gray-700">Vol direct uniquement</span>
-        </label>
-      </div>
-
-      {error && (
-        <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm animate-in slide-in-from-top-2 duration-200">
-          <div className="flex items-center">
-            <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
-            {error}
+              {loading ? 'Recherche en cours...' : buttonText}
+            </Button>
           </div>
         </div>
       )}
