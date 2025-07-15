@@ -77,25 +77,25 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, onAddToComparison, isInCom
 
           <div className="flex items-center justify-between">
             <div>
-            <Button variant="success" size="md">
-              <div className="text-sm text-gray-500">par nuit</div>
-            </Button>
+              <Button variant="success" size="md">
+                <div className="text-sm text-gray-500">par nuit</div>
+              </Button>
+            </div>
             
             <div className="flex gap-2">
               <button className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors font-medium">
                 Voir les chambres
               </button>
               
-              <button
-            <Button
-              variant="secondary"
-              size="sm"
+              <Button
+                variant="secondary"
+                size="sm"
                 disabled={isInComparison}
-                className={`px-4 py-2 rounded-lg border transition-colors text-sm ${
-              icon={<Plus size={14} />}
+                icon={<Plus size={14} />}
+              >
                 <Plus size={14} className="inline mr-1" />
-              </button>
-            </Button>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
