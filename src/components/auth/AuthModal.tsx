@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, Mail, ArrowRight, Sparkles } from 'lucide-react';
 import { useAuth } from '@/features/auth';
 import { supabase } from '@/lib/supabase';
@@ -16,13 +16,23 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState('');
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [error, setError] = useState('');
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isOpen) {
       setEmail('');
       setIsEmailSent(false);
       setError('');
+    } else {
+      // Focus trap
+      modalRef.current?.focus();
+      // Prevent body scroll
+      document.body.style.overflow = 'hidden';
     }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
   }, [isOpen]);
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
@@ -56,34 +66,38 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <>
+    <div className="fixed inset-0 z-[100] overflow-y-auto">
+      {/* Overlay sombre */}
       <div 
-        className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm animate-in fade-in-0 duration-300"
+        className="fixed inset-0 bg-black bg-opacity-75 transition-opacity"
         onClick={onClose}
       />
       
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+      {/* Container du modal */}
+      <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
         <div 
-          className="bg-white rounded-3xl shadow-2xl w-full max-w-md my-8 animate-in slide-in-from-bottom-4 duration-300"
+          ref={modalRef}
+          className="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md"
           onClick={(e) => e.stopPropagation()}
+          tabIndex={-1}
         >
           <div className="relative p-6 sm:p-8">
             <button
               onClick={onClose}
-              className="absolute top-6 right-6 p-2 rounded-full hover:bg-gray-100 transition-colors"
+              className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
               aria-label="Fermer"
             >
-              <X size={20} className="text-gray-500" />
+              <X size={20} className="text-gray-600" />
             </button>
 
-            <div className="text-center mb-6">
-              <div className="inline-flex p-3 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-2xl mb-4 shadow-lg shadow-purple-200/30">
-                <Sparkles className="w-8 h-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600" strokeWidth={2} stroke="currentColor" />
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+                <Sparkles className="w-8 h-8 text-blue-600" />
               </div>
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-2">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 Bienvenue sur Nooraya
               </h2>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-600">
                 Connectez-vous pour accéder à vos réservations
               </p>
             </div>
@@ -93,7 +107,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 <button
                   onClick={handleGoogleAuth}
                   disabled={isLoading}
-                  className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-white border border-gray-300 rounded-2xl hover:bg-gray-50 hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group"
+                  className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group"
                 >
                   <svg className="w-5 h-5" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -122,7 +136,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Votre adresse email"
                       required
-                      className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 outline-none"
+                      className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 outline-none"
                     />
                   </div>
 
@@ -133,7 +147,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium rounded-2xl hover:from-blue-700 hover:to-indigo-700 transform hover:scale-[1.02] transition-all duration-200 shadow-lg shadow-blue-600/25 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                    className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Continuer avec l&apos;email
                     <ArrowRight size={18} />
@@ -177,7 +191,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
