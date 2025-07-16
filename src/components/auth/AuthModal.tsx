@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, Mail, ArrowRight, Sparkles } from 'lucide-react';
 import { useAuth } from '@/features/auth';
 import { supabase } from '@/lib/supabase';
+import { ModalPortal } from './ModalPortal';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -66,15 +67,16 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] overflow-y-auto">
-      {/* Overlay sombre */}
+    <ModalPortal>
+      {/* Overlay sombre avec z-index très élevé */}
       <div 
-        className="fixed inset-0 bg-black bg-opacity-75 transition-opacity"
+        className="fixed inset-0 z-[9998] bg-black bg-opacity-75 transition-opacity"
         onClick={onClose}
       />
       
-      {/* Container du modal */}
-      <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+      {/* Container du modal avec z-index encore plus élevé */}
+      <div className="fixed inset-0 z-[9999] overflow-y-auto">
+        <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
         <div 
           ref={modalRef}
           className="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md"
@@ -191,7 +193,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
       </div>
-    </div>
+    </ModalPortal>
   );
 };
 
