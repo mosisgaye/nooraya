@@ -4,14 +4,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, Mail, ArrowRight, Sparkles } from 'lucide-react';
 import { useAuth } from '@/features/auth';
 import { supabase } from '@/lib/supabase';
+import { useAuthModal } from '@/contexts/AuthModalContext';
 
-interface AuthModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  initialMode?: 'login' | 'register';
-}
-
-const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
+const AuthModal: React.FC = () => {
+  const { isAuthModalOpen, closeAuthModal } = useAuthModal();
   const { loginWithGoogle, isLoading } = useAuth();
   const [email, setEmail] = useState('');
   const [isEmailSent, setIsEmailSent] = useState(false);
@@ -19,7 +15,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!isOpen) {
+    if (!isAuthModalOpen) {
       setEmail('');
       setIsEmailSent(false);
       setError('');
@@ -33,7 +29,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen]);
+  }, [isAuthModalOpen]);
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,20 +53,20 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const handleGoogleAuth = async () => {
     try {
       await loginWithGoogle();
-      onClose();
+      closeAuthModal();
     } catch {
       setError('Connexion Google échouée. Veuillez réessayer.');
     }
   };
 
-  if (!isOpen) return null;
+  if (!isAuthModalOpen) return null;
 
   return (
     <div>
       {/* Overlay sombre avec z-index très élevé */}
       <div 
         className="fixed inset-0 z-[9998] bg-black bg-opacity-75 transition-opacity"
-        onClick={onClose}
+        onClick={closeAuthModal}
       />
       
       {/* Container du modal avec z-index encore plus élevé */}
@@ -84,7 +80,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           >
             <div className="relative p-6 sm:p-8">
               <button
-                onClick={onClose}
+                onClick={closeAuthModal}
                 className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
                 aria-label="Fermer"
               >

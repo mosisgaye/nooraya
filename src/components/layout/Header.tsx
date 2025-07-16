@@ -18,16 +18,16 @@ import {
   Sparkles
 } from 'lucide-react';
 import { useAuth } from '@/features/auth';
-import { AuthModal } from '@/components/auth';
+import { useAuthModal } from '@/contexts/AuthModalContext';
 
 const Header: React.FC = () => {
   const router = useRouter();
   const { user, logout, isAuthenticated } = useAuth();
+  const { openAuthModal } = useAuthModal();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false);
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
-  const [authModalOpen, setAuthModalOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -195,7 +195,7 @@ const Header: React.FC = () => {
             </div>
           ) : (
             <button
-              onClick={() => setAuthModalOpen(true)}
+              onClick={openAuthModal}
               className="flex items-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg shadow-blue-600/20"
             >
               <Sparkles size={18} />
@@ -284,7 +284,7 @@ const Header: React.FC = () => {
               </>
             ) : (
               <button
-                onClick={() => { setAuthModalOpen(true); closeAllDropdowns(); }}
+                onClick={() => { openAuthModal(); closeAllDropdowns(); }}
                 className="w-full flex items-center justify-center space-x-2 py-3 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200"
               >
                 <Sparkles size={18} />
@@ -303,12 +303,6 @@ const Header: React.FC = () => {
           aria-label="Fermer les menus"
         ></div>
       )}
-
-      {/* Modal d'authentification */}
-      <AuthModal 
-        isOpen={authModalOpen} 
-        onClose={() => setAuthModalOpen(false)} 
-      />
     </header>
   );
 };
