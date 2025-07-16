@@ -3,27 +3,7 @@
 import React from 'react';
 import { Plane, Star, Wifi, Coffee, Plus } from 'lucide-react';
 import LazyImage from '../ui/LazyImage';
-
-interface Flight {
-  id: string;
-  airline: string;
-  logo: string;
-  departure: {
-    time: string;
-    airport: string;
-    code: string;
-  };
-  arrival: {
-    time: string;
-    airport: string;
-    code: string;
-  };
-  duration: string;
-  stops: number;
-  price: number;
-  cabinClass: string;
-  amenities: string[];
-}
+import { Flight } from '@/types';
 
 interface FlightCardProps {
   flight: Flight;

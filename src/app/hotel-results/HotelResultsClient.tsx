@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Filter, SortAsc, Star, Bell, Map, Calendar } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import HotelCard from '@/components/cards/HotelCard';
+import { Hotel } from '@/types';
 
 // Dynamic imports pour les composants lourds
 const AdvancedFilters = dynamic(() => import('@/components/search/AdvancedFilters'), { 
@@ -21,18 +22,6 @@ const InteractiveMap = dynamic(() => import('@/components/ui/InteractiveMap'), {
   loading: () => <div>Chargement...</div> 
 });
 
-interface Hotel {
-  id: string;
-  name: string;
-  image: string;
-  location: string;
-  stars: number;
-  rating: number;
-  reviews: number;
-  price: number;
-  distance: string;
-  amenities: string[];
-}
 
 interface ComparisonItem {
   id: string;
@@ -152,7 +141,7 @@ function HotelResultsContent() {
     lng: 2.3522 + (Math.random() - 0.5) * 0.1,
     price: hotel.price,
     rating: hotel.rating,
-    image: hotel.image,
+    image: hotel.mainImage,
     description: `${hotel.stars} étoiles • ${hotel.amenities.length} équipements`
   }));
 
@@ -398,73 +387,155 @@ const mockHotels: Hotel[] = [
   {
     id: '1',
     name: 'Hôtel Plaza Athénée',
-    image: 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg',
-    location: 'Paris 8ème',
+    images: ['https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg'],
+    mainImage: 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg',
+    location: {
+      address: '25 Avenue Montaigne',
+      city: 'Paris 8ème',
+      country: 'France',
+      coordinates: { lat: 48.8654, lng: 2.3066 }
+    },
     stars: 5,
     rating: 9.2,
     reviews: 1847,
     price: 450,
+    currency: 'EUR',
+    description: 'Luxueux hôtel palace situé avenue Montaigne',
     distance: '2.5 km',
-    amenities: ['wifi', 'parking', 'restaurant', 'gym', 'spa']
+    amenities: [
+      { id: '1', name: 'wifi', category: 'basic' },
+      { id: '2', name: 'parking', category: 'comfort' },
+      { id: '3', name: 'restaurant', category: 'basic' },
+      { id: '4', name: 'gym', category: 'leisure' },
+      { id: '5', name: 'spa', category: 'leisure' }
+    ]
   },
   {
     id: '2',
     name: 'Le Meurice',
-    image: 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg',
-    location: 'Paris 1er',
+    images: ['https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg'],
+    mainImage: 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg',
+    location: {
+      address: '228 Rue de Rivoli',
+      city: 'Paris 1er',
+      country: 'France',
+      coordinates: { lat: 48.8655, lng: 2.3279 }
+    },
     stars: 5,
     rating: 9.4,
     reviews: 2156,
     price: 520,
+    currency: 'EUR',
+    description: 'Hôtel de luxe face au jardin des Tuileries',
     distance: '1 km',
-    amenities: ['wifi', 'restaurant', 'gym', 'spa', 'pool']
+    amenities: [
+      { id: '1', name: 'wifi', category: 'basic' },
+      { id: '2', name: 'restaurant', category: 'basic' },
+      { id: '3', name: 'gym', category: 'leisure' },
+      { id: '4', name: 'spa', category: 'leisure' },
+      { id: '5', name: 'pool', category: 'leisure' }
+    ]
   },
   {
     id: '3',
     name: 'Hôtel de Crillon',
-    image: 'https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg',
-    location: 'Place de la Concorde',
+    images: ['https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg'],
+    mainImage: 'https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg',
+    location: {
+      address: '10 Place de la Concorde',
+      city: 'Place de la Concorde',
+      country: 'France',
+      coordinates: { lat: 48.8686, lng: 2.3210 }
+    },
     stars: 5,
     rating: 9.3,
     reviews: 1543,
     price: 580,
+    currency: 'EUR',
+    description: 'Palace emblématique place de la Concorde',
     distance: '1.8 km',
-    amenities: ['wifi', 'parking', 'restaurant', 'gym', 'spa']
+    amenities: [
+      { id: '1', name: 'wifi', category: 'basic' },
+      { id: '2', name: 'parking', category: 'comfort' },
+      { id: '3', name: 'restaurant', category: 'basic' },
+      { id: '4', name: 'gym', category: 'leisure' },
+      { id: '5', name: 'spa', category: 'leisure' }
+    ]
   },
   {
     id: '4',
     name: 'Le Bristol Paris',
-    image: 'https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg',
-    location: 'Faubourg Saint-Honoré',
+    images: ['https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg'],
+    mainImage: 'https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg',
+    location: {
+      address: '112 Rue du Faubourg Saint-Honoré',
+      city: 'Faubourg Saint-Honoré',
+      country: 'France',
+      coordinates: { lat: 48.8721, lng: 2.3149 }
+    },
     stars: 5,
     rating: 9.5,
     reviews: 1876,
     price: 650,
+    currency: 'EUR',
+    description: 'Hôtel de prestige avec jardin français',
     distance: '2.2 km',
-    amenities: ['wifi', 'restaurant', 'gym', 'spa', 'pool']
+    amenities: [
+      { id: '1', name: 'wifi', category: 'basic' },
+      { id: '2', name: 'restaurant', category: 'basic' },
+      { id: '3', name: 'gym', category: 'leisure' },
+      { id: '4', name: 'spa', category: 'leisure' },
+      { id: '5', name: 'pool', category: 'leisure' }
+    ]
   },
   {
     id: '5',
     name: 'Four Seasons George V',
-    image: 'https://images.pexels.com/photos/271639/pexels-photo-271639.jpeg',
-    location: 'Champs-Élysées',
+    images: ['https://images.pexels.com/photos/271639/pexels-photo-271639.jpeg'],
+    mainImage: 'https://images.pexels.com/photos/271639/pexels-photo-271639.jpeg',
+    location: {
+      address: '31 Avenue George V',
+      city: 'Champs-Élysées',
+      country: 'France',
+      coordinates: { lat: 48.8686, lng: 2.3010 }
+    },
     stars: 5,
     rating: 9.6,
     reviews: 2341,
     price: 750,
+    currency: 'EUR',
+    description: 'Hôtel de luxe près des Champs-Élysées',
     distance: '2.8 km',
-    amenities: ['wifi', 'parking', 'restaurant', 'gym', 'spa']
+    amenities: [
+      { id: '1', name: 'wifi', category: 'basic' },
+      { id: '2', name: 'parking', category: 'comfort' },
+      { id: '3', name: 'restaurant', category: 'basic' },
+      { id: '4', name: 'gym', category: 'leisure' },
+      { id: '5', name: 'spa', category: 'leisure' }
+    ]
   },
   {
     id: '6',
     name: 'Hôtel des Grands Boulevards',
-    image: 'https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg',
-    location: 'Grands Boulevards',
+    images: ['https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg'],
+    mainImage: 'https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg',
+    location: {
+      address: '17 Boulevard Poissonnière',
+      city: 'Grands Boulevards',
+      country: 'France',
+      coordinates: { lat: 48.8717, lng: 2.3469 }
+    },
     stars: 4,
     rating: 8.8,
     reviews: 987,
     price: 280,
+    currency: 'EUR',
+    description: 'Hôtel boutique dans le quartier des Grands Boulevards',
     distance: '3.5 km',
-    amenities: ['wifi', 'restaurant', 'gym']
+    amenities: [
+      { id: '1', name: 'wifi', category: 'basic' },
+      { id: '2', name: 'restaurant', category: 'basic' },
+      { id: '3', name: 'gym', category: 'leisure' }
+    ]
   }
 ];

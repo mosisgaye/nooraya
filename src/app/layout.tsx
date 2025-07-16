@@ -6,6 +6,7 @@ import './accessibility.css';
 import { Header } from '@/components/layout';
 import { Footer } from '@/components/layout';
 import { generateStructuredData } from '@/lib/seo';
+import { AuthProvider } from '@/providers/AuthProvider';
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -112,13 +113,15 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} antialiased`}>
-        <div className="flex flex-col min-h-screen font-sans text-gray-800">
-          <Header />
-          <main className="flex-grow">
-            {children}
-          </main>
-          <Footer />
-        </div>
+        <AuthProvider>
+          <div className="flex flex-col min-h-screen font-sans text-gray-800">
+            <Header />
+            <main className="flex-grow">
+              {children}
+            </main>
+            <Footer />
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );

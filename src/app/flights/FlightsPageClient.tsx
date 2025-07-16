@@ -7,11 +7,12 @@ import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
 import Image from 'next/image';
-
-type TripType = 'round-trip' | 'one-way' | 'multi-city';
+import { useFlightSearch } from '@/features/flights/hooks/useFlightSearch';
+import { TripType } from '@/types';
 
 export default function FlightsPageClient() {
   const router = useRouter();
+  const { searchFlights, loading, error } = useFlightSearch();
   const [tripType, setTripType] = useState<TripType>('round-trip');
   const [departureDate, setDepartureDate] = useState<Date | null>(null);
   const [returnDate, setReturnDate] = useState<Date | null>(null);
@@ -23,26 +24,33 @@ export default function FlightsPageClient() {
   const [showPassengersDropdown, setShowPassengersDropdown] = useState(false);
   const [cabinClass, setCabinClass] = useState('economy');
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const searchParams = {
-      from: formData.get('departure'),
-      to: formData.get('destination'),
+      from: formData.get('departure') as string,
+      to: formData.get('destination') as string,
       departureDate: departureDate ? format(departureDate, 'yyyy-MM-dd') : '',
       returnDate: returnDate ? format(returnDate, 'yyyy-MM-dd') : '',
-      passengers: passengers.adults + passengers.children + passengers.infants,
+      adults: passengers.adults,
+      children: passengers.children,
+      infants: passengers.infants,
       cabinClass,
-      tripType
+      flexible: false
     };
     
-    // Créer les query params
-    const queryString = new URLSearchParams(
-      Object.fromEntries(
-        Object.entries(searchParams).map(([key, value]) => [key, String(value)])
-      )
-    ).toString();
-    router.push(`/flight-results?${queryString}`);
+    try {
+      await searchFlights(searchParams);
+      // Créer les query params pour la navigation
+      const queryString = new URLSearchParams(
+        Object.fromEntries(
+          Object.entries(searchParams).map(([key, value]) => [key, String(value)])
+        )
+      ).toString();
+      router.push(`/flight-results?${queryString}`);
+    } catch (err) {
+      console.error('Erreur lors de la recherche:', err);
+    }
   };
 
   const totalPassengers = passengers.adults + passengers.children + passengers.infants;
@@ -255,12 +263,19 @@ export default function FlightsPageClient() {
             <div className="flex justify-center pt-4">
               <button
                 type="submit"
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105 flex items-center"
+                disabled={loading}
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Search className="mr-2" size={20} />
-                Rechercher des vols
+                {loading ? 'Recherche en cours...' : 'Rechercher des vols'}
               </button>
             </div>
+            
+            {error && (
+              <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                {error}
+              </div>
+            )}
           </form>
         </div>
       </div>

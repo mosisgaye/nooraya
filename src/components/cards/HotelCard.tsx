@@ -3,19 +3,7 @@
 import React from 'react';
 import { Star, Wifi, Car, Coffee, Dumbbell, MapPin, Plus } from 'lucide-react';
 import LazyImage from '../ui/LazyImage';
-
-interface Hotel {
-  id: string;
-  name: string;
-  image: string;
-  location: string;
-  stars: number;
-  rating: number;
-  reviews: number;
-  price: number;
-  distance: string;
-  amenities: string[];
-}
+import { Hotel } from '@/types';
 
 interface HotelCardProps {
   hotel: Hotel;
@@ -32,12 +20,12 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, onAddToComparison, isInCom
   };
 
   return (
-    <article className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow" role="article" aria-label={`Hotel ${hotel.name} a ${hotel.location}`}>
+    <article className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow" role="article" aria-label={`Hotel ${hotel.name} a ${hotel.location.city}`}>
       <div className="flex flex-col lg:flex-row">
         <div className="lg:w-1/3 h-48 lg:h-auto relative">
           <LazyImage 
-            src={hotel.image} 
-            alt={`${hotel.name} - Hotel ${hotel.stars} etoiles a ${hotel.location}`}
+            src={hotel.mainImage} 
+            alt={`${hotel.name} - Hotel ${hotel.stars} etoiles a ${hotel.location.city}`}
             fill
             sizes="(max-width: 1024px) 100vw, 33vw"
             className="object-cover"
@@ -52,7 +40,7 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, onAddToComparison, isInCom
               <h3 className="text-xl font-semibold text-gray-900 mb-2">{hotel.name}</h3>
               <div className="flex items-center text-sm text-gray-600 space-x-2">
                 <MapPin size={16} className="text-gray-400" />
-                <span aria-label={`Situe a ${hotel.location}, a ${hotel.distance}`}>{hotel.location} • {hotel.distance}</span>
+                <span aria-label={`Situe a ${hotel.location.city}, a ${hotel.distance}`}>{hotel.location.city} • {hotel.distance}</span>
               </div>
             </div>
             <div className="text-right">
@@ -72,11 +60,11 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, onAddToComparison, isInCom
           <div className="flex flex-wrap gap-2 mb-4">
             {hotel.amenities.map((amenity) => (
               <span
-                key={amenity}
+                key={amenity.id}
                 className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700"
               >
-                {amenityIcons[amenity] || null}
-                <span className="ml-1">{amenity}</span>
+                {amenityIcons[amenity.name] || null}
+                <span className="ml-1">{amenity.name}</span>
               </span>
             ))}
           </div>

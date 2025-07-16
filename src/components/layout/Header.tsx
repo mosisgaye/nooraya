@@ -2,28 +2,32 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { 
   Plane, 
   Building, 
   Package, 
   Tag, 
   HelpCircle, 
-  User, 
   ChevronDown, 
   Globe, 
   Menu, 
   X,
-  Bell,
-  Heart,
-  Settings
+  LogOut,
+  UserCircle,
+  Sparkles
 } from 'lucide-react';
+import { useAuth } from '@/features/auth';
+import { AuthModal } from '@/components/auth';
 
 const Header: React.FC = () => {
+  const router = useRouter();
+  const { user, logout, isAuthenticated } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false);
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -111,21 +115,6 @@ const Header: React.FC = () => {
 
         {/* Contrôles utilisateur simplifiés */}
         <div className="hidden lg:flex items-center space-x-3">
-          <button 
-            className="relative p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200"
-            aria-label="Notifications (1 nouveau)"
-          >
-            <Bell size={20} />
-            <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse" aria-hidden="true"></span>
-          </button>
-
-          <button 
-            className="p-2 text-gray-600 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all duration-200"
-            aria-label="Mes favoris"
-          >
-            <Heart size={20} />
-          </button>
-
           <div className="relative">
             <button
               onClick={() => {
@@ -156,44 +145,63 @@ const Header: React.FC = () => {
             )}
           </div>
 
-          <div className="relative">
-            <button
-              onClick={() => {
-                setAccountDropdownOpen(!accountDropdownOpen);
-                setLanguageDropdownOpen(false);
-              }}
-              className="flex items-center space-x-2 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200"
-              aria-label="Menu compte utilisateur"
-              aria-expanded={accountDropdownOpen}
-              aria-haspopup="true"
-            >
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
-                <User size={16} className="text-white" />
-              </div>
-              <span className="font-medium">Compte</span>
-              <ChevronDown size={16} className={`transition-transform duration-200 ${accountDropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
-
-            {accountDropdownOpen && (
-              <div 
-                className="absolute right-0 mt-2 py-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 animate-in slide-in-from-top-2 duration-200"
-                role="menu"
+          {isAuthenticated ? (
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setAccountDropdownOpen(!accountDropdownOpen);
+                  setLanguageDropdownOpen(false);
+                }}
+                className="flex items-center space-x-2 px-3 py-2.5 bg-gradient-to-r from-blue-50 to-purple-50 text-gray-700 hover:from-blue-100 hover:to-purple-100 rounded-2xl transition-all duration-200 border border-gray-200"
                 aria-label="Menu compte utilisateur"
+                aria-expanded={accountDropdownOpen}
+                aria-haspopup="true"
               >
-                <div className="px-4 py-3 border-b border-gray-100">
-                  <p className="text-sm font-medium text-gray-900">Bienvenue !</p>
-                  <p className="text-xs text-gray-500">Connectez-vous pour accéder à vos réservations</p>
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-md">
+                  <span className="text-white font-semibold text-sm">
+                    {user?.firstName?.[0]?.toUpperCase() || 'U'}
+                  </span>
                 </div>
-                <AccountMenuItem icon={<User size={16} />} text="Se connecter" />
-                <AccountMenuItem icon={<User size={16} />} text="Créer un compte" />
-                <div className="border-t border-gray-100 my-1"></div>
-                <AccountMenuItem icon={<Package size={16} />} text="Mes réservations" />
-                <AccountMenuItem icon={<Heart size={16} />} text="Mes favoris" />
-                <AccountMenuItem icon={<Bell size={16} />} text="Mes alertes" />
-                <AccountMenuItem icon={<Settings size={16} />} text="Paramètres" />
-              </div>
-            )}
-          </div>
+                <span className="font-medium">{user?.firstName || 'Mon compte'}</span>
+                <ChevronDown size={16} className={`transition-transform duration-200 ${accountDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {accountDropdownOpen && (
+                <div 
+                  className="absolute right-0 mt-2 py-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 animate-in slide-in-from-top-2 duration-200"
+                  role="menu"
+                  aria-label="Menu compte utilisateur"
+                >
+                  <div className="px-4 py-3 border-b border-gray-100">
+                    <p className="text-sm font-medium text-gray-900">
+                      {user?.firstName} {user?.lastName}
+                    </p>
+                    <p className="text-xs text-gray-500">{user?.email}</p>
+                  </div>
+                  <AccountMenuItem icon={UserCircle} label="Mon profil" onClick={() => router.push('/profile')} />
+                  <div className="border-t border-gray-100 mt-2 pt-2">
+                    <AccountMenuItem 
+                      icon={LogOut} 
+                      label="Se déconnecter" 
+                      onClick={async () => {
+                        await logout();
+                        router.push('/');
+                        setAccountDropdownOpen(false);
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={() => setAuthModalOpen(true)}
+              className="flex items-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg shadow-blue-600/20"
+            >
+              <Sparkles size={18} />
+              <span>Se connecter</span>
+            </button>
+          )}
         </div>
 
         {/* Bouton menu mobile simplifié */}
@@ -256,10 +264,33 @@ const Header: React.FC = () => {
           </div>
           
           <div className="px-4 py-4 border-t border-gray-100 bg-gray-50 space-y-3">
-            <MobileActionButton icon={<Globe size={18} />} text="Changer la langue" />
-            <MobileActionButton icon={<User size={18} />} text="Se connecter" />
-            <MobileActionButton icon={<Bell size={18} />} text="Notifications" />
-            <MobileActionButton icon={<Heart size={18} />} text="Favoris" />
+            {isAuthenticated ? (
+              <>
+                <div className="px-4 py-3 bg-white rounded-2xl border border-gray-200 mb-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-md">
+                      <span className="text-white font-semibold">
+                        {user?.firstName?.[0]?.toUpperCase() || 'U'}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">{user?.firstName} {user?.lastName}</p>
+                      <p className="text-xs text-gray-500">{user?.email}</p>
+                    </div>
+                  </div>
+                </div>
+                <MobileActionButton icon={<UserCircle size={18} />} text="Mon profil" onClick={() => { router.push('/profile'); closeAllDropdowns(); }} />
+                <MobileActionButton icon={<LogOut size={18} />} text="Se déconnecter" onClick={async () => { await logout(); router.push('/'); closeAllDropdowns(); }} />
+              </>
+            ) : (
+              <button
+                onClick={() => { setAuthModalOpen(true); closeAllDropdowns(); }}
+                className="w-full flex items-center justify-center space-x-2 py-3 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200"
+              >
+                <Sparkles size={18} />
+                <span>Se connecter</span>
+              </button>
+            )}
           </div>
         </div>
       )}
@@ -272,6 +303,12 @@ const Header: React.FC = () => {
           aria-label="Fermer les menus"
         ></div>
       )}
+
+      {/* Modal d'authentification */}
+      <AuthModal 
+        isOpen={authModalOpen} 
+        onClose={() => setAuthModalOpen(false)} 
+      />
     </header>
   );
 };
@@ -347,20 +384,22 @@ const LanguageOption: React.FC<{ flag: string; language: string; isActive?: bool
   </button>
 );
 
-const AccountMenuItem: React.FC<{ icon: React.ReactNode; text: string }> = ({ icon, text }) => (
+const AccountMenuItem: React.FC<{ icon: React.ComponentType<{ size?: number; className?: string }>; label: string; onClick?: () => void }> = ({ icon: Icon, label, onClick }) => (
   <button 
     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center transition-colors"
     role="menuitem"
+    onClick={onClick}
   >
-    <span className="mr-3 text-gray-400" aria-hidden="true">{icon}</span>
-    {text}
+    <Icon size={18} className="mr-3 text-gray-400" aria-hidden="true" />
+    {label}
   </button>
 );
 
-const MobileActionButton: React.FC<{ icon: React.ReactNode; text: string }> = ({ icon, text }) => (
+const MobileActionButton: React.FC<{ icon: React.ReactNode; text: string; onClick?: () => void }> = ({ icon, text, onClick }) => (
   <button 
     className="flex items-center space-x-3 text-gray-700 w-full p-3 rounded-xl hover:bg-white transition-colors"
     role="menuitem"
+    onClick={onClick}
   >
     <span aria-hidden="true">{icon}</span>
     <span>{text}</span>

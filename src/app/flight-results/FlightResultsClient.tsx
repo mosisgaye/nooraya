@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Filter, SortAsc, Bell, Map, BarChart3 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import FlightCard from '@/components/cards/FlightCard';
+import { Flight } from '@/types';
 
 // Dynamic imports pour les composants lourds
 const AdvancedFilters = dynamic(() => import('@/components/search/AdvancedFilters'), { 
@@ -24,26 +25,6 @@ const InteractiveMap = dynamic(() => import('@/components/ui/InteractiveMap'), {
   loading: () => <div>Chargement...</div> 
 });
 
-interface Flight {
-  id: string;
-  airline: string;
-  logo: string;
-  departure: {
-    time: string;
-    airport: string;
-    code: string;
-  };
-  arrival: {
-    time: string;
-    airport: string;
-    code: string;
-  };
-  duration: string;
-  stops: number;
-  price: number;
-  cabinClass: string;
-  amenities: string[];
-}
 
 interface ComparisonItem {
   id: string;
@@ -408,48 +389,68 @@ const mockFlights: Flight[] = [
     id: '1',
     airline: 'Air France',
     logo: 'https://images.pexels.com/photos/912050/pexels-photo-912050.jpeg?w=32&h=32',
-    departure: { time: '08:30', airport: 'Charles de Gaulle', code: 'CDG' },
-    arrival: { time: '10:45', airport: 'Heathrow', code: 'LHR' },
+    departure: { time: '08:30', airport: 'Charles de Gaulle', code: 'CDG', city: 'Paris' },
+    arrival: { time: '10:45', airport: 'Heathrow', code: 'LHR', city: 'London' },
     duration: '2h 15m',
     stops: 0,
     price: 189,
-    cabinClass: 'Économique',
-    amenities: ['wifi', 'meal']
+    currency: 'EUR',
+    cabinClass: 'economy',
+    amenities: ['wifi', 'meal'],
+    baggage: { cabin: '8kg', checked: '23kg' },
+    availability: 5,
+    carrier: 'Air France',
+    flightNumber: 'AF1234'
   },
   {
     id: '2',
     airline: 'British Airways',
     logo: 'https://images.pexels.com/photos/912050/pexels-photo-912050.jpeg?w=32&h=32',
-    departure: { time: '14:20', airport: 'Charles de Gaulle', code: 'CDG' },
-    arrival: { time: '16:35', airport: 'Heathrow', code: 'LHR' },
+    departure: { time: '14:20', airport: 'Charles de Gaulle', code: 'CDG', city: 'Paris' },
+    arrival: { time: '16:35', airport: 'Heathrow', code: 'LHR', city: 'London' },
     duration: '2h 15m',
     stops: 0,
     price: 225,
-    cabinClass: 'Économique',
-    amenities: ['wifi', 'entertainment']
+    currency: 'EUR',
+    cabinClass: 'economy',
+    amenities: ['wifi', 'entertainment'],
+    baggage: { cabin: '8kg', checked: '23kg' },
+    availability: 3,
+    carrier: 'British Airways',
+    flightNumber: 'BA1234'
   },
   {
     id: '3',
     airline: 'Lufthansa',
     logo: 'https://images.pexels.com/photos/912050/pexels-photo-912050.jpeg?w=32&h=32',
-    departure: { time: '11:15', airport: 'Charles de Gaulle', code: 'CDG' },
-    arrival: { time: '15:30', airport: 'Heathrow', code: 'LHR' },
+    departure: { time: '11:15', airport: 'Charles de Gaulle', code: 'CDG', city: 'Paris' },
+    arrival: { time: '15:30', airport: 'Heathrow', code: 'LHR', city: 'London' },
     duration: '4h 15m',
     stops: 1,
     price: 156,
-    cabinClass: 'Économique',
-    amenities: ['wifi']
+    currency: 'EUR',
+    cabinClass: 'economy',
+    amenities: ['wifi'],
+    baggage: { cabin: '8kg', checked: '23kg' },
+    availability: 8,
+    carrier: 'Lufthansa',
+    flightNumber: 'LH1234'
   },
   {
     id: '4',
     airline: 'KLM',
     logo: 'https://images.pexels.com/photos/912050/pexels-photo-912050.jpeg?w=32&h=32',
-    departure: { time: '18:45', airport: 'Charles de Gaulle', code: 'CDG' },
-    arrival: { time: '21:00', airport: 'Heathrow', code: 'LHR' },
+    departure: { time: '18:45', airport: 'Charles de Gaulle', code: 'CDG', city: 'Paris' },
+    arrival: { time: '21:00', airport: 'Heathrow', code: 'LHR', city: 'London' },
     duration: '2h 15m',
     stops: 0,
     price: 198,
-    cabinClass: 'Économique',
-    amenities: ['wifi', 'meal', 'entertainment']
+    currency: 'EUR',
+    cabinClass: 'economy',
+    amenities: ['wifi', 'meal', 'entertainment'],
+    baggage: { cabin: '8kg', checked: '23kg' },
+    availability: 12,
+    carrier: 'KLM',
+    flightNumber: 'KL1234'
   }
 ];

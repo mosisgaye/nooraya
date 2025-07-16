@@ -7,29 +7,41 @@ import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
 import Image from 'next/image';
+import { useHotelSearch } from '@/features/hotels/hooks/useHotelSearch';
 
 export default function HotelsPageClient() {
   const router = useRouter();
+  const { searchHotels, loading, error } = useHotelSearch();
   const [checkInDate, setCheckInDate] = useState<Date | null>(null);
   const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
   const [rooms, setRooms] = useState(1);
   const [guests, setGuests] = useState({ adults: 2, children: 0 });
   const [showGuestsDropdown, setShowGuestsDropdown] = useState(false);
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const searchParams = {
-      destination: formData.get('destination'),
+      to: formData.get('destination') as string,
       checkIn: checkInDate ? format(checkInDate, 'yyyy-MM-dd') : '',
       checkOut: checkOutDate ? format(checkOutDate, 'yyyy-MM-dd') : '',
-      rooms: rooms.toString(),
-      adults: guests.adults.toString(),
-      children: guests.children.toString()
+      rooms: rooms,
+      adults: guests.adults,
+      children: guests.children
     };
     
-    const queryString = new URLSearchParams(searchParams as Record<string, string>).toString();
-    router.push(`/hotel-results?${queryString}`);
+    try {
+      await searchHotels(searchParams);
+      // Créer les query params pour la navigation
+      const queryString = new URLSearchParams(
+        Object.fromEntries(
+          Object.entries(searchParams).map(([key, value]) => [key, String(value)])
+        )
+      ).toString();
+      router.push(`/hotel-results?${queryString}`);
+    } catch (err) {
+      console.error('Erreur lors de la recherche:', err);
+    }
   };
 
   return (
@@ -174,12 +186,19 @@ export default function HotelsPageClient() {
             <div className="flex justify-center pt-4">
               <button
                 type="submit"
-                className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:from-emerald-700 hover:to-teal-700 transition-all transform hover:scale-105 flex items-center"
+                disabled={loading}
+                className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:from-emerald-700 hover:to-teal-700 transition-all transform hover:scale-105 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Search className="mr-2" size={20} />
-                Rechercher des hôtels
+                {loading ? 'Recherche en cours...' : 'Rechercher des hôtels'}
               </button>
             </div>
+            
+            {error && (
+              <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                {error}
+              </div>
+            )}
           </form>
         </div>
       </div>

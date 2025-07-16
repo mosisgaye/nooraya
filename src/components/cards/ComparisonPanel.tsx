@@ -2,40 +2,7 @@
 import React from 'react';
 import { X, Star } from 'lucide-react';
 import LazyImage from '../ui/LazyImage';
-
-interface Flight {
-  id: string;
-  airline: string;
-  logo: string;
-  departure: {
-    time: string;
-    airport: string;
-    code: string;
-  };
-  arrival: {
-    time: string;
-    airport: string;
-    code: string;
-  };
-  duration: string;
-  stops: number;
-  price: number;
-  cabinClass: string;
-  amenities: string[];
-}
-
-interface Hotel {
-  id: string;
-  name: string;
-  image: string;
-  location: string;
-  stars: number;
-  rating: number;
-  reviews: number;
-  price: number;
-  distance: string;
-  amenities: string[];
-}
+import { Flight, Hotel } from '@/types';
 
 interface ComparisonItem {
   id: string;
@@ -242,8 +209,8 @@ const HotelComparison: React.FC<HotelComparisonProps> = ({
                   </button>
                   <div className="relative w-full h-32 mb-2">
                     <LazyImage 
-                      src={item.data.image} 
-                      alt={`${item.data.name} - Hôtel ${item.data.stars} étoiles à ${item.data.location} (${item.data.price}€/nuit)`}
+                      src={item.data.mainImage} 
+                      alt={`${item.data.name} - Hôtel ${item.data.stars} étoiles à ${item.data.location.city} (${item.data.price}€/nuit)`}
                       fill
                       sizes="256px"
                       className="object-cover rounded-lg"
@@ -252,7 +219,7 @@ const HotelComparison: React.FC<HotelComparisonProps> = ({
                     />
                   </div>
                   <div className="font-semibold text-lg">{item.data.name}</div>
-                  <div className="text-sm text-gray-600">{item.data.location}</div>
+                  <div className="text-sm text-gray-600">{item.data.location.city}</div>
                 </div>
               </th>
             ))}
@@ -301,9 +268,9 @@ const HotelComparison: React.FC<HotelComparisonProps> = ({
             {items.map((item) => (
               <td key={item.id} className="p-4 text-center">
                 <div className="flex flex-wrap justify-center gap-1">
-                  {item.data.amenities.map((amenity: string, index: number) => (
+                  {item.data.amenities.map((amenity, index: number) => (
                     <span key={index} className="text-xs bg-gray-100 px-2 py-1 rounded">
-                      {amenity}
+                      {amenity.name}
                     </span>
                   ))}
                 </div>
