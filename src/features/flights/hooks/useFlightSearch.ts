@@ -3,33 +3,28 @@
 import { useState, useCallback } from 'react';
 import { Flight, SearchParams, FilterOptions } from '@/types';
 import { flightService } from '../services/flightService';
+import { useAsyncOperation } from '@/hooks/useAsyncOperation';
 
 export const useFlightSearch = () => {
   const [flights, setFlights] = useState<Flight[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [totalCount, setTotalCount] = useState(0);
+  const { isLoading, error, execute } = useAsyncOperation<{ flights: Flight[], totalCount: number }>();
 
   const searchFlights = useCallback(async (params: SearchParams) => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const result = await flightService.searchFlights(params);
-      if (result.success && result.data) {
-        setFlights(result.data.flights);
-        setTotalCount(result.data.totalCount);
+    const result = await execute(async () => {
+      const apiResult = await flightService.searchFlights(params);
+      if (apiResult.success && apiResult.data) {
+        return apiResult.data;
       } else {
-        throw new Error(result.error?.message || 'Erreur de recherche');
+        throw new Error(apiResult.error?.message || 'Erreur de recherche');
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur de recherche');
-      setFlights([]);
-      setTotalCount(0);
-    } finally {
-      setLoading(false);
+    });
+
+    if (result) {
+      setFlights(result.flights);
+      setTotalCount(result.totalCount);
     }
-  }, []);
+  }, [execute]);
 
   const filterFlights = useCallback((filters: FilterOptions) => {
     if (flights.length === 0) return;
@@ -45,7 +40,7 @@ export const useFlightSearch = () => {
 
   return {
     flights,
-    loading,
+    isLoading,
     error,
     totalCount,
     searchFlights,

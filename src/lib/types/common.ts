@@ -10,13 +10,14 @@ export interface SortParams {
   order: SortOrder;
 }
 
-export interface SearchParams extends PaginationParams {
+// Renommé pour éviter les conflits
+export interface DataSearchParams extends PaginationParams {
   query?: string;
   filters?: Record<string, unknown>;
   sort?: SortParams;
 }
 
-export interface Location {
+export interface Coordinates {
   lat: number;
   lng: number;
 }
@@ -27,14 +28,10 @@ export interface Address {
   state?: string;
   country: string;
   postalCode: string;
-  coordinates?: Location;
+  coordinates?: Coordinates;
 }
 
-export interface ContactInfo {
-  email: string;
-  phone: string;
-  address?: Address;
-}
+// Supprimé - utiliser ContactInfo de /types/common/index.ts
 
 export interface Image {
   id: string;

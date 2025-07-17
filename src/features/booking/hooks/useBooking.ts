@@ -3,85 +3,64 @@
 import { useState, useCallback } from 'react';
 import { Booking, BookingRequest } from '../types';
 import { bookingService } from '../services/bookingService';
+import { useAsyncOperation } from '@/hooks/useAsyncOperation';
 
 export const useBooking = () => {
   const [booking, setBooking] = useState<Booking | null>(null);
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { isLoading, error, execute } = useAsyncOperation<Booking>();
+  const { execute: executeMultiple } = useAsyncOperation<Booking[]>();
 
   const createBooking = useCallback(async (request: BookingRequest) => {
-    setLoading(true);
-    setError(null);
+    const result = await execute(async () => {
+      return await bookingService.createBooking(request);
+    });
 
-    try {
-      const newBooking = await bookingService.createBooking(request);
-      setBooking(newBooking);
-      return newBooking;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur de réservation');
-      throw err;
-    } finally {
-      setLoading(false);
+    if (result) {
+      setBooking(result);
     }
-  }, []);
+    return result;
+  }, [execute]);
 
   const getBooking = useCallback(async (bookingId: string) => {
-    setLoading(true);
-    setError(null);
+    const result = await execute(async () => {
+      return await bookingService.getBooking(bookingId);
+    });
 
-    try {
-      const bookingData = await bookingService.getBooking(bookingId);
-      setBooking(bookingData);
-      return bookingData;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur de chargement');
-      throw err;
-    } finally {
-      setLoading(false);
+    if (result) {
+      setBooking(result);
     }
-  }, []);
+    return result;
+  }, [execute]);
 
   const getUserBookings = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+    const result = await executeMultiple(async () => {
+      return await bookingService.getUserBookings();
+    });
 
-    try {
-      const userBookings = await bookingService.getUserBookings();
-      setBookings(userBookings);
-      return userBookings;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur de chargement');
-      throw err;
-    } finally {
-      setLoading(false);
+    if (result) {
+      setBookings(result);
     }
-  }, []);
+    return result;
+  }, [executeMultiple]);
 
   const cancelBooking = useCallback(async (bookingId: string, reason?: string) => {
-    setLoading(true);
-    setError(null);
+    const result = await execute(async () => {
+      return await bookingService.cancelBooking(bookingId, reason);
+    });
 
-    try {
-      const cancelledBooking = await bookingService.cancelBooking(bookingId, reason);
-      
+    if (result) {
       // Mettre à jour l'état local
       if (booking && booking.id === bookingId) {
-        setBooking(cancelledBooking);
+        setBooking(result);
       }
       
       setBookings(prev => 
-        prev.map(b => b.id === bookingId ? cancelledBooking : b)
+        prev.map(b => b.id === bookingId ? result : b)
       );
-
-      return cancelledBooking;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur d\'annulation');
-      throw err;
-    } finally {
-      setLoading(false);
     }
-  }, [booking]);
+    return result;
+  }, [execute, booking]);
 
   const downloadInvoice = useCallback(async (bookingId: string) => {
     try {
@@ -95,7 +74,6 @@ export const useBooking = () => {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur de téléchargement');
       throw err;
     }
   }, []);
@@ -103,7 +81,7 @@ export const useBooking = () => {
   return {
     booking,
     bookings,
-    loading,
+    isLoading,
     error,
     createBooking,
     getBooking,

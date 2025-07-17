@@ -21,7 +21,7 @@ const PriceAlerts = dynamic(() => import('@/components/search/PriceAlerts'), {
 const FlexibleSearch = dynamic(() => import('@/components/search/FlexibleSearch'), { 
   loading: () => <div>Chargement...</div> 
 });
-const InteractiveMap = dynamic(() => import('@/components/ui/InteractiveMap'), { 
+const InteractiveMap = dynamic(() => import('@/components/ui/interactive-map'), { 
   loading: () => <div>Chargement...</div> 
 });
 

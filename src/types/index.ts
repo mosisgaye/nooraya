@@ -40,21 +40,23 @@ export interface StopDetail {
 }
 
 // Types pour les hôtels
+export interface HotelLocation {
+  lat: number;
+  lng: number;
+  address?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  postalCode?: string;
+  district?: string;
+}
+
 export interface Hotel {
   id: string;
   name: string;
   images: string[];
   mainImage: string;
-  location: {
-    address: string;
-    city: string;
-    country: string;
-    coordinates: {
-      lat: number;
-      lng: number;
-    };
-    district?: string;
-  };
+  location: HotelLocation;
   stars: 1 | 2 | 3 | 4 | 5;
   rating: number;
   reviews: number;
@@ -139,21 +141,11 @@ export interface Itinerary {
   meals: string[];
 }
 
-// Types pour les recherches
-export interface SearchParams {
-  from?: string;
-  to?: string;
-  departureDate?: string;
-  returnDate?: string;
-  checkIn?: string;
-  checkOut?: string;
-  adults: number;
-  children: number;
-  infants?: number;
-  rooms?: number;
-  cabinClass?: string;
-  flexible?: boolean;
-}
+// Importation des types unifiés
+import type { ContactInfo } from './common';
+export type { TravelSearchParams as SearchParams, Coordinates, EmergencyContact, AsyncState, PaginatedData, LoadingState, SortOrder } from './common';
+export type { ContactInfo } from './common';
+export type { Location } from './common';
 
 // Types pour les utilisateurs
 export interface User {
@@ -211,15 +203,6 @@ export interface Passenger {
   };
 }
 
-export interface ContactInfo {
-  email: string;
-  phone: string;
-  emergencyContact?: {
-    name: string;
-    phone: string;
-    relationship: string;
-  };
-}
 
 export interface PaymentInfo {
   method: 'card' | 'paypal' | 'bank_transfer';

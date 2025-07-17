@@ -18,7 +18,7 @@ const ComparisonPanel = dynamic(() => import('@/components/cards/ComparisonPanel
 const PriceAlerts = dynamic(() => import('@/components/search/PriceAlerts'), { 
   loading: () => <div>Chargement...</div> 
 });
-const InteractiveMap = dynamic(() => import('@/components/ui/InteractiveMap'), { 
+const InteractiveMap = dynamic(() => import('@/components/ui/interactive-map'), { 
   loading: () => <div>Chargement...</div> 
 });
 
@@ -393,7 +393,8 @@ const mockHotels: Hotel[] = [
       address: '25 Avenue Montaigne',
       city: 'Paris 8ème',
       country: 'France',
-      coordinates: { lat: 48.8654, lng: 2.3066 }
+      lat: 48.8654,
+      lng: 2.3066
     },
     stars: 5,
     rating: 9.2,
@@ -419,7 +420,8 @@ const mockHotels: Hotel[] = [
       address: '228 Rue de Rivoli',
       city: 'Paris 1er',
       country: 'France',
-      coordinates: { lat: 48.8655, lng: 2.3279 }
+      lat: 48.8655,
+      lng: 2.3279
     },
     stars: 5,
     rating: 9.4,
@@ -445,7 +447,8 @@ const mockHotels: Hotel[] = [
       address: '10 Place de la Concorde',
       city: 'Place de la Concorde',
       country: 'France',
-      coordinates: { lat: 48.8686, lng: 2.3210 }
+      lat: 48.8686,
+      lng: 2.3210
     },
     stars: 5,
     rating: 9.3,
@@ -471,7 +474,8 @@ const mockHotels: Hotel[] = [
       address: '112 Rue du Faubourg Saint-Honoré',
       city: 'Faubourg Saint-Honoré',
       country: 'France',
-      coordinates: { lat: 48.8721, lng: 2.3149 }
+      lat: 48.8721,
+      lng: 2.3149
     },
     stars: 5,
     rating: 9.5,
@@ -497,7 +501,8 @@ const mockHotels: Hotel[] = [
       address: '31 Avenue George V',
       city: 'Champs-Élysées',
       country: 'France',
-      coordinates: { lat: 48.8686, lng: 2.3010 }
+      lat: 48.8686,
+      lng: 2.3010
     },
     stars: 5,
     rating: 9.6,
@@ -523,7 +528,8 @@ const mockHotels: Hotel[] = [
       address: '17 Boulevard Poissonnière',
       city: 'Grands Boulevards',
       country: 'France',
-      coordinates: { lat: 48.8717, lng: 2.3469 }
+      lat: 48.8717,
+      lng: 2.3469
     },
     stars: 4,
     rating: 8.8,

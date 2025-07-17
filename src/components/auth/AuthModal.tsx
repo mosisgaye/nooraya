@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, Mail, Lock, Eye, EyeOff, User, AlertCircle } from 'lucide-react';
 import { useAuth } from '@/features/auth';
 import { useAuthModal } from '@/contexts/AuthModalContext';
+import FocusTrap from '@/components/ui/focus-trap';
 
 type AuthMode = 'login' | 'register' | 'forgot';
 
@@ -154,7 +155,7 @@ const AuthModal: React.FC = () => {
   const passwordStrength = mode === 'register' ? getPasswordStrength(formData.password) : null;
 
   return (
-    <>
+    <FocusTrap isActive={isAuthModalOpen}>
       {/* Overlay */}
       <div 
         className="fixed inset-0 z-[9998] bg-black/60 backdrop-blur-sm"
@@ -222,7 +223,11 @@ const AuthModal: React.FC = () => {
             <form onSubmit={handleSubmit} className="p-6">
               {/* Error message */}
               {errors.general && (
-                <div className="mb-4 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-800">
+                <div 
+                  role="alert" 
+                  aria-live="polite"
+                  className="mb-4 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-800"
+                >
                   <AlertCircle size={16} />
                   {errors.general}
                 </div>
@@ -235,6 +240,7 @@ const AuthModal: React.FC = () => {
                     type="button"
                     onClick={handleGoogleLogin}
                     disabled={isLoading}
+                    aria-label={mode === 'login' ? 'Se connecter avec Google' : 'S\'inscrire avec Google'}
                     className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group"
                   >
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -488,7 +494,7 @@ const AuthModal: React.FC = () => {
           </div>
         </div>
       </div>
-    </>
+    </FocusTrap>
   );
 };
 

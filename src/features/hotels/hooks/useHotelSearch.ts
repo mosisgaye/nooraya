@@ -3,33 +3,28 @@
 import { useState, useCallback } from 'react';
 import { Hotel, SearchParams, FilterOptions } from '@/types';
 import { hotelService } from '../services/hotelService';
+import { useAsyncOperation } from '@/hooks/useAsyncOperation';
 
 export const useHotelSearch = () => {
   const [hotels, setHotels] = useState<Hotel[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [totalCount, setTotalCount] = useState(0);
+  const { isLoading, error, execute } = useAsyncOperation<{ hotels: Hotel[], totalCount: number }>();
 
   const searchHotels = useCallback(async (params: SearchParams) => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const result = await hotelService.searchHotels(params);
-      if (result.success && result.data) {
-        setHotels(result.data.hotels);
-        setTotalCount(result.data.totalCount);
+    const result = await execute(async () => {
+      const apiResult = await hotelService.searchHotels(params);
+      if (apiResult.success && apiResult.data) {
+        return apiResult.data;
       } else {
-        throw new Error(result.error?.message || 'Erreur de recherche');
+        throw new Error(apiResult.error?.message || 'Erreur de recherche');
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur de recherche');
-      setHotels([]);
-      setTotalCount(0);
-    } finally {
-      setLoading(false);
+    });
+
+    if (result) {
+      setHotels(result.hotels);
+      setTotalCount(result.totalCount);
     }
-  }, []);
+  }, [execute]);
 
   const filterHotels = useCallback((filters: FilterOptions) => {
     if (hotels.length === 0) return;
@@ -45,7 +40,7 @@ export const useHotelSearch = () => {
 
   return {
     hotels,
-    loading,
+    isLoading,
     error,
     totalCount,
     searchHotels,

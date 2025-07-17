@@ -139,67 +139,62 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-green-900 to-slate-800">
+    <div className="min-h-[60vh] bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-800">
       {/* Navigation */}
-      <nav className="pt-8 pb-4">
+      <nav className="pt-6 pb-4">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex space-x-2">
+          <div className="max-w-6xl">
+            <div className="flex space-x-2 justify-start pl-6 sm:pl-7 md:pl-8">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center space-x-2 px-8 py-3.5 rounded-full text-base font-medium transition-all duration-300 ${
+                  className={`flex items-center space-x-2 px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
                     activeTab === tab.id
-                      ? 'bg-white text-gray-900 shadow-lg scale-105'
-                      : 'text-white/80 hover:text-white hover:bg-white/10 backdrop-blur-sm'
+                      ? 'bg-white text-gray-900 shadow-xl'
+                      : 'text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm'
                   }`}
                 >
-                  <Icon className="w-5 h-5" />
+                  <Icon className="w-4 h-4" />
                   <span>{tab.label}</span>
                 </button>
               );
             })}
+            </div>
           </div>
         </div>
       </nav>
 
       {/* Hero Content */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Title */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
-            Des millions de vols pas chers.
-          </h1>
-          <p className="text-xl md:text-2xl text-green-200 font-light">
-            Une simple recherche.
-          </p>
-        </div>
-
+      <div className="max-w-7xl mx-auto px-4 py-4">
         {/* Search Form */}
-        <div className="bg-white rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] p-6 sm:p-8 md:p-10 max-w-7xl mx-auto backdrop-blur-lg bg-white/95">
+        <div className="p-6 sm:p-7 md:p-8 max-w-6xl">
+          {/* Title */}
+          <div className="text-left mb-6">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 leading-tight tracking-tight">
+              Explorez le monde avec <span className="text-emerald-400">élégance</span>
+            </h1>
+          </div>
           {/* Trip Type Selector */}
-          <div className="mb-8">
+          <div className="mb-6">
             <Select value={tripType} onValueChange={setTripType}>
-              <SelectTrigger className="w-52 bg-gradient-to-r from-gray-50 to-gray-50/50 border-gray-200 h-12 text-base font-medium hover:bg-gray-100 transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
+              <SelectTrigger className="w-48 bg-emerald-600 border-white border-2 h-10 text-sm font-medium text-white hover:bg-emerald-700 transition-all duration-200 focus:ring-2 focus:ring-white/30 rounded-xl">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="rounded-xl">
-                <SelectItem value="round-trip" className="text-base py-3">Aller-retour</SelectItem>
-                <SelectItem value="one-way" className="text-base py-3">Aller simple</SelectItem>
-                <SelectItem value="multi-city" className="text-base py-3">Multi-destinations</SelectItem>
+              <SelectContent className="rounded-lg shadow-lg bg-white">
+                <SelectItem value="round-trip" className="text-sm py-2 hover:bg-emerald-50 text-gray-900">Aller-retour</SelectItem>
+                <SelectItem value="one-way" className="text-sm py-2 hover:bg-emerald-50 text-gray-900">Aller simple</SelectItem>
+                <SelectItem value="multi-city" className="text-sm py-2 hover:bg-emerald-50 text-gray-900">Multi-destinations</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          green
+
           {/* Search Fields */}
-          <div className="flex flex-col lg:flex-row lg:items-end gap-4 mb-8">
+          <div className="flex flex-col lg:flex-row lg:items-end gap-1 mb-4">
             {/* From Field */}
             <div className="relative flex-1 w-full lg:w-auto">
-              <Label htmlFor="from" className="text-sm font-semibold text-gray-700 mb-3 block uppercase tracking-wider opacity-80">
-                De
-              </Label>
               <div className="relative">
                 <Input
                   id="from"
@@ -210,24 +205,36 @@ export default function Home() {
                   }}
                   onFocus={() => setShowFromDropdown(true)}
                   onBlur={() => setTimeout(() => setShowFromDropdown(false), 200)}
-                  placeholder="Pays, ville ou aéroport"
-                  className="pl-12 pr-4 h-12 text-base border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/10 hover:border-gray-300 transition-all duration-200 bg-gray-50/50"
+                  placeholder="Départ&#10;Pays, ville"
+                  className="pl-10 pr-4 h-16 text-sm border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 hover:border-gray-300 transition-all duration-200 bg-white shadow-sm"
                 />
-                <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center">
+                  <MapPin className="w-4 h-4 text-gray-400" />
+                </div>
                 
                 {showFromDropdown && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] z-50 max-h-72 overflow-y-auto">
+                  <div 
+                    role="listbox" 
+                    aria-label="Sélectionnez un aéroport de départ"
+                    className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] z-50 max-h-60 overflow-y-auto"
+                  >
                     {filterAirports(fromSearch).map((airport) => (
                       <button
                         key={airport.code}
+                        role="option"
+                        aria-selected={false}
                         onClick={() => handleAirportSelect(airport, 'from')}
-                        className="w-full text-left px-4 py-4 hover:bg-gradient-to-r hover:from-green-50 hover:to-transparent border-b border-gray-100 last:border-b-0 transition-all duration-150 group"
+                        className="w-full text-left px-3 py-3 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-transparent border-b border-gray-100 last:border-b-0 transition-all duration-150 group"
                       >
                         <div className="flex items-center space-x-3">
-                          <Plane className="w-5 h-5 text-gray-400 group-hover:text-green-600 transition-colors" />
+                          <div className="bg-emerald-100 p-2 rounded-lg">
+                            <Plane className="w-5 h-5 text-emerald-600" />
+                          </div>
                           <div>
-                            <div className="font-semibold text-gray-900 group-hover:text-green-700 transition-colors">{airport.name} ({airport.code})</div>
-                            <div className="text-sm text-gray-600 group-hover:text-gray-700">{airport.city}, {airport.country}</div>
+                            <div className="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">
+                              {airport.city} <span className="text-emerald-600">({airport.code})</span>
+                            </div>
+                            <div className="text-sm text-gray-600 group-hover:text-gray-700">{airport.name}, {airport.country}</div>
                           </div>
                         </div>
                       </button>
@@ -238,22 +245,17 @@ export default function Home() {
             </div>
 
             {/* Swap Button */}
-            <div className="hidden lg:flex items-center justify-center px-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-12 w-12 rounded-full bg-white border-2 border-gray-200 hover:border-green-500 hover:bg-green-50 transition-all duration-200 mb-8 shadow-sm hover:shadow-md"
+            <div className="hidden lg:flex items-center justify-center px-1 mb-1">
+              <button
+                className="h-16 w-16 rounded-full bg-white border-2 border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center"
                 onClick={swapAirports}
               >
-                <ArrowUpDown className="w-4 h-4 text-gray-500" />
-              </Button>
+                <ArrowUpDown className="w-4 h-4 text-gray-500 hover:text-emerald-600" />
+              </button>
             </div>
 
             {/* To Field */}
             <div className="relative flex-1 w-full lg:w-auto">
-              <Label htmlFor="to" className="text-sm font-semibold text-gray-700 mb-3 block uppercase tracking-wider opacity-80">
-                Vers
-              </Label>
               <div className="relative">
                 <Input
                   id="to"
@@ -264,24 +266,36 @@ export default function Home() {
                   }}
                   onFocus={() => setShowToDropdown(true)}
                   onBlur={() => setTimeout(() => setShowToDropdown(false), 200)}
-                  placeholder="Pays, ville ou aéroport"
-                  className="pl-12 pr-4 h-12 text-base border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/10 hover:border-gray-300 transition-all duration-200 bg-gray-50/50"
+                  placeholder="Destination&#10;Pays, ville"
+                  className="pl-10 pr-4 h-16 text-sm border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 hover:border-gray-300 transition-all duration-200 bg-white shadow-sm"
                 />
-                <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center">
+                  <MapPin className="w-4 h-4 text-gray-400" />
+                </div>
                 
                 {showToDropdown && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] z-50 max-h-72 overflow-y-auto">
+                  <div 
+                    role="listbox" 
+                    aria-label="Sélectionnez un aéroport de destination"
+                    className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] z-50 max-h-60 overflow-y-auto"
+                  >
                     {filterAirports(toSearch).map((airport) => (
                       <button
                         key={airport.code}
+                        role="option"
+                        aria-selected={false}
                         onClick={() => handleAirportSelect(airport, 'to')}
-                        className="w-full text-left px-4 py-4 hover:bg-gradient-to-r hover:from-green-50 hover:to-transparent border-b border-gray-100 last:border-b-0 transition-all duration-150 group"
+                        className="w-full text-left px-3 py-3 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-transparent border-b border-gray-100 last:border-b-0 transition-all duration-150 group"
                       >
                         <div className="flex items-center space-x-3">
-                          <Plane className="w-5 h-5 text-gray-400 group-hover:text-green-600 transition-colors" />
+                          <div className="bg-emerald-100 p-2 rounded-lg">
+                            <Plane className="w-5 h-5 text-emerald-600" />
+                          </div>
                           <div>
-                            <div className="font-semibold text-gray-900 group-hover:text-green-700 transition-colors">{airport.name} ({airport.code})</div>
-                            <div className="text-sm text-gray-600 group-hover:text-gray-700">{airport.city}, {airport.country}</div>
+                            <div className="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">
+                              {airport.city} <span className="text-emerald-600">({airport.code})</span>
+                            </div>
+                            <div className="text-sm text-gray-600 group-hover:text-gray-700">{airport.name}, {airport.country}</div>
                           </div>
                         </div>
                       </button>
@@ -293,25 +307,30 @@ export default function Home() {
 
             {/* Departure Date */}
             <div className="flex-1 w-full lg:w-auto">
-              <Label className="text-sm font-semibold text-gray-700 mb-3 block uppercase tracking-wider opacity-80">
-                Départ
-              </Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-full h-12 justify-start text-left font-normal text-base border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-green-500 focus:ring-4 focus:ring-green-500/10 transition-all duration-200 bg-gray-50/50"
+                    className="w-full h-16 justify-start text-left font-normal text-sm border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200 bg-white shadow-sm flex-col items-start"
                   >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {departureDate ? format(departureDate, "dd MMM yyyy", { locale: fr }) : "Ajouter une date"}
+                    <div className="flex items-center w-full">
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-medium text-gray-600">Départ</span>
+                        <span className="text-sm">
+                          {departureDate ? format(departureDate, "dd MMM yyyy", { locale: fr }) : "Choisir une date"}
+                        </span>
+                      </div>
+                    </div>
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
+                <PopoverContent className="w-auto p-0 rounded-lg shadow-xl border border-gray-200">
                   <Calendar
                     mode="single"
                     selected={departureDate}
                     onSelect={setDepartureDate}
                     initialFocus
+                    className="rounded-lg"
                   />
                 </PopoverContent>
               </Popover>
@@ -320,25 +339,30 @@ export default function Home() {
             {/* Return Date */}
             {tripType === 'round-trip' && (
               <div className="flex-1 w-full lg:w-auto">
-                <Label className="text-sm font-semibold text-gray-700 mb-3 block uppercase tracking-wider opacity-80">
-                  Retour
-                </Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className="w-full h-12 justify-start text-left font-normal text-base border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-green-500 focus:ring-4 focus:ring-green-500/10 transition-all duration-200 bg-gray-50/50"
+                      className="w-full h-16 justify-start text-left font-normal text-sm border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200 bg-white shadow-sm flex-col items-start"
                     >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {returnDate ? format(returnDate, "dd MMM yyyy", { locale: fr }) : "Ajouter une date"}
+                      <div className="flex items-center w-full">
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        <div className="flex flex-col">
+                          <span className="text-xs font-medium text-gray-600">Retour</span>
+                          <span className="text-sm">
+                            {returnDate ? format(returnDate, "dd MMM yyyy", { locale: fr }) : "Choisir une date"}
+                          </span>
+                        </div>
+                      </div>
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
+                  <PopoverContent className="w-auto p-0 rounded-lg shadow-xl border border-gray-200">
                     <Calendar
                       mode="single"
                       selected={returnDate}
                       onSelect={setReturnDate}
                       initialFocus
+                      className="rounded-lg"
                     />
                   </PopoverContent>
                 </Popover>
@@ -347,22 +371,24 @@ export default function Home() {
 
             {/* Passengers */}
             <div className="relative flex-1 w-full lg:w-auto" ref={passengerRef}>
-              <Label className="text-sm font-semibold text-gray-700 mb-3 block uppercase tracking-wider opacity-80">
-                Voyageurs et classe
-              </Label>
               <button
                 onClick={() => setShowPassengerDropdown(!showPassengerDropdown)}
-                className="w-full h-12 px-4 text-left text-base border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-green-500 focus:ring-4 focus:ring-green-500/10 bg-gray-50/50 flex items-center justify-between transition-all duration-200"
+                className="w-full h-16 px-3 text-left text-sm border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 bg-white shadow-sm flex items-center justify-between transition-all duration-200"
               >
                 <div className="flex items-center space-x-2">
-                  <Users className="w-4 h-4 text-gray-400" />
-                  <span className="text-base">{getPassengerText()}</span>
+                  <div className="bg-emerald-100 p-1.5 rounded-md">
+                    <Users className="w-3 h-3 text-emerald-600" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs font-medium text-gray-600">Voyageurs</span>
+                    <span className="text-sm font-medium">{getPassengerText()}</span>
+                  </div>
                 </div>
-                <ChevronDown className="w-4 h-4 text-gray-400" />
+                <ChevronDown className={`w-3 h-3 text-gray-400 transition-transform ${showPassengerDropdown ? 'rotate-180' : ''}`} />
               </button>
 
               {showPassengerDropdown && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] z-50 p-6">
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] z-50 p-4">
                   <div className="space-y-4">
                     {/* Adults */}
                     <div className="flex items-center justify-between">
@@ -376,16 +402,16 @@ export default function Home() {
                           size="sm"
                           onClick={() => updatePassengers('adults', 'decrement')}
                           disabled={passengers.adults <= 1}
-                          className="h-8 w-8 p-0"
+                          className="h-9 w-9 p-0 rounded-full border-2 border-gray-200 text-gray-600 hover:border-emerald-500 hover:text-emerald-600"
                         >
                           -
                         </Button>
-                        <span className="w-8 text-center font-medium">{passengers.adults}</span>
+                        <span className="w-8 text-center font-medium text-lg">{passengers.adults}</span>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => updatePassengers('adults', 'increment')}
-                          className="h-8 w-8 p-0"
+                          className="h-9 w-9 p-0 rounded-full border-2 border-gray-200 text-gray-600 hover:border-emerald-500 hover:text-emerald-600"
                         >
                           +
                         </Button>
@@ -404,16 +430,16 @@ export default function Home() {
                           size="sm"
                           onClick={() => updatePassengers('children', 'decrement')}
                           disabled={passengers.children <= 0}
-                          className="h-8 w-8 p-0"
+                          className="h-9 w-9 p-0 rounded-full border-2 border-gray-200 text-gray-600 hover:border-emerald-500 hover:text-emerald-600"
                         >
                           -
                         </Button>
-                        <span className="w-8 text-center font-medium">{passengers.children}</span>
+                        <span className="w-8 text-center font-medium text-lg">{passengers.children}</span>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => updatePassengers('children', 'increment')}
-                          className="h-8 w-8 p-0"
+                          className="h-9 w-9 p-0 rounded-full border-2 border-gray-200 text-gray-600 hover:border-emerald-500 hover:text-emerald-600"
                         >
                           +
                         </Button>
@@ -432,16 +458,16 @@ export default function Home() {
                           size="sm"
                           onClick={() => updatePassengers('infants', 'decrement')}
                           disabled={passengers.infants <= 0}
-                          className="h-8 w-8 p-0"
+                          className="h-9 w-9 p-0 rounded-full border-2 border-gray-200 text-gray-600 hover:border-emerald-500 hover:text-emerald-600"
                         >
                           -
                         </Button>
-                        <span className="w-8 text-center font-medium">{passengers.infants}</span>
+                        <span className="w-8 text-center font-medium text-lg">{passengers.infants}</span>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => updatePassengers('infants', 'increment')}
-                          className="h-8 w-8 p-0"
+                          className="h-9 w-9 p-0 rounded-full border-2 border-gray-200 text-gray-600 hover:border-emerald-500 hover:text-emerald-600"
                         >
                           +
                         </Button>
@@ -449,37 +475,104 @@ export default function Home() {
                     </div>
 
                     {/* Class */}
-                    <div className="pt-4 border-t">
+                    <div className="pt-5 border-t border-gray-100">
                       <Label className="text-sm font-semibold text-gray-700 mb-3 block uppercase tracking-wider opacity-80">
                         Classe de voyage
                       </Label>
-                      <Select value={passengers.class} onValueChange={(value) => setPassengers(prev => ({ ...prev, class: value }))}>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="economy">Économie</SelectItem>
-                          <SelectItem value="business">Affaires</SelectItem>
-                          <SelectItem value="first">Première</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <div className="grid grid-cols-3 gap-3">
+                        <button
+                          onClick={() => setPassengers(prev => ({ ...prev, class: 'economy' }))}
+                          className={`py-3 px-2 rounded-lg border-2 transition-all ${
+                            passengers.class === 'economy' 
+                              ? 'border-emerald-500 bg-emerald-50 text-emerald-700 font-medium' 
+                              : 'border-gray-200 hover:border-emerald-300'
+                          }`}
+                        >
+                          Économie
+                        </button>
+                        <button
+                          onClick={() => setPassengers(prev => ({ ...prev, class: 'business' }))}
+                          className={`py-3 px-2 rounded-lg border-2 transition-all ${
+                            passengers.class === 'business' 
+                              ? 'border-emerald-500 bg-emerald-50 text-emerald-700 font-medium' 
+                              : 'border-gray-200 hover:border-emerald-300'
+                          }`}
+                        >
+                          Affaires
+                        </button>
+                        <button
+                          onClick={() => setPassengers(prev => ({ ...prev, class: 'first' }))}
+                          className={`py-3 px-2 rounded-lg border-2 transition-all ${
+                            passengers.class === 'first' 
+                              ? 'border-emerald-500 bg-emerald-50 text-emerald-700 font-medium' 
+                              : 'border-gray-200 hover:border-emerald-300'
+                          }`}
+                        >
+                          Première
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               )}
             </div>
+            {/* Search Button */}
+            <div className="flex-shrink-0 lg:ml-2">
+              <div className="mb-2 lg:mb-6"></div>
+              <button 
+                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-8 py-3 text-sm font-semibold rounded-xl shadow-lg flex items-center justify-center space-x-2 transition-all duration-200 hover:shadow-xl h-16"
+                onClick={() => {
+                  // Validation
+                  if (!fromValue || !toValue || !departureDate) {
+                    alert('Veuillez remplir tous les champs obligatoires');
+                    return;
+                  }
+
+                  if (tripType === 'round-trip' && !returnDate) {
+                    alert('Veuillez sélectionner une date de retour');
+                    return;
+                  }
+
+                  // Extraire les codes d'aéroport
+                  const fromCode = fromValue.match(/\(([^)]+)\)/)?.[1] || '';
+                  const toCode = toValue.match(/\(([^)]+)\)/)?.[1] || '';
+
+                  // Construire l'URL avec les paramètres de recherche
+                  const searchParams = new URLSearchParams({
+                    from: fromCode,
+                    to: toCode,
+                    departureDate: departureDate ? format(departureDate, 'yyyy-MM-dd') : '',
+                    ...(tripType === 'round-trip' && returnDate ? { returnDate: format(returnDate, 'yyyy-MM-dd') } : {}),
+                    adults: passengers.adults.toString(),
+                    children: passengers.children.toString(),
+                    infants: passengers.infants.toString(),
+                    cabinClass: passengers.class,
+                    tripType: tripType,
+                    ...(nearbyAirports ? { nearbyAirports: 'true' } : {}),
+                    ...(directFlights ? { directFlights: 'true' } : {})
+                  });
+
+                  // Rediriger vers la page de résultats
+                  router.push(`/flight-results?${searchParams.toString()}`);
+                }}
+              >
+                <Plane className="w-4 h-4" />
+                <span>Rechercher</span>
+              </button>
+            </div>
           </div>
 
           {/* Checkboxes */}
-          <div className="flex flex-wrap gap-8 mb-10 px-2">
+          <div className="flex flex-wrap gap-6 mb-4 px-1">
             <div className="flex items-center space-x-2">
               <Checkbox 
                 id="nearby-airports-from" 
                 checked={nearbyAirports}
                 onCheckedChange={(checked) => setNearbyAirports(checked as boolean)}
+                className="h-4 w-4 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600 border-white bg-white"
               />
-              <Label htmlFor="nearby-airports-from" className="text-sm text-gray-700 cursor-pointer">
-                Ajouter des aéroports à proximité
+              <Label htmlFor="nearby-airports-from" className="text-xs text-white cursor-pointer font-medium opacity-90">
+                Inclure les aéroports à proximité
               </Label>
             </div>
             <div className="flex items-center space-x-2">
@@ -487,55 +580,14 @@ export default function Home() {
                 id="direct-flights" 
                 checked={directFlights}
                 onCheckedChange={(checked) => setDirectFlights(checked as boolean)}
+                className="h-4 w-4 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600 border-white bg-white"
               />
-              <Label htmlFor="direct-flights" className="text-sm text-gray-700 cursor-pointer">
+              <Label htmlFor="direct-flights" className="text-xs text-white cursor-pointer font-medium opacity-90">
                 Vols directs uniquement
               </Label>
             </div>
           </div>
 
-          {/* Search Button */}
-          <div className="flex justify-end">
-            <Button 
-              className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-12 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
-              onClick={() => {
-                // Validation
-                if (!fromValue || !toValue || !departureDate) {
-                  alert('Veuillez remplir tous les champs obligatoires');
-                  return;
-                }
-
-                if (tripType === 'round-trip' && !returnDate) {
-                  alert('Veuillez sélectionner une date de retour');
-                  return;
-                }
-
-                // Extraire les codes d'aéroport
-                const fromCode = fromValue.match(/\(([^)]+)\)/)?.[1] || '';
-                const toCode = toValue.match(/\(([^)]+)\)/)?.[1] || '';
-
-                // Construire l'URL avec les paramètres de recherche
-                const searchParams = new URLSearchParams({
-                  from: fromCode,
-                  to: toCode,
-                  departureDate: departureDate ? format(departureDate, 'yyyy-MM-dd') : '',
-                  ...(tripType === 'round-trip' && returnDate ? { returnDate: format(returnDate, 'yyyy-MM-dd') } : {}),
-                  adults: passengers.adults.toString(),
-                  children: passengers.children.toString(),
-                  infants: passengers.infants.toString(),
-                  cabinClass: passengers.class,
-                  tripType: tripType,
-                  ...(nearbyAirports ? { nearbyAirports: 'true' } : {}),
-                  ...(directFlights ? { directFlights: 'true' } : {})
-                });
-
-                // Rediriger vers la page de résultats
-                router.push(`/flight-results?${searchParams.toString()}`);
-              }}
-            >
-              Rechercher
-            </Button>
-          </div>
         </div>
       </div>
     </div>

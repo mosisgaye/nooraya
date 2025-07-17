@@ -8,9 +8,7 @@ import {
   Building,
   Package,
   Tag,
-  HelpCircle,
   ChevronDown,
-  Globe,
   Menu,
   X,
   LogOut,
@@ -98,51 +96,15 @@ const Header: React.FC = () => {
             isActive={isActive('/packages')}
           />
           <NavLink
-            href="/offers"
+            href="/omra"
             icon={<Tag size={18} />}
-            label="Offres"
-            isActive={isActive('/offers')}
-            badge="Nouveau"
-          />
-          <NavLink
-            href="/help"
-            icon={<HelpCircle size={18} />}
-            label="Aide"
-            isActive={isActive('/help')}
+            label="Omra"
+            isActive={isActive('/omra')}
           />
         </nav>
 
         {/* Contrôles utilisateur simplifiés */}
         <div className="hidden lg:flex items-center space-x-3">
-          <div className="relative">
-            <button
-              onClick={() => {
-                setLanguageDropdownOpen(!languageDropdownOpen);
-                setAccountDropdownOpen(false);
-              }}
-              className="flex items-center space-x-2 px-3 py-2 text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all duration-200"
-              aria-label="Sélectionner la langue"
-              aria-expanded={languageDropdownOpen}
-              aria-haspopup="true"
-            >
-              <Globe size={18} />
-              <span className="font-medium">FR</span>
-              <ChevronDown size={16} className={`transition-transform duration-200 ${languageDropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
-
-            {languageDropdownOpen && (
-              <div
-                className="absolute right-0 mt-2 py-2 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 animate-in slide-in-from-top-2 duration-200"
-                role="menu"
-                aria-label="Sélection de langue"
-              >
-                <LanguageOption flag="🇫🇷" language="Français" isActive />
-                <LanguageOption flag="🇬🇧" language="English" />
-                <LanguageOption flag="🇪🇸" language="Español" />
-                <LanguageOption flag="🇩🇪" language="Deutsch" />
-              </div>
-            )}
-          </div>
 
           {isAuthenticated ? (
             <div className="relative">
@@ -246,18 +208,10 @@ const Header: React.FC = () => {
               onClick={closeAllDropdowns}
             />
             <MobileNavLink
-              href="/offers"
+              href="/omra"
               icon={<Tag size={18} />}
-              label="Offres"
-              isActive={isActive('/offers')}
-              onClick={closeAllDropdowns}
-              badge="Nouveau"
-            />
-            <MobileNavLink
-              href="/help"
-              icon={<HelpCircle size={18} />}
-              label="Aide"
-              isActive={isActive('/help')}
+              label="Omra"
+              isActive={isActive('/omra')}
               onClick={closeAllDropdowns}
             />
           </div>
@@ -319,7 +273,7 @@ const NavLink: React.FC<NavLinkProps> = ({ href, icon, label, isActive, badge })
     <Link
       href={href}
       className={`relative flex items-center px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 ${isActive
-          ? 'text--600 bg-green-50 shadow-sm'
+          ? 'text-green-600 bg-green-50 shadow-sm'
           : 'text-gray-700 hover:text-green-600 hover:bg-green-50'
         }`}
     >
@@ -359,20 +313,6 @@ const MobileNavLink: React.FC<MobileNavLinkProps> = ({ href, icon, label, isActi
   );
 };
 
-const LanguageOption: React.FC<{ flag: string; language: string; isActive?: boolean }> = ({
-  flag, language, isActive
-}) => (
-  <button
-    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center transition-colors ${isActive ? 'text-green-600 bg-green-50' : 'text-gray-700'
-      }`}
-    role="menuitem"
-    aria-current={isActive ? 'true' : 'false'}
-  >
-    <span className="mr-3 text-lg" aria-hidden="true">{flag}</span>
-    {language}
-    {isActive && <span className="ml-auto text-green-600" aria-hidden="true">✓</span>}
-  </button>
-);
 
 const AccountMenuItem: React.FC<{ icon: React.ComponentType<{ size?: number; className?: string }>; label: string; onClick?: () => void }> = ({ icon: Icon, label, onClick }) => (
   <button

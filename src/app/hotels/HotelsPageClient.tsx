@@ -11,7 +11,7 @@ import { useHotelSearch } from '@/features/hotels/hooks/useHotelSearch';
 
 export default function HotelsPageClient() {
   const router = useRouter();
-  const { searchHotels, loading, error } = useHotelSearch();
+  const { searchHotels, isLoading, error } = useHotelSearch();
   const [checkInDate, setCheckInDate] = useState<Date | null>(null);
   const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
   const [rooms, setRooms] = useState(1);
@@ -186,11 +186,11 @@ export default function HotelsPageClient() {
             <div className="flex justify-center pt-4">
               <button
                 type="submit"
-                disabled={loading}
+                disabled={isLoading}
                 className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:from-emerald-700 hover:to-teal-700 transition-all transform hover:scale-105 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Search className="mr-2" size={20} />
-                {loading ? 'Recherche en cours...' : 'Rechercher des hôtels'}
+                {isLoading ? 'Recherche en cours...' : 'Rechercher des hôtels'}
               </button>
             </div>
             

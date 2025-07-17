@@ -1,7 +1,7 @@
 'use client'
 import React from 'react';
 import { X, Star } from 'lucide-react';
-import LazyImage from '../ui/LazyImage';
+import LazyImage from '../ui/lazy-image';
 import { Flight, Hotel } from '@/types';
 
 interface ComparisonItem {

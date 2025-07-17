@@ -4,7 +4,7 @@ import { Calendar, MapPin, TrendingDown, ArrowRight } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import { format, addDays, startOfMonth, endOfMonth } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import LazyImage from '../ui/LazyImage';
+import LazyImage from '../ui/lazy-image';
 
 interface SearchData {
   from?: string;

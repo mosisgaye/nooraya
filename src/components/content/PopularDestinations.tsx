@@ -4,7 +4,7 @@
 
 import React, { useState, memo } from 'react';
 import { Map, ChevronLeft, ChevronRight } from 'lucide-react';
-import LazyImage from '../ui/LazyImage';
+import LazyImage from '../ui/lazy-image';
 
 interface Destination {
   id: number;

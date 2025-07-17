@@ -12,7 +12,7 @@ import { TripType } from '@/types';
 
 export default function FlightsPageClient() {
   const router = useRouter();
-  const { searchFlights, loading, error } = useFlightSearch();
+  const { searchFlights, isLoading, error } = useFlightSearch();
   const [tripType, setTripType] = useState<TripType>('round-trip');
   const [departureDate, setDepartureDate] = useState<Date | null>(null);
   const [returnDate, setReturnDate] = useState<Date | null>(null);
@@ -263,11 +263,11 @@ export default function FlightsPageClient() {
             <div className="flex justify-center pt-4">
               <button
                 type="submit"
-                disabled={loading}
+                disabled={isLoading}
                 className="bg-gradient-to-r from-green-600 to-indigo-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:from-green-700 hover:to-indigo-700 transition-all transform hover:scale-105 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Search className="mr-2" size={20} />
-                {loading ? 'Recherche en cours...' : 'Rechercher des vols'}
+                {isLoading ? 'Recherche en cours...' : 'Rechercher des vols'}
               </button>
             </div>
             

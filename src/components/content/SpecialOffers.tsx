@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { Tag, ArrowRight } from 'lucide-react';
-import LazyImage from '../ui/LazyImage';
+import LazyImage from '../ui/lazy-image';
 
 interface Offer {
   id: number;

@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import { MapPin, Star, X, Navigation, Layers } from 'lucide-react';
-import LazyImage from './LazyImage';
+import LazyImage from './lazy-image';
 
 interface MapLocation {
   id: string;

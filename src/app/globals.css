@@ -53,14 +53,14 @@
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-green-600 to-purple-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent;
   }
 
   .floating-animation {
     animation: float 6s ease-in-out infinite;
   }
 
-  @keyframes flogreenat {
+  @keyframes float {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-20px); }
   }
@@ -95,7 +95,7 @@
   }
 
   .hero-section {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(147, 51, 234, 0.8) 100%);
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.9) 0%, rgba(16, 185, 129, 0.8) 100%);
     position: relative;
   }
 
@@ -128,7 +128,7 @@
 
   .destination-card::after {
     content: '';
-    @apply absolute inset-0 bg-gradient-to-r from-green-600/20 to-purple-600/20 opacity-0 transition-opacity duration-300;
+    @apply absolute inset-0 bg-gradient-to-r from-green-600/20 to-emerald-600/20 opacity-0 transition-opacity duration-300;
   }
 
   .destination-card:hover::after {
@@ -136,12 +136,6 @@
   }
 
   /* Animations supplémentaires */
-  .shimmer {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-  }
-
   .animate-shimmer {
     animation: shimmer 1.5s infinite;
   }
@@ -179,7 +173,7 @@
   }
 
   .react-datepicker__header {
-    @apply bg-gradient-to-r from-green-50 to-purple-50 border-gray-200 rounded-t-xl !important;
+    @apply bg-gradient-to-r from-green-50 to-emerald-50 border-gray-200 rounded-t-xl !important;
   }
 
   .react-datepicker__day--selected {
@@ -214,7 +208,10 @@
 
   /* Loading states */
   .skeleton {
-    @apply bg-gray-200 rounded animate-pulse;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    @apply rounded;
   }
 
   /* Focus styles */
@@ -263,13 +260,4 @@
     perspective: 1000px;
   }
 
-  /* Préchargement des images critiques */
-  .preload-image {
-    content: url('https://images.pexels.com/photos/3769138/pexels-photo-3769138.jpeg');
-    position: absolute;
-    left: -9999px;
-    top: -9999px;
-    width: 1px;
-    height: 1px;
-  }
 }

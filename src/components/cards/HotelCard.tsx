@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Star, Wifi, Car, Coffee, Dumbbell, MapPin, Plus } from 'lucide-react';
-import LazyImage from '../ui/LazyImage';
+import LazyImage from '../ui/lazy-image';
 import { Hotel } from '@/types';
 
 interface HotelCardProps {

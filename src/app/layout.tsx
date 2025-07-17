@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Poppins } from 'next/font/google';
-import './critical.css';
 import './globals.css';
-import '@/styles/accessibility.css';
+import './critical.css';
 import { Header } from '@/components/layout';
 import { Footer } from '@/components/layout';
 import { generateStructuredData } from '@/lib/seo';
