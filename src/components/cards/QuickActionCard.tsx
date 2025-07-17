@@ -12,7 +12,7 @@ interface QuickActionCardProps {
 
 const QuickActionCard: React.FC<QuickActionCardProps> = ({ icon, title, description, action, variant }) => {
   const variants = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700',
+    primary: 'bg-green-600 text-white hover:bg-green-700',
     secondary: 'bg-green-600 text-white hover:bg-green-700',
     tertiary: 'bg-purple-600 text-white hover:bg-purple-700'
   };

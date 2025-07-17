@@ -113,7 +113,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ type, fields, buttonText, butto
                       onChange={(date: Date | null) => setDepartureDate(date)}
                       dateFormat="dd/MM/yyyy"
                       placeholderText="Départ"
-                      className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                      className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                       minDate={new Date()}
                       id="departure-date"
                       autoComplete="off"
@@ -131,7 +131,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ type, fields, buttonText, butto
                         onChange={(date: Date | null) => setReturnDate(date)}
                         dateFormat="dd/MM/yyyy"
                         placeholderText="Retour"
-                        className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                        className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                         minDate={departureDate || new Date()}
                         id="return-date"
                         autoComplete="off"
@@ -154,7 +154,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ type, fields, buttonText, butto
                 <button
                   type="button"
                   onClick={() => setShowPassengersDropdown(!showPassengersDropdown)}
-                  className="w-full flex items-center justify-between pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-left"
+                  className="w-full flex items-center justify-between pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm text-left"
                   aria-label={`${totalPassengers} passager${totalPassengers > 1 ? 's' : ''}`}
                   aria-expanded={showPassengersDropdown}
                   aria-haspopup="true"
@@ -269,7 +269,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ type, fields, buttonText, butto
                   id={field.id}
                   name={field.id}
                   placeholder={field.placeholder}
-                  className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                   required={field.id !== 'returnDate'}
                   autoComplete={field.id === 'origin' || field.id === 'destination' ? 'off' : undefined}
                   aria-required={field.id !== 'returnDate' ? 'true' : 'false'}
@@ -290,7 +290,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ type, fields, buttonText, butto
               type="checkbox"
               checked={flexibleDates}
               onChange={(e) => setFlexibleDates(e.target.checked)}
-              className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="mr-2 rounded border-gray-300 text-green-600 focus:ring-green-500"
               aria-label="Dates flexibles"
             />
             <span className="text-sm text-gray-700">Dates flexibles (+/- 3 jours)</span>
@@ -307,7 +307,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ type, fields, buttonText, butto
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 px-6 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white py-4 px-6 rounded-lg font-medium hover:from-green-700 hover:to-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
         aria-label={loading ? 'Recherche en cours' : buttonText}
       >
         {loading ? (

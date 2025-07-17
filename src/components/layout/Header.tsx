@@ -3,15 +3,15 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { 
-  Plane, 
-  Building, 
-  Package, 
-  Tag, 
-  HelpCircle, 
-  ChevronDown, 
-  Globe, 
-  Menu, 
+import {
+  Plane,
+  Building,
+  Package,
+  Tag,
+  HelpCircle,
+  ChevronDown,
+  Globe,
+  Menu,
   X,
   LogOut,
   UserCircle,
@@ -55,21 +55,20 @@ const Header: React.FC = () => {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <header 
-      className={`sticky top-0 z-50 w-full transition-all duration-500 ${
-        scrolled 
-          ? 'bg-white/95 backdrop-blur-xl shadow-lg border-b border-gray-100' 
+    <header
+      className={`sticky top-0 z-50 w-full transition-all duration-500 ${scrolled
+          ? 'bg-white/95 backdrop-blur-xl shadow-lg border-b border-gray-100'
           : 'bg-white/90 backdrop-blur-sm'
-      }`}
+        }`}
       role="banner"
       onKeyDown={handleKeyDown}
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16 lg:h-20" role="navigation" aria-label="Navigation principale">
         {/* Logo simplifié */}
         <Link href="/" className="flex items-center group" aria-label="Nooraya - Accueil">
-          <Plane className="h-8 w-8 lg:h-10 lg:w-10 text-blue-600 transform -rotate-45 transition-all duration-500 group-hover:rotate-0 group-hover:scale-110" />
+          <Plane className="h-8 w-8 lg:h-10 lg:w-10 text-green-600 transform -rotate-45 transition-all duration-500 group-hover:rotate-0 group-hover:scale-110" />
           <div className="ml-3">
-            <span className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
+            <span className="text-xl lg:text-2xl font-bold text-green-600">
               Nooraya
             </span>
             <span className="block text-xs text-gray-500 font-light tracking-wider uppercase">
@@ -80,36 +79,36 @@ const Header: React.FC = () => {
 
         {/* Navigation desktop simplifiée */}
         <nav className="hidden lg:flex items-center space-x-1">
-          <NavLink 
-            href="/flights" 
-            icon={<Plane size={18} />} 
-            label="Vols" 
-            isActive={isActive('/flights') || isActive('/flight-results')} 
+          <NavLink
+            href="/flights"
+            icon={<Plane size={18} />}
+            label="Vols"
+            isActive={isActive('/flights') || isActive('/flight-results')}
           />
-          <NavLink 
-            href="/hotels" 
-            icon={<Building size={18} />} 
-            label="Hôtels" 
-            isActive={isActive('/hotels') || isActive('/hotel-results')} 
+          <NavLink
+            href="/hotels"
+            icon={<Building size={18} />}
+            label="Hôtels"
+            isActive={isActive('/hotels') || isActive('/hotel-results')}
           />
-          <NavLink 
-            href="/packages" 
-            icon={<Package size={18} />} 
-            label="Séjours" 
-            isActive={isActive('/packages')} 
+          <NavLink
+            href="/packages"
+            icon={<Package size={18} />}
+            label="Séjours"
+            isActive={isActive('/packages')}
           />
-          <NavLink 
-            href="/offers" 
-            icon={<Tag size={18} />} 
-            label="Offres" 
-            isActive={isActive('/offers')} 
+          <NavLink
+            href="/offers"
+            icon={<Tag size={18} />}
+            label="Offres"
+            isActive={isActive('/offers')}
             badge="Nouveau"
           />
-          <NavLink 
-            href="/help" 
-            icon={<HelpCircle size={18} />} 
-            label="Aide" 
-            isActive={isActive('/help')} 
+          <NavLink
+            href="/help"
+            icon={<HelpCircle size={18} />}
+            label="Aide"
+            isActive={isActive('/help')}
           />
         </nav>
 
@@ -121,7 +120,7 @@ const Header: React.FC = () => {
                 setLanguageDropdownOpen(!languageDropdownOpen);
                 setAccountDropdownOpen(false);
               }}
-              className="flex items-center space-x-2 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200"
+              className="flex items-center space-x-2 px-3 py-2 text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all duration-200"
               aria-label="Sélectionner la langue"
               aria-expanded={languageDropdownOpen}
               aria-haspopup="true"
@@ -130,9 +129,9 @@ const Header: React.FC = () => {
               <span className="font-medium">FR</span>
               <ChevronDown size={16} className={`transition-transform duration-200 ${languageDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
-            
+
             {languageDropdownOpen && (
-              <div 
+              <div
                 className="absolute right-0 mt-2 py-2 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 animate-in slide-in-from-top-2 duration-200"
                 role="menu"
                 aria-label="Sélection de langue"
@@ -152,12 +151,12 @@ const Header: React.FC = () => {
                   setAccountDropdownOpen(!accountDropdownOpen);
                   setLanguageDropdownOpen(false);
                 }}
-                className="flex items-center space-x-2 px-3 py-2.5 bg-gradient-to-r from-blue-50 to-purple-50 text-gray-700 hover:from-blue-100 hover:to-purple-100 rounded-2xl transition-all duration-200 border border-gray-200"
+                className="flex items-center space-x-2 px-3 py-2.5 bg-gradient-to-r from-green-50 to-purple-50 text-gray-700 hover:from-green-100 hover:to-purple-100 rounded-2xl transition-all duration-200 border border-gray-200"
                 aria-label="Menu compte utilisateur"
                 aria-expanded={accountDropdownOpen}
                 aria-haspopup="true"
               >
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-md">
+                <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-purple-500 rounded-full flex items-center justify-center shadow-md">
                   <span className="text-white font-semibold text-sm">
                     {user?.firstName?.[0]?.toUpperCase() || 'U'}
                   </span>
@@ -167,7 +166,7 @@ const Header: React.FC = () => {
               </button>
 
               {accountDropdownOpen && (
-                <div 
+                <div
                   className="absolute right-0 mt-2 py-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 animate-in slide-in-from-top-2 duration-200"
                   role="menu"
                   aria-label="Menu compte utilisateur"
@@ -180,9 +179,9 @@ const Header: React.FC = () => {
                   </div>
                   <AccountMenuItem icon={UserCircle} label="Mon profil" onClick={() => router.push('/profile')} />
                   <div className="border-t border-gray-100 mt-2 pt-2">
-                    <AccountMenuItem 
-                      icon={LogOut} 
-                      label="Se déconnecter" 
+                    <AccountMenuItem
+                      icon={LogOut}
+                      label="Se déconnecter"
                       onClick={async () => {
                         await logout();
                         router.push('/');
@@ -196,7 +195,7 @@ const Header: React.FC = () => {
           ) : (
             <button
               onClick={openAuthModal}
-              className="flex items-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg shadow-blue-600/20"
+              className="flex items-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-green-600 to-green-700 text-white font-medium rounded-2xl hover:from-green-700 hover:to-green-800 transition-all duration-200 shadow-lg shadow-green-600/20"
             >
               <Sparkles size={18} />
               <span>Se connecter</span>
@@ -207,7 +206,7 @@ const Header: React.FC = () => {
         {/* Bouton menu mobile simplifié */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden p-2 rounded-xl text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
+          className="lg:hidden p-2 rounded-xl text-gray-700 hover:text-green-600 hover:bg-green-50 transition-all duration-200"
           aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
           aria-expanded={mobileMenuOpen}
           aria-controls="mobile-menu"
@@ -218,57 +217,57 @@ const Header: React.FC = () => {
 
       {/* Menu mobile simplifié */}
       {mobileMenuOpen && (
-        <div 
+        <div
           id="mobile-menu"
           className="lg:hidden bg-white border-t border-gray-100 shadow-xl animate-in slide-in-from-top-2 duration-300"
           role="menu"
           aria-label="Menu mobile"
         >
           <div className="px-4 pt-4 pb-3 space-y-2">
-            <MobileNavLink 
-              href="/flights" 
-              icon={<Plane size={18} />} 
-              label="Vols" 
-              isActive={isActive('/flights')} 
+            <MobileNavLink
+              href="/flights"
+              icon={<Plane size={18} />}
+              label="Vols"
+              isActive={isActive('/flights')}
               onClick={closeAllDropdowns}
             />
-            <MobileNavLink 
-              href="/hotels" 
-              icon={<Building size={18} />} 
-              label="Hôtels" 
-              isActive={isActive('/hotels')} 
+            <MobileNavLink
+              href="/hotels"
+              icon={<Building size={18} />}
+              label="Hôtels"
+              isActive={isActive('/hotels')}
               onClick={closeAllDropdowns}
             />
-            <MobileNavLink 
-              href="/packages" 
-              icon={<Package size={18} />} 
-              label="Séjours" 
-              isActive={isActive('/packages')} 
+            <MobileNavLink
+              href="/packages"
+              icon={<Package size={18} />}
+              label="Séjours"
+              isActive={isActive('/packages')}
               onClick={closeAllDropdowns}
             />
-            <MobileNavLink 
-              href="/offers" 
-              icon={<Tag size={18} />} 
-              label="Offres" 
-              isActive={isActive('/offers')} 
+            <MobileNavLink
+              href="/offers"
+              icon={<Tag size={18} />}
+              label="Offres"
+              isActive={isActive('/offers')}
               onClick={closeAllDropdowns}
               badge="Nouveau"
             />
-            <MobileNavLink 
-              href="/help" 
-              icon={<HelpCircle size={18} />} 
-              label="Aide" 
-              isActive={isActive('/help')} 
+            <MobileNavLink
+              href="/help"
+              icon={<HelpCircle size={18} />}
+              label="Aide"
+              isActive={isActive('/help')}
               onClick={closeAllDropdowns}
             />
           </div>
-          
+
           <div className="px-4 py-4 border-t border-gray-100 bg-gray-50 space-y-3">
             {isAuthenticated ? (
               <>
                 <div className="px-4 py-3 bg-white rounded-2xl border border-gray-200 mb-3">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-md">
+                    <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-purple-500 rounded-full flex items-center justify-center shadow-md">
                       <span className="text-white font-semibold">
                         {user?.firstName?.[0]?.toUpperCase() || 'U'}
                       </span>
@@ -285,7 +284,7 @@ const Header: React.FC = () => {
             ) : (
               <button
                 onClick={() => { openAuthModal(); closeAllDropdowns(); }}
-                className="w-full flex items-center justify-center space-x-2 py-3 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200"
+                className="w-full flex items-center justify-center space-x-2 py-3 px-4 bg-gradient-to-r from-green-600 to-green-700 text-white font-medium rounded-2xl hover:from-green-700 hover:to-green-800 transition-all duration-200"
               >
                 <Sparkles size={18} />
                 <span>Se connecter</span>
@@ -297,8 +296,8 @@ const Header: React.FC = () => {
 
       {/* Overlay pour les dropdowns */}
       {(languageDropdownOpen || accountDropdownOpen) && (
-        <div 
-          className="fixed inset-0 z-40 bg-black/10 backdrop-blur-sm" 
+        <div
+          className="fixed inset-0 z-40 bg-black/10 backdrop-blur-sm"
           onClick={closeAllDropdowns}
           aria-label="Fermer les menus"
         ></div>
@@ -319,11 +318,10 @@ const NavLink: React.FC<NavLinkProps> = ({ href, icon, label, isActive, badge })
   return (
     <Link
       href={href}
-      className={`relative flex items-center px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 ${
-        isActive
-          ? 'text-blue-600 bg-blue-50 shadow-sm'
-          : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
-      }`}
+      className={`relative flex items-center px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 ${isActive
+          ? 'text--600 bg-green-50 shadow-sm'
+          : 'text-gray-700 hover:text-green-600 hover:bg-green-50'
+        }`}
     >
       <span className="mr-2">{icon}</span>
       {label}
@@ -345,11 +343,10 @@ const MobileNavLink: React.FC<MobileNavLinkProps> = ({ href, icon, label, isActi
     <Link
       href={href}
       onClick={onClick}
-      className={`relative flex items-center px-4 py-3 text-base font-medium rounded-xl transition-all duration-200 ${
-        isActive
-          ? 'text-blue-600 bg-blue-50'
+      className={`relative flex items-center px-4 py-3 text-base font-medium rounded-xl transition-all duration-200 ${isActive
+          ? 'text-green-600 bg-green-50'
           : 'text-gray-700 hover:bg-gray-50'
-      }`}
+        }`}
     >
       <span className="mr-3">{icon}</span>
       {label}
@@ -362,24 +359,23 @@ const MobileNavLink: React.FC<MobileNavLinkProps> = ({ href, icon, label, isActi
   );
 };
 
-const LanguageOption: React.FC<{ flag: string; language: string; isActive?: boolean }> = ({ 
-  flag, language, isActive 
+const LanguageOption: React.FC<{ flag: string; language: string; isActive?: boolean }> = ({
+  flag, language, isActive
 }) => (
-  <button 
-    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center transition-colors ${
-      isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-700'
-    }`}
+  <button
+    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center transition-colors ${isActive ? 'text-green-600 bg-green-50' : 'text-gray-700'
+      }`}
     role="menuitem"
     aria-current={isActive ? 'true' : 'false'}
   >
-    <span className="mr-3 text-lg" aria-hidden="true">{flag}</span> 
+    <span className="mr-3 text-lg" aria-hidden="true">{flag}</span>
     {language}
-    {isActive && <span className="ml-auto text-blue-600" aria-hidden="true">✓</span>}
+    {isActive && <span className="ml-auto text-green-600" aria-hidden="true">✓</span>}
   </button>
 );
 
 const AccountMenuItem: React.FC<{ icon: React.ComponentType<{ size?: number; className?: string }>; label: string; onClick?: () => void }> = ({ icon: Icon, label, onClick }) => (
-  <button 
+  <button
     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center transition-colors"
     role="menuitem"
     onClick={onClick}
@@ -390,7 +386,7 @@ const AccountMenuItem: React.FC<{ icon: React.ComponentType<{ size?: number; cla
 );
 
 const MobileActionButton: React.FC<{ icon: React.ReactNode; text: string; onClick?: () => void }> = ({ icon, text, onClick }) => (
-  <button 
+  <button
     className="flex items-center space-x-3 text-gray-700 w-full p-3 rounded-xl hover:bg-white transition-colors"
     role="menuitem"
     onClick={onClick}

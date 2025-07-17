@@ -23,9 +23,9 @@ export default function AuthCallbackPage() {
   }, [router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-purple-50">
       <div className="text-center">
-        <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
+        <Loader2 className="w-12 h-12 text-green-600 animate-spin mx-auto mb-4" />
         <h1 className="text-xl font-semibold text-gray-900 mb-2">
           Connexion en cours...
         </h1>

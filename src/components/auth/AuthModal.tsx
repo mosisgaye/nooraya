@@ -171,7 +171,7 @@ const AuthModal: React.FC = () => {
             tabIndex={-1}
           >
             {/* Header */}
-            <div className="relative bg-gradient-to-r from-blue-600 to-blue-700 p-6 text-white">
+            <div className="relative bg-gradient-to-r from-green-600 to-green-700 p-6 text-white">
               <button
                 onClick={closeAuthModal}
                 className="absolute right-4 top-4 rounded-lg bg-white/20 p-2 hover:bg-white/30 transition-colors"
@@ -185,7 +185,7 @@ const AuthModal: React.FC = () => {
                 {mode === 'register' && 'Créer un compte'}
                 {mode === 'forgot' && 'Mot de passe oublié'}
               </h2>
-              <p className="mt-1 text-blue-100">
+              <p className="mt-1 text-green-100">
                 {mode === 'login' && 'Accédez à votre espace personnel'}
                 {mode === 'register' && 'Rejoignez Nooraya Voyages'}
                 {mode === 'forgot' && 'Réinitialisez votre mot de passe'}
@@ -199,7 +199,7 @@ const AuthModal: React.FC = () => {
                   onClick={() => setMode('login')}
                   className={`flex-1 py-3 text-sm font-medium transition-colors ${
                     mode === 'login'
-                      ? 'border-b-2 border-blue-600 text-blue-600'
+                      ? 'border-b-2 border-green-600 text-green-600'
                       : 'text-gray-500 hover:text-gray-700'
                   }`}
                 >
@@ -209,7 +209,7 @@ const AuthModal: React.FC = () => {
                   onClick={() => setMode('register')}
                   className={`flex-1 py-3 text-sm font-medium transition-colors ${
                     mode === 'register'
-                      ? 'border-b-2 border-blue-600 text-blue-600'
+                      ? 'border-b-2 border-green-600 text-green-600'
                       : 'text-gray-500 hover:text-gray-700'
                   }`}
                 >
@@ -273,7 +273,7 @@ const AuthModal: React.FC = () => {
                         type="text"
                         value={formData.firstName}
                         onChange={(e) => handleInputChange('firstName', e.target.value)}
-                        className={`w-full rounded-lg border pl-10 pr-3 py-2.5 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all ${
+                        className={`w-full rounded-lg border pl-10 pr-3 py-2.5 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none transition-all ${
                           errors.firstName ? 'border-red-500' : 'border-gray-300'
                         }`}
                         placeholder="Jean"
@@ -294,7 +294,7 @@ const AuthModal: React.FC = () => {
                         type="text"
                         value={formData.lastName}
                         onChange={(e) => handleInputChange('lastName', e.target.value)}
-                        className={`w-full rounded-lg border pl-10 pr-3 py-2.5 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all ${
+                        className={`w-full rounded-lg border pl-10 pr-3 py-2.5 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none transition-all ${
                           errors.lastName ? 'border-red-500' : 'border-gray-300'
                         }`}
                         placeholder="Dupont"
@@ -341,7 +341,7 @@ const AuthModal: React.FC = () => {
                       type={showPassword ? 'text' : 'password'}
                       value={formData.password}
                       onChange={(e) => handleInputChange('password', e.target.value)}
-                      className={`w-full rounded-lg border pl-10 pr-10 py-2.5 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all ${
+                      className={`w-full rounded-lg border pl-10 pr-10 py-2.5 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none transition-all ${
                         errors.password ? 'border-red-500' : 'border-gray-300'
                       }`}
                       placeholder="••••••••"
@@ -417,15 +417,15 @@ const AuthModal: React.FC = () => {
                       type="checkbox"
                       checked={formData.acceptTerms}
                       onChange={(e) => handleInputChange('acceptTerms', e.target.checked)}
-                      className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500/20"
+                      className="mt-1 h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-2 focus:ring-green-500/20"
                     />
                     <span className="text-sm text-gray-600">
                       J&apos;accepte les{' '}
-                      <a href="/terms" className="text-blue-600 hover:underline">
+                      <a href="/terms" className="text-green-600 hover:underline">
                         conditions d&apos;utilisation
                       </a>{' '}
                       et la{' '}
-                      <a href="/privacy" className="text-blue-600 hover:underline">
+                      <a href="/privacy" className="text-green-600 hover:underline">
                         politique de confidentialité
                       </a>
                     </span>
@@ -442,7 +442,7 @@ const AuthModal: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setMode('forgot')}
-                    className="text-sm text-blue-600 hover:underline"
+                    className="text-sm text-green-600 hover:underline"
                   >
                     Mot de passe oublié ?
                   </button>
@@ -453,7 +453,7 @@ const AuthModal: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting || isLoading}
-                className="w-full rounded-lg bg-blue-600 py-3 font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
+                className="w-full rounded-lg bg-green-600 py-3 font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
               >
                 {isSubmitting ? (
                   <span className="flex items-center justify-center gap-2">
@@ -478,7 +478,7 @@ const AuthModal: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setMode('login')}
-                    className="text-sm text-blue-600 hover:underline"
+                    className="text-sm text-green-600 hover:underline"
                   >
                     Retour à la connexion
                   </button>

@@ -51,11 +51,11 @@ export default function ConfirmEmailPage() {
   }, [searchParams, router]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-indigo-100 flex items-center justify-center px-4 py-8">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
         {status === 'loading' && (
           <>
-            <Loader2 className="w-16 h-16 text-blue-600 mx-auto mb-6 animate-spin" />
+            <Loader2 className="w-16 h-16 text-green-600 mx-auto mb-6 animate-spin" />
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Confirmation en cours...</h1>
             <p className="text-gray-600">Nous vérifions votre email, veuillez patienter.</p>
           </>
@@ -69,7 +69,7 @@ export default function ConfirmEmailPage() {
             <p className="text-sm text-gray-500">Redirection automatique dans 3 secondes...</p>
             <Link 
               href="/login" 
-              className="inline-block mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              className="inline-block mt-6 px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
             >
               Se connecter maintenant
             </Link>
@@ -84,7 +84,7 @@ export default function ConfirmEmailPage() {
             <div className="space-y-3">
               <Link 
                 href="/register" 
-                className="block w-full px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                className="block w-full px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
               >
                 Créer un nouveau compte
               </Link>

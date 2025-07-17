@@ -65,10 +65,10 @@ const SpecialOffers: React.FC = () => {
               <Tag size={18} className="mr-2" />
               <span>OFFRES SPÉCIALES</span>
             </div>
-            <h2 className="text-3xl font-bold text-blue-900">Promotions exclusives</h2>
+            <h2 className="text-3xl font-bold text-green-900">Promotions exclusives</h2>
             <p className="text-gray-600 mt-2">Économisez jusqu&apos;à 25% sur ces destinations</p>
           </div>
-          <a href="/offers" className="hidden md:flex items-center text-blue-500 hover:text-blue-700 transition-colors">
+          <a href="/offers" className="hidden md:flex items-center text-green-500 hover:text-green-700 transition-colors">
             <span className="mr-1">Voir toutes les offres</span>
             <ArrowRight size={18} />
           </a>
@@ -81,7 +81,7 @@ const SpecialOffers: React.FC = () => {
         </div>
 
         <div className="mt-8 text-center md:hidden">
-          <a href="/offers" className="inline-flex items-center text-blue-500 hover:text-blue-700 transition-colors">
+          <a href="/offers" className="inline-flex items-center text-green-500 hover:text-green-700 transition-colors">
             <span className="mr-1">Voir toutes les offres</span>
             <ArrowRight size={18} />
           </a>
@@ -113,14 +113,14 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer }) => {
         </div>
       </div>
       <div className="p-4">
-        <h3 className="text-lg font-bold text-blue-900 mb-2">{offer.destination}</h3>
+        <h3 className="text-lg font-bold text-green-900 mb-2">{offer.destination}</h3>
         <p className="text-gray-600 text-sm mb-3">{offer.duration} • Vol + Hôtel</p>
         <div className="flex items-baseline">
           <span className="text-gray-500 line-through text-sm mr-2">{offer.oldPrice}€</span>
-          <span className="text-2xl font-bold text-blue-500">{offer.newPrice}€</span>
+          <span className="text-2xl font-bold text-green-500">{offer.newPrice}€</span>
           <span className="text-gray-500 text-sm ml-1">/ personne</span>
         </div>
-        <button className="mt-4 w-full py-2 border border-blue-500 text-blue-500 rounded-lg font-medium transition-colors hover:bg-blue-50">
+        <button className="mt-4 w-full py-2 border border-green-500 text-green-500 rounded-lg font-medium transition-colors hover:bg-green-50">
           Voir l&apos;offre
         </button>
       </div>

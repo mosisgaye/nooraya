@@ -5,15 +5,15 @@ import { Home, Search, HelpCircle, ArrowLeft, Building } from 'lucide-react';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-indigo-100 flex items-center justify-center px-4">
       <div className="max-w-2xl w-full text-center">
         {/* Illustration */}
         <div className="mb-8">
           <div className="relative inline-block">
-            <div className="text-9xl font-bold text-blue-200">404</div>
+            <div className="text-9xl font-bold text-green-200">404</div>
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="bg-white rounded-full p-4 shadow-lg">
-                <Search className="h-12 w-12 text-blue-600" />
+                <Search className="h-12 w-12 text-green-600" />
               </div>
             </div>
           </div>
@@ -32,7 +32,7 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
           <Link
             href="/"
-            className="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
           >
             <Home className="mr-2" size={20} />
             Retour à l&apos;accueil
@@ -91,12 +91,12 @@ interface SuggestionCardProps {
 const SuggestionCard: React.FC<SuggestionCardProps> = ({ icon, title, description, link }) => (
   <Link
     href={link}
-    className="group bg-gray-50 rounded-lg p-6 hover:bg-blue-50 transition-colors"
+    className="group bg-gray-50 rounded-lg p-6 hover:bg-green-50 transition-colors"
   >
-    <div className="text-blue-600 mb-3 group-hover:scale-110 transition-transform">
+    <div className="text-green-600 mb-3 group-hover:scale-110 transition-transform">
       {icon}
     </div>
-    <h3 className="font-semibold mb-1 group-hover:text-blue-600 transition-colors">
+    <h3 className="font-semibold mb-1 group-hover:text-green-600 transition-colors">
       {title}
     </h3>
     <p className="text-sm text-gray-600">{description}</p>

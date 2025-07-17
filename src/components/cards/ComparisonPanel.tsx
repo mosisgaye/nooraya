@@ -36,7 +36,7 @@ const ComparisonPanel: React.FC<ComparisonPanelProps> = ({
         <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
           <div className="flex items-center">
             <h2 className="text-2xl font-bold mr-4">Comparaison</h2>
-            <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+            <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
               {items.length} élément{items.length > 1 ? 's' : ''}
             </span>
           </div>
@@ -111,7 +111,7 @@ const FlightComparison: React.FC<FlightComparisonProps> = ({
             <td className="p-4 font-medium">Prix</td>
             {items.map((item) => (
               <td key={item.id} className="p-4 text-center">
-                <span className="text-2xl font-bold text-blue-600">{item.data.price}€</span>
+                <span className="text-2xl font-bold text-green-600">{item.data.price}€</span>
               </td>
             ))}
           </tr>
@@ -171,7 +171,7 @@ const FlightComparison: React.FC<FlightComparisonProps> = ({
             <td className="p-4 font-medium">Action</td>
             {items.map((item) => (
               <td key={item.id} className="p-4 text-center">
-                <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                <button className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors">
                   Sélectionner
                 </button>
               </td>

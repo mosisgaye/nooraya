@@ -130,7 +130,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
                   onClick={() => setSelectedLocation(location)}
                 >
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform ${
-                    location.type === 'hotel' ? 'bg-blue-500' :
+                    location.type === 'hotel' ? 'bg-green-500' :
                     location.type === 'attraction' ? 'bg-green-500' :
                     'bg-orange-500'
                   }`}>
@@ -192,7 +192,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
                   {selectedLocation.price && (
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">Prix</span>
-                      <span className="font-semibold text-blue-600">{selectedLocation.price}€</span>
+                      <span className="font-semibold text-green-600">{selectedLocation.price}€</span>
                     </div>
                   )}
 
@@ -217,7 +217,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
                 {onLocationSelect && (
                   <button
                     onClick={() => onLocationSelect(selectedLocation)}
-                    className="w-full mt-6 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                    className="w-full mt-6 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors"
                   >
                     Sélectionner
                   </button>
@@ -228,7 +228,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
                 <h3 className="text-lg font-semibold mb-4">Légende</h3>
                 <div className="space-y-3">
                   <div className="flex items-center">
-                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs mr-3">
+                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs mr-3">
                       🏨
                     </div>
                     <span className="text-sm">Hôtels</span>

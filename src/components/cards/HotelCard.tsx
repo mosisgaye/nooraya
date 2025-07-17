@@ -87,7 +87,7 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, onAddToComparison, isInCom
             
             <div className="flex space-x-2">
               <button
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                 aria-label={`Reserver ${hotel.name} pour ${hotel.price} euros par nuit`}
               >
                 Réserver
@@ -96,7 +96,7 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, onAddToComparison, isInCom
               <button
                 onClick={() => onAddToComparison(hotel)}
                 disabled={isInComparison}
-                className={`px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                className={`px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
                   isInComparison 
                     ? 'border-green-300 text-green-600 bg-green-50' 
                     : 'border-gray-300 text-gray-600 hover:bg-gray-50'

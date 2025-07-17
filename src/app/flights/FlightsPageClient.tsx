@@ -56,9 +56,9 @@ export default function FlightsPageClient() {
   const totalPassengers = passengers.adults + passengers.children + passengers.infants;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-indigo-100">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-16">
+      <div className="relative bg-gradient-to-r from-green-600 to-indigo-700 text-white py-16">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative max-w-7xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
@@ -123,7 +123,7 @@ export default function FlightsPageClient() {
                     type="text"
                     name="departure"
                     placeholder="Ville ou aéroport de départ"
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     required
                   />
                 </div>
@@ -139,7 +139,7 @@ export default function FlightsPageClient() {
                     type="text"
                     name="destination"
                     placeholder="Ville ou aéroport de destination"
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     required
                   />
                 </div>
@@ -160,7 +160,7 @@ export default function FlightsPageClient() {
                     dateFormat="dd/MM/yyyy"
                     minDate={new Date()}
                     placeholderText="Sélectionner une date"
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     required
                   />
                 </div>
@@ -179,7 +179,7 @@ export default function FlightsPageClient() {
                       dateFormat="dd/MM/yyyy"
                       minDate={departureDate || new Date()}
                       placeholderText="Sélectionner une date"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -197,7 +197,7 @@ export default function FlightsPageClient() {
                   <button
                     type="button"
                     onClick={() => setShowPassengersDropdown(!showPassengersDropdown)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg text-left focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg text-left focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   >
                     {totalPassengers} voyageur{totalPassengers > 1 ? 's' : ''}
                   </button>
@@ -249,7 +249,7 @@ export default function FlightsPageClient() {
                 <select
                   value={cabinClass}
                   onChange={(e) => setCabinClass(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 >
                   <option value="economy">Économique</option>
                   <option value="premium">Premium</option>
@@ -264,7 +264,7 @@ export default function FlightsPageClient() {
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-gradient-to-r from-green-600 to-indigo-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:from-green-700 hover:to-indigo-700 transition-all transform hover:scale-105 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Search className="mr-2" size={20} />
                 {loading ? 'Recherche en cours...' : 'Rechercher des vols'}
@@ -292,7 +292,7 @@ export default function FlightsPageClient() {
               <div className="p-4">
                 <h3 className="font-semibold text-lg">{dest.name}</h3>
                 <p className="text-gray-600 text-sm">{dest.country}</p>
-                <p className="text-blue-600 font-bold mt-2">À partir de {dest.price}€</p>
+                <p className="text-green-600 font-bold mt-2">À partir de {dest.price}€</p>
               </div>
             </div>
           ))}

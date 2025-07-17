@@ -19,16 +19,16 @@ import {
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white" role="contentinfo">
+    <footer className="bg-gradient-to-br from-slate-900 via-greenS-900 to-slate-900 text-white" role="contentinfo">
       <div className="max-w-7xl mx-auto px-4 pt-16 pb-8">
         {/* Section principale */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Logo et description */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center mb-6" aria-label="Nooraya Voyages - Accueil">
-              <Plane className="h-10 w-10 text-blue-400 transform -rotate-45" />
+              <Plane className="h-10 w-10 text-green-400 transform -rotate-45" />
               <div className="ml-3">
-                <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                <span className="text-2xl font-bold bg-gradient-to-r from-green-400 to-purple-400 bg-clip-text text-transparent">
                   Nooraya Voyages
                 </span>
                 <span className="block text-xs text-gray-400 font-light tracking-wider uppercase">
@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
             {/* Statistiques */}
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div className="text-center p-3 bg-white/5 rounded-xl">
-                <div className="text-xl font-bold text-blue-400">2M+</div>
+                <div className="text-xl font-bold text-green-400">2M+</div>
                 <div className="text-xs text-gray-400">Destinations</div>
               </div>
               <div className="text-center p-3 bg-white/5 rounded-xl">
@@ -99,8 +99,8 @@ const Footer: React.FC = () => {
                 <a href="tel:+33123456789" className="text-sm text-white hover:text-green-300 transition-colors">+33 1 23 45 67 89</a>
               </div>
               <div className="flex items-center mb-2">
-                <Mail size={16} className="mr-2 text-blue-400" aria-hidden="true" />
-                <a href="mailto:support@noorayavoyages.com" className="text-sm text-white hover:text-blue-300 transition-colors">support@noorayavoyages.com</a>
+                <Mail size={16} className="mr-2 text-green-400" aria-hidden="true" />
+                <a href="mailto:support@noorayavoyages.com" className="text-sm text-white hover:text-green-300 transition-colors">support@noorayavoyages.com</a>
               </div>
               <div className="flex items-center">
                 <Clock size={16} className="mr-2 text-purple-400" aria-hidden="true" />
@@ -166,7 +166,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Newsletter */}
-        <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-2xl p-6 mb-8 flex flex-col md:flex-row items-center justify-between">
+        <div className="bg-gradient-to-r from-green-600/20 to-purple-600/20 rounded-2xl p-6 mb-8 flex flex-col md:flex-row items-center justify-between">
           <div className="mb-4 md:mb-0 md:max-w-md">
             <h3 className="text-xl font-bold mb-2">
               Restez informé de nos meilleures offres

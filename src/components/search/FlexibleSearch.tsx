@@ -85,7 +85,7 @@ const FlexibleSearch: React.FC<FlexibleSearchProps> = ({
               onClick={() => setSearchType('dates')}
               className={`flex items-center px-6 py-3 rounded-lg transition-colors ${
                 searchType === 'dates' 
-                  ? 'bg-blue-100 text-blue-700 border-2 border-blue-300' 
+                  ? 'bg-green-100 text-green-700 border-2 border-green-300' 
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -96,7 +96,7 @@ const FlexibleSearch: React.FC<FlexibleSearchProps> = ({
               onClick={() => setSearchType('destinations')}
               className={`flex items-center px-6 py-3 rounded-lg transition-colors ${
                 searchType === 'destinations' 
-                  ? 'bg-blue-100 text-blue-700 border-2 border-blue-300' 
+                  ? 'bg-green-100 text-green-700 border-2 border-green-300' 
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -162,7 +162,7 @@ const FlexibleSearch: React.FC<FlexibleSearchProps> = ({
                   {generateFlexibleDates().map((dateOption, index) => (
                     <div
                       key={index}
-                      className="bg-white rounded-lg p-4 border hover:border-blue-300 cursor-pointer transition-colors"
+                      className="bg-white rounded-lg p-4 border hover:border-green-300 cursor-pointer transition-colors"
                       onClick={() => {
                         onSearch({
                           ...initialData,
@@ -180,7 +180,7 @@ const FlexibleSearch: React.FC<FlexibleSearchProps> = ({
                         <div className="text-xs text-gray-500 mb-2">
                           {flexibleDates.duration} jours
                         </div>
-                        <div className="text-lg font-bold text-blue-600">
+                        <div className="text-lg font-bold text-green-600">
                           {dateOption.price}€
                         </div>
                         {index < 3 && (
@@ -278,7 +278,7 @@ const FlexibleSearch: React.FC<FlexibleSearchProps> = ({
                           <p className="text-gray-600 text-sm">{destination.country}</p>
                         </div>
                         <div className="text-right">
-                          <div className="text-xl font-bold text-blue-600">{destination.price}€</div>
+                          <div className="text-xl font-bold text-green-600">{destination.price}€</div>
                           <div className="text-xs text-gray-500">aller-retour</div>
                         </div>
                       </div>

@@ -76,18 +76,18 @@ const PopularDestinations: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <div className="flex items-center text-blue-500 font-medium mb-2">
+            <div className="flex items-center text-green-500 font-medium mb-2">
               <Map size={18} className="mr-2" aria-hidden="true" />
               <span>DESTINATIONS POPULAIRES</span>
             </div>
-            <h2 id="popular-destinations-title" className="text-3xl font-bold text-blue-900">Inspirez-vous</h2>
+            <h2 id="popular-destinations-title" className="text-3xl font-bold text-green-900">Inspirez-vous</h2>
             <p className="text-gray-600 mt-2">Explorez nos destinations les plus prisées</p>
           </div>
           <div className="hidden md:flex space-x-3" role="group" aria-label="Navigation du carrousel">
             <button 
               onClick={handlePrev}
               disabled={currentIndex === 0}
-              className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 will-change-transform focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 will-change-transform focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
               aria-label="Destinations précédentes"
             >
               <ChevronLeft size={20} aria-hidden="true" />
@@ -95,7 +95,7 @@ const PopularDestinations: React.FC = () => {
             <button 
               onClick={handleNext}
               disabled={currentIndex >= destinations.length - visibleCount.desktop}
-              className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 will-change-transform focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 will-change-transform focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
               aria-label="Destinations suivantes"
             >
               <ChevronRight size={20} aria-hidden="true" />
@@ -126,7 +126,7 @@ const PopularDestinations: React.FC = () => {
           <button 
             onClick={handlePrev}
             disabled={currentIndex === 0}
-            className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
             aria-label="Destination précédente"
           >
             <ChevronLeft size={20} aria-hidden="true" />
@@ -134,7 +134,7 @@ const PopularDestinations: React.FC = () => {
           <button 
             onClick={handleNext}
             disabled={currentIndex >= destinations.length - 1}
-            className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
             aria-label="Destination suivante"
           >
             <ChevronRight size={20} aria-hidden="true" />
@@ -152,7 +152,7 @@ interface DestinationCardProps {
 const DestinationCard: React.FC<DestinationCardProps> = memo(({ destination }) => {
   return (
     <article 
-      className="destination-card relative h-80 rounded-xl overflow-hidden group cursor-pointer will-change-transform focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+      className="destination-card relative h-80 rounded-xl overflow-hidden group cursor-pointer will-change-transform focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
       role="button"
       tabIndex={0}
       aria-label={`Découvrir ${destination.name}, ${destination.country} - Meilleure période: ${destination.bestTime}, Prix moyen: ${destination.averagePrice} euros`}

@@ -76,12 +76,12 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, onAddToComparison, isIn
         </div>
 
         <div className="lg:ml-8 mt-4 lg:mt-0 text-center lg:text-right">
-          <div className="text-3xl font-bold text-blue-600 mb-2" aria-label={`Prix : ${flight.price} euros par personne`}>{flight.price}€</div>
+          <div className="text-3xl font-bold text-green-600 mb-2" aria-label={`Prix : ${flight.price} euros par personne`}>{flight.price}€</div>
           <div className="text-sm text-gray-500 mb-4">par personne</div>
           
           <div className="space-y-2" role="group" aria-label="Actions pour ce vol">
             <button 
-              className="w-full lg:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="w-full lg:w-auto bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
               aria-label={`Sélectionner le vol ${flight.airline} à ${flight.price} euros`}
             >
               Sélectionner
@@ -90,7 +90,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, onAddToComparison, isIn
             <button
               onClick={() => onAddToComparison(flight)}
               disabled={isInComparison}
-              className={`w-full lg:w-auto px-6 py-2 rounded-lg border transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+              className={`w-full lg:w-auto px-6 py-2 rounded-lg border transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
                 isInComparison 
                   ? 'border-green-300 text-green-600 bg-green-50' 
                   : 'border-gray-300 text-gray-600 hover:bg-gray-50'

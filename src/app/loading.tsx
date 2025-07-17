@@ -7,11 +7,11 @@ export default function Loading() {
         {/* Logo animé */}
         <div className="mb-8 relative">
           <div className="w-20 h-20 mx-auto relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-ping opacity-20"></div>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full animate-pulse"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-purple-500 rounded-full animate-ping opacity-20"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-purple-600 rounded-full animate-pulse"></div>
             <div className="relative bg-white rounded-full w-full h-full flex items-center justify-center shadow-lg">
               <svg
-                className="w-10 h-10 text-blue-600 animate-spin"
+                className="w-10 h-10 text-green-600 animate-spin"
                 fill="none"
                 viewBox="0 0 24 24"
               >
@@ -44,7 +44,7 @@ export default function Loading() {
         {/* Barre de progression */}
         <div className="mt-8 max-w-xs mx-auto">
           <div className="bg-gray-200 rounded-full h-2 overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 h-full rounded-full animate-progress"></div>
+            <div className="bg-gradient-to-r from-green-600 to-purple-600 h-full rounded-full animate-progress"></div>
           </div>
         </div>
 
@@ -90,7 +90,7 @@ function LoadingTip() {
   const randomTip = tips[Math.floor(Math.random() * tips.length)];
 
   return (
-    <div className="bg-blue-50 rounded-lg p-4 text-sm text-blue-800">
+    <div className="bg-green-50 rounded-lg p-4 text-sm text-green-800">
       {randomTip}
     </div>
   );

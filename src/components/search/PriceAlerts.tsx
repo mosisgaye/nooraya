@@ -104,7 +104,7 @@ const PriceAlerts: React.FC<PriceAlertsProps> = ({ isOpen, onClose, searchData }
         <div className="p-6">
           {/* Créer une nouvelle alerte */}
           {searchData && (
-            <div className="bg-blue-50 rounded-lg p-6 mb-6">
+            <div className="bg-green-50 rounded-lg p-6 mb-6">
               <h3 className="text-lg font-semibold mb-4">Créer une alerte pour cette recherche</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
@@ -116,7 +116,7 @@ const PriceAlerts: React.FC<PriceAlertsProps> = ({ isOpen, onClose, searchData }
                     value={newAlert.targetPrice}
                     onChange={(e) => setNewAlert({ ...newAlert, targetPrice: e.target.value })}
                     placeholder="Ex: 150"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                   />
                 </div>
                 <div>
@@ -129,7 +129,7 @@ const PriceAlerts: React.FC<PriceAlertsProps> = ({ isOpen, onClose, searchData }
                       ...newAlert, 
                       notificationMethod: e.target.value as 'email' | 'sms' | 'both' 
                     })}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                   >
                     <option value="email">Email</option>
                     <option value="sms">SMS</option>
@@ -139,7 +139,7 @@ const PriceAlerts: React.FC<PriceAlertsProps> = ({ isOpen, onClose, searchData }
                 <div className="flex items-end">
                   <button
                     onClick={handleCreateAlert}
-                    className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                    className="w-full bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
                   >
                     Créer l&apos;alerte
                   </button>
@@ -188,7 +188,7 @@ const PriceAlerts: React.FC<PriceAlertsProps> = ({ isOpen, onClose, searchData }
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                           <div>
                             <span className="text-gray-600">Prix cible :</span>
-                            <span className="ml-2 font-semibold text-blue-600">{alert.targetPrice}€</span>
+                            <span className="ml-2 font-semibold text-green-600">{alert.targetPrice}€</span>
                           </div>
                           <div>
                             <span className="text-gray-600">Prix actuel :</span>
@@ -203,7 +203,7 @@ const PriceAlerts: React.FC<PriceAlertsProps> = ({ isOpen, onClose, searchData }
                             <span className="text-gray-600">Notification :</span>
                             <div className="ml-2 flex items-center space-x-1">
                               {(alert.notificationMethod === 'email' || alert.notificationMethod === 'both') && (
-                                <Mail size={14} className="text-blue-500" />
+                                <Mail size={14} className="text-green-500" />
                               )}
                               {(alert.notificationMethod === 'sms' || alert.notificationMethod === 'both') && (
                                 <Smartphone size={14} className="text-green-500" />

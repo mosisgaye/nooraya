@@ -62,7 +62,7 @@ function LoadingFlights() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="text-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto mb-4"></div>
         <p className="text-lg text-gray-600">Recherche des meilleurs vols...</p>
       </div>
     </div>
@@ -108,12 +108,44 @@ function FlightResultsContent() {
   };
 
   useEffect(() => {
-    // Simulate API call with mock data
-    setTimeout(() => {
-      setFlights(mockFlights);
-      setLoading(false);
-    }, 1500);
-  }, []);
+    const fetchFlights = async () => {
+      try {
+        setLoading(true);
+        
+        // Construire l'URL avec les paramètres de recherche
+        const queryParams = new URLSearchParams();
+        if (searchData.from) queryParams.append('from', searchData.from);
+        if (searchData.to) queryParams.append('to', searchData.to);
+        if (searchData.departureDate) queryParams.append('departureDate', searchData.departureDate);
+        if (searchData.returnDate) queryParams.append('returnDate', searchData.returnDate);
+        if (searchData.passengers) queryParams.append('passengers', searchData.passengers);
+        if (searchData.cabinClass) queryParams.append('cabinClass', searchData.cabinClass);
+        
+        const response = await fetch(`/api/flights?${queryParams.toString()}`);
+        
+        if (!response.ok) {
+          throw new Error('Erreur lors de la recherche des vols');
+        }
+        
+        const data = await response.json();
+        
+        // Si pas de résultats de l'API, utiliser les données mockées
+        if (!data.flights || data.flights.length === 0) {
+          setFlights(mockFlights);
+        } else {
+          setFlights(data.flights);
+        }
+      } catch (error) {
+        console.error('Erreur:', error);
+        // En cas d'erreur, utiliser les données mockées
+        setFlights(mockFlights);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFlights();
+  }, [searchData.from, searchData.to, searchData.departureDate, searchData.returnDate, searchData.passengers, searchData.cabinClass]);
 
   const sortedFlights = [...flights].sort((a, b) => {
     switch (sortBy) {
@@ -199,7 +231,7 @@ function FlightResultsContent() {
               </button>
               <Link
                 href="/flights"
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm"
               >
                 Modifier la recherche
               </Link>
@@ -220,7 +252,7 @@ function FlightResultsContent() {
                 </h3>
                 <button
                   onClick={() => setShowAdvancedFilters(true)}
-                  className="text-blue-600 hover:text-blue-700 text-sm"
+                  className="text-green-600 hover:text-green-700 text-sm"
                 >
                   Avancés
                 </button>
@@ -286,16 +318,16 @@ function FlightResultsContent() {
 
             {/* Comparison Panel Toggle */}
             {comparisonItems.length > 0 && (
-              <div className="mt-4 bg-blue-50 rounded-lg p-4">
+              <div className="mt-4 bg-green-50 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-medium">Comparaison</span>
-                  <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
+                  <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
                     {comparisonItems.length}
                   </span>
                 </div>
                 <button
                   onClick={() => setShowComparison(true)}
-                  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors"
                 >
                   Comparer
                 </button>
