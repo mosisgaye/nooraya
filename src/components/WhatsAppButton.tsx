@@ -6,8 +6,6 @@ import { MessageCircle, X } from 'lucide-react';
 export default function WhatsAppButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
-  const phoneNumber = '221779867037'; // Sans le +
-  const message = 'Bonjour, je suis intéressé par vos offres Umra. Pouvez-vous me donner plus d\'informations ?';
 
   useEffect(() => {
     // Afficher le tooltip après 5 secondes
@@ -42,7 +40,7 @@ export default function WhatsAppButton() {
               <X size={16} />
             </button>
             <p className="text-sm font-semibold text-gray-800 mb-1">
-              💬 Besoin d\'aide ?
+              💬 Besoin d&apos;aide ?
             </p>
             <p className="text-xs text-gray-600">
               Chattez avec nous sur WhatsApp pour une réponse immédiate !
@@ -97,7 +95,7 @@ export default function WhatsAppButton() {
                   👋 Assalamu alaikum ! Bienvenue chez Nooraya Voyages.
                 </p>
                 <p className="text-sm text-gray-700 mb-2">
-                  Comment puis-je vous aider aujourd\'hui ?
+                  Comment puis-je vous aider aujourd&apos;hui ?
                 </p>
                 <div className="flex flex-wrap gap-2 mt-3">
                   <a

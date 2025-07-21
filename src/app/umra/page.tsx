@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Calendar, MapPin, Phone, Mail, Globe, Check, Star, Gift, Clock, Users, Send, User, MessageSquare, Package, MessageCircle } from 'lucide-react';
+import { Calendar, Phone, Mail, Check, Star, Clock, Users, Send, User, MessageSquare, Package, MessageCircle } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -419,7 +419,7 @@ export default function UmraPage() {
                 <Users className="w-10 h-10 text-green-600" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Expérience</h3>
-              <p className="text-gray-600">Des années d\'expertise dans l\'organisation de voyages spirituels</p>
+              <p className="text-gray-600">Des années d&apos;expertise dans l&apos;organisation de voyages spirituels</p>
             </div>
             <div className="text-center">
               <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -565,22 +565,6 @@ export default function UmraPage() {
                 </a>
               </div>
             </form>
-            
-            {/* Note: Pour activer l'envoi automatique d'emails */}
-            {EMAILJS_SERVICE_ID === 'service_xxxxxxx' && (
-              <div className="mt-6 p-4 bg-yellow-50 rounded-xl border border-yellow-200">
-                <p className="text-sm text-yellow-800 font-semibold mb-2">
-                  ⚠️ Configuration EmailJS requise
-                </p>
-                <ol className="text-xs text-yellow-700 space-y-1 list-decimal list-inside">
-                  <li>Créez un compte gratuit sur <a href="https://www.emailjs.com/" target="_blank" rel="noopener noreferrer" className="underline">emailjs.com</a></li>
-                  <li>Ajoutez un service SMTP avec vos paramètres Titan/Hostinger</li>
-                  <li>Créez un template d'email</li>
-                  <li>Remplacez les IDs dans le code (lignes 20-22)</li>
-                  <li>Consultez le guide : EMAILJS_TITAN_SETUP.md</li>
-                </ol>
-              </div>
-            )}
           </div>
         </div>
       </div>

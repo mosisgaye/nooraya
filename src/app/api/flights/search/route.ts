@@ -16,6 +16,39 @@ interface SearchRequest {
   cabinClass?: 'economy' | 'premium_economy' | 'business' | 'first';
 }
 
+interface DuffelOffer {
+  id: string;
+  total_amount: string;
+  total_currency: string;
+  owner: {
+    name: string;
+    logo_symbol_url: string;
+  };
+  slices: Array<{
+    duration?: string;
+    segments: Array<{
+      departing_at: string;
+      arriving_at: string;
+      origin: {
+        iata_code: string;
+        city_name: string;
+      };
+      destination: {
+        iata_code: string;
+        city_name: string;
+      };
+      origin_terminal?: string;
+      destination_terminal?: string;
+      passengers: Array<{
+        cabin_class?: string;
+      }>;
+    }>;
+  }>;
+  passengers: Array<{
+    type: string;
+  }>;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body: SearchRequest = await request.json();
@@ -75,7 +108,7 @@ export async function POST(request: NextRequest) {
     const data = await response.json();
 
     // Transformer les données Duffel pour notre format
-    const flights = data.data.offers.map((offer: any) => ({
+    const flights = data.data.offers.map((offer: DuffelOffer) => ({
       id: offer.id,
       price: parseFloat(offer.total_amount),
       currency: offer.total_currency,
