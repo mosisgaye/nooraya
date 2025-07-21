@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Mail, CheckCircle, XCircle, Loader2 } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { getSupabaseClient } from '@/lib/supabase-client';
 
 export default function ConfirmEmailPage() {
   const router = useRouter();
@@ -24,6 +24,7 @@ export default function ConfirmEmailPage() {
       }
 
       try {
+        const supabase = getSupabaseClient();
         const { error } = await supabase.auth.verifyOtp({
           token_hash,
           type: 'email',

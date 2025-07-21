@@ -17,7 +17,7 @@ import {
   Bell,
   Settings
 } from 'lucide-react';
-import { useAuth } from '@/features/auth/hooks/useAuth';
+import { useAuth } from '@/providers/AuthProvider';
 
 export default function ProfilePage() {
   const router = useRouter();

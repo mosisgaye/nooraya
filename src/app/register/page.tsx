@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Mail, Lock, User, AlertCircle, Loader2, Check } from 'lucide-react';
-import { useAuth } from '@/features/auth/hooks/useAuth';
+import { useAuth } from '@/providers/AuthProvider';
 
 export default function RegisterPage() {
   const { register, loginWithGoogle } = useAuth();

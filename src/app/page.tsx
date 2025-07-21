@@ -1,5 +1,6 @@
 import { Hero } from '@/components/layout';
 import { SpecialOffers, PopularDestinations, WhyChooseUs } from '@/components/content';
+import WhatsAppButton from '@/components/WhatsAppButton';
 
 export const metadata = {
   title: 'Nooraya Voyages Paris & Sénégal - Vols Pas Cher, Hôtels & Séjours Tout Compris 2024',
@@ -27,6 +28,7 @@ export default function HomePage() {
       <SpecialOffers />
       <PopularDestinations />
       <WhyChooseUs />
+      <WhatsAppButton />
     </>
   );
 }

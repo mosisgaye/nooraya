@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Mail, Lock, Eye, EyeOff, User, AlertCircle } from 'lucide-react';
-import { useAuth } from '@/features/auth';
+import { useAuth } from '@/providers/AuthProvider';
 import { useAuthModal } from '@/contexts/AuthModalContext';
 import FocusTrap from '@/components/ui/focus-trap';
 

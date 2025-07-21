@@ -15,7 +15,7 @@ import {
   UserCircle,
   Sparkles
 } from 'lucide-react';
-import { useAuth } from '@/features/auth';
+import { useAuth } from '@/providers/AuthProvider';
 import { useAuthModal } from '@/contexts/AuthModalContext';
 
 const Header: React.FC = () => {
@@ -96,10 +96,10 @@ const Header: React.FC = () => {
             isActive={isActive('/packages')}
           />
           <NavLink
-            href="/omra"
-            icon={<Tag size={18} />}
-            label="Omra"
-            isActive={isActive('/omra')}
+            href="/umra"
+            icon={<Sparkles size={18} />}
+            label="Umra"
+            isActive={isActive('/umra')}
           />
         </nav>
 
@@ -208,10 +208,10 @@ const Header: React.FC = () => {
               onClick={closeAllDropdowns}
             />
             <MobileNavLink
-              href="/omra"
-              icon={<Tag size={18} />}
-              label="Omra"
-              isActive={isActive('/omra')}
+              href="/umra"
+              icon={<Sparkles size={18} />}
+              label="Umra"
+              isActive={isActive('/umra')}
               onClick={closeAllDropdowns}
             />
           </div>
