@@ -20,7 +20,7 @@ export default function UmraPage() {
 
   // Configuration EmailJS - IMPORTANT: Remplacez ces valeurs
   // 1. Créez un compte sur https://www.emailjs.com/
-  // 2. Créez un service Gmail
+  // 2. Ajoutez un service SMTP avec vos paramètres Titan/Hostinger
   // 3. Créez un template d'email
   // 4. Copiez vos IDs ici
   const EMAILJS_SERVICE_ID = 'service_xxxxxxx'; // Remplacer
@@ -574,9 +574,10 @@ export default function UmraPage() {
                 </p>
                 <ol className="text-xs text-yellow-700 space-y-1 list-decimal list-inside">
                   <li>Créez un compte gratuit sur <a href="https://www.emailjs.com/" target="_blank" rel="noopener noreferrer" className="underline">emailjs.com</a></li>
-                  <li>Ajoutez Gmail comme service</li>
+                  <li>Ajoutez un service SMTP avec vos paramètres Titan/Hostinger</li>
                   <li>Créez un template d'email</li>
                   <li>Remplacez les IDs dans le code (lignes 20-22)</li>
+                  <li>Consultez le guide : EMAILJS_TITAN_SETUP.md</li>
                 </ol>
               </div>
             )}
