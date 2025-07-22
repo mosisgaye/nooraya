@@ -53,42 +53,63 @@ const features: Feature[] = [
 
 const WhyChooseUs: React.FC = () => {
   return (
-    <section className="py-16 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-green-900 mb-4">Pourquoi nous choisir ?</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+    <section className="py-24 px-4 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+      {/* Motif de fond */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, #10b981 1px, transparent 1px)`,
+          backgroundSize: '50px 50px'
+        }}></div>
+      </div>
+      
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-100 to-orange-100 text-amber-800 px-6 py-2 rounded-full mb-6">
+            <Shield className="w-4 h-4" />
+            <span className="text-sm font-bold uppercase tracking-wider">Pourquoi nous choisir</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Voyagez en toute confiance</h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Des milliers de voyageurs nous font confiance chaque jour pour organiser leur séjour parfait.
             Découvrez pourquoi.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {features.map((feature) => (
             <FeatureCard key={feature.id} feature={feature} />
           ))}
         </div>
 
-        <div className="mt-16 bg-green-50 rounded-xl p-8 flex flex-col md:flex-row items-center justify-between">
-          <div className="mb-6 md:mb-0 md:max-w-md">
-            <h3 className="text-2xl font-bold text-green-900 mb-3">
-              Prêt à vivre une expérience inoubliable ?
-            </h3>
-            <p className="text-gray-600">
-              Rejoignez notre newsletter et recevez des offres exclusives et des conseils de voyage.
-            </p>
+        {/* Section Newsletter */}
+        <div className="mt-20 bg-gradient-to-r from-green-600 to-emerald-600 rounded-3xl p-12 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute inset-0" style={{
+              backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.1) 35px, rgba(255,255,255,.1) 70px)`,
+            }}></div>
           </div>
-          <div className="w-full md:w-auto">
-            <form className="flex flex-col sm:flex-row">
-              <input
-                type="email"
-                placeholder="Votre adresse email"
-                className="input-field mb-3 sm:mb-0 sm:mr-3 sm:w-64"
-              />
-              <button type="submit" className="btn-primary whitespace-nowrap">
-                Je m&apos;inscris
-              </button>
-            </form>
+          
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="text-white md:max-w-lg">
+              <h3 className="text-3xl font-bold mb-3">
+                Prêt à vivre une expérience inoubliable ?
+              </h3>
+              <p className="text-green-100 text-lg">
+                Rejoignez notre newsletter et recevez des offres exclusives et des conseils de voyage personnalisés.
+              </p>
+            </div>
+            <div className="w-full md:w-auto">
+              <form className="flex flex-col sm:flex-row gap-4">
+                <input
+                  type="email"
+                  placeholder="Votre adresse email"
+                  className="px-6 py-4 rounded-xl border-2 border-white/30 bg-white/20 backdrop-blur text-white placeholder-white/70 focus:border-white focus:ring-4 focus:ring-white/20 transition-all sm:w-72"
+                />
+                <button type="submit" className="px-8 py-4 bg-white text-green-700 rounded-xl font-bold hover:bg-green-50 transition-all duration-300 shadow-xl hover:shadow-2xl whitespace-nowrap transform hover:scale-105">
+                  Je m&apos;inscris
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
@@ -102,12 +123,19 @@ interface FeatureCardProps {
 
 const FeatureCard: React.FC<FeatureCardProps> = ({ feature }) => {
   return (
-    <div className="p-6 border border-gray-100 rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow">
-      <div className="bg-green-50 p-3 rounded-full w-16 h-16 flex items-center justify-center mb-4">
-        {feature.icon}
+    <div className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 relative overflow-hidden">
+      {/* Effet de hover */}
+      <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-emerald-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      
+      <div className="relative z-10">
+        <div className="bg-gradient-to-br from-green-100 to-emerald-100 p-4 rounded-2xl w-20 h-20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-md">
+          <div className="h-10 w-10 text-green-600">
+            {feature.icon}
+          </div>
+        </div>
+        <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-green-700 transition-colors">{feature.title}</h3>
+        <p className="text-gray-600 leading-relaxed group-hover:text-gray-700">{feature.description}</p>
       </div>
-      <h3 className="text-xl font-bold text-green-900 mb-2">{feature.title}</h3>
-      <p className="text-gray-600">{feature.description}</p>
     </div>
   );
 };

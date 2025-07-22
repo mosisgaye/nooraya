@@ -12,7 +12,8 @@ import {
   X,
   LogOut,
   UserCircle,
-  Sparkles
+  Sparkles,
+  Trophy
 } from 'lucide-react';
 import { useAuth } from '@/providers/AuthProvider';
 import { useAuthModal } from '@/contexts/AuthModalContext';
@@ -99,6 +100,13 @@ const Header: React.FC = () => {
             icon={<Sparkles size={18} />}
             label="Umra"
             isActive={isActive('/umra')}
+          />
+          <NavLink
+            href="/can-2025"
+            icon={<Trophy size={18} />}
+            label="CAN 2025"
+            isActive={isActive('/can-2025')}
+            badge="PROMO"
           />
         </nav>
 
@@ -212,6 +220,14 @@ const Header: React.FC = () => {
               label="Umra"
               isActive={isActive('/umra')}
               onClick={closeAllDropdowns}
+            />
+            <MobileNavLink
+              href="/can-2025"
+              icon={<Trophy size={18} />}
+              label="CAN 2025"
+              isActive={isActive('/can-2025')}
+              onClick={closeAllDropdowns}
+              badge="PROMO"
             />
           </div>
 

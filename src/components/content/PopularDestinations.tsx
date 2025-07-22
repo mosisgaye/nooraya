@@ -72,22 +72,22 @@ const PopularDestinations: React.FC = () => {
   };
 
   return (
-    <section className="py-16 px-4" role="region" aria-labelledby="popular-destinations-title">
+    <section className="py-24 px-4 bg-gradient-to-b from-white to-gray-50" role="region" aria-labelledby="popular-destinations-title">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center mb-12">
           <div>
-            <div className="flex items-center text-green-500 font-medium mb-2">
-              <Map size={18} className="mr-2" aria-hidden="true" />
-              <span>DESTINATIONS POPULAIRES</span>
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 px-6 py-2 rounded-full mb-4">
+              <Map size={18} aria-hidden="true" />
+              <span className="text-sm font-bold uppercase tracking-wider">DESTINATIONS POPULAIRES</span>
             </div>
-            <h2 id="popular-destinations-title" className="text-3xl font-bold text-green-900">Inspirez-vous</h2>
-            <p className="text-gray-600 mt-2">Explorez nos destinations les plus prisées</p>
+            <h2 id="popular-destinations-title" className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">Inspirez-vous</h2>
+            <p className="text-xl text-gray-600">Explorez nos destinations les plus prisées</p>
           </div>
           <div className="hidden md:flex space-x-3" role="group" aria-label="Navigation du carrousel">
             <button 
               onClick={handlePrev}
               disabled={currentIndex === 0}
-              className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 will-change-transform focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              className="p-3 rounded-full bg-white shadow-lg border-2 border-gray-200 text-gray-600 hover:border-green-500 hover:text-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-green-500/20"
               aria-label="Destinations précédentes"
             >
               <ChevronLeft size={20} aria-hidden="true" />
@@ -95,7 +95,7 @@ const PopularDestinations: React.FC = () => {
             <button 
               onClick={handleNext}
               disabled={currentIndex >= destinations.length - visibleCount.desktop}
-              className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 will-change-transform focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              className="p-3 rounded-full bg-white shadow-lg border-2 border-gray-200 text-gray-600 hover:border-green-500 hover:text-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-green-500/20"
               aria-label="Destinations suivantes"
             >
               <ChevronRight size={20} aria-hidden="true" />
@@ -126,7 +126,7 @@ const PopularDestinations: React.FC = () => {
           <button 
             onClick={handlePrev}
             disabled={currentIndex === 0}
-            className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+            className="p-3 rounded-full bg-white shadow-lg border-2 border-gray-200 text-gray-600 hover:border-green-500 hover:text-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-green-500/20"
             aria-label="Destination précédente"
           >
             <ChevronLeft size={20} aria-hidden="true" />
@@ -134,7 +134,7 @@ const PopularDestinations: React.FC = () => {
           <button 
             onClick={handleNext}
             disabled={currentIndex >= destinations.length - 1}
-            className="p-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+            className="p-3 rounded-full bg-white shadow-lg border-2 border-gray-200 text-gray-600 hover:border-green-500 hover:text-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-green-500/20"
             aria-label="Destination suivante"
           >
             <ChevronRight size={20} aria-hidden="true" />
@@ -152,7 +152,7 @@ interface DestinationCardProps {
 const DestinationCard: React.FC<DestinationCardProps> = memo(({ destination }) => {
   return (
     <article 
-      className="destination-card relative h-80 rounded-xl overflow-hidden group cursor-pointer will-change-transform focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+      className="destination-card relative h-96 rounded-2xl overflow-hidden group cursor-pointer shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 focus:outline-none focus:ring-4 focus:ring-green-500/20"
       role="button"
       tabIndex={0}
       aria-label={`Découvrir ${destination.name}, ${destination.country} - Meilleure période: ${destination.bestTime}, Prix moyen: ${destination.averagePrice} euros`}
@@ -167,17 +167,17 @@ const DestinationCard: React.FC<DestinationCardProps> = memo(({ destination }) =
         quality={80}
       />
       
-      {/* Overlay pour améliorer le contraste */}
-      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-all duration-300" aria-hidden="true"></div>
+      {/* Overlay avec gradient */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent group-hover:from-black/90 transition-all duration-300" aria-hidden="true"></div>
       
       <div className="absolute bottom-0 left-0 right-0 p-6 text-white z-10">
-        <h3 className="text-2xl font-bold mb-1 drop-shadow-lg">{destination.name}</h3>
-        <p className="mb-2 drop-shadow-md">{destination.country}</p>
+        <h3 className="text-3xl font-bold mb-2 drop-shadow-lg group-hover:text-green-400 transition-colors">{destination.name}</h3>
+        <p className="text-lg mb-3 drop-shadow-md opacity-90">{destination.country}</p>
         
         <div className="overflow-hidden max-h-0 group-hover:max-h-20 transition-all duration-300">
           <div className="pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
             <p className="text-sm drop-shadow-md" aria-label={`Meilleure période pour visiter : ${destination.bestTime}`}>Meilleure période: {destination.bestTime}</p>
-            <p className="text-sm drop-shadow-md" aria-label={`Prix moyen du voyage : ${destination.averagePrice} euros`}>Prix moyen: {destination.averagePrice}€</p>
+            <p className="text-lg font-bold drop-shadow-md bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent" aria-label={`Prix moyen du voyage : ${destination.averagePrice} euros`}>À partir de {destination.averagePrice}€</p>
           </div>
         </div>
       </div>

@@ -172,15 +172,19 @@ export default function Home() {
         {/* Search Form */}
         <div className="p-6 sm:p-7 md:p-8 max-w-6xl">
           {/* Title */}
-          <div className="text-left mb-6">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 leading-tight tracking-tight">
-              Explorez le monde avec <span className="text-emerald-400">élégance</span>
+          <div className="text-left mb-8">
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-5 py-2 rounded-full mb-6">
+              <span className="text-sm font-semibold text-white/90 uppercase tracking-wider">Voyagez en toute sérénité</span>
+            </div>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight tracking-tight">
+              Explorez le monde avec <span className="text-emerald-300 font-extrabold">élégance</span>
             </h1>
+            <p className="text-lg text-white/80 max-w-2xl">Découvrez nos offres exceptionnelles et créez des souvenirs inoubliables</p>
           </div>
           {/* Trip Type Selector */}
           <div className="mb-6">
             <Select value={tripType} onValueChange={setTripType}>
-              <SelectTrigger className="w-48 bg-emerald-600 border-white border-2 h-10 text-sm font-medium text-white hover:bg-emerald-700 transition-all duration-200 focus:ring-2 focus:ring-white/30 rounded-xl">
+              <SelectTrigger className="w-48 bg-emerald-600/80 backdrop-blur-md border-white/40 border-2 h-10 text-sm font-semibold text-white hover:bg-emerald-700 transition-all duration-300 focus:ring-4 focus:ring-white/20 rounded-xl shadow-lg">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="rounded-lg shadow-lg bg-white">
@@ -206,7 +210,7 @@ export default function Home() {
                   onFocus={() => setShowFromDropdown(true)}
                   onBlur={() => setTimeout(() => setShowFromDropdown(false), 200)}
                   placeholder="Départ&#10;Pays, ville"
-                  className="pl-10 pr-4 h-16 text-sm border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 hover:border-gray-300 transition-all duration-200 bg-white shadow-sm"
+                  className="pl-10 pr-4 h-16 text-sm border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
                 />
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center">
                   <MapPin className="w-4 h-4 text-gray-400" />
@@ -216,7 +220,7 @@ export default function Home() {
                   <div 
                     role="listbox" 
                     aria-label="Sélectionnez un aéroport de départ"
-                    className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] z-50 max-h-60 overflow-y-auto"
+                    className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl z-50 max-h-60 overflow-y-auto"
                   >
                     {filterAirports(fromSearch).map((airport) => (
                       <button
@@ -224,7 +228,7 @@ export default function Home() {
                         role="option"
                         aria-selected={false}
                         onClick={() => handleAirportSelect(airport, 'from')}
-                        className="w-full text-left px-3 py-3 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-transparent border-b border-gray-100 last:border-b-0 transition-all duration-150 group"
+                        className="w-full text-left px-4 py-4 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-transparent border-b border-gray-100 last:border-b-0 transition-all duration-200 group"
                       >
                         <div className="flex items-center space-x-3">
                           <div className="bg-emerald-100 p-2 rounded-lg">
@@ -267,7 +271,7 @@ export default function Home() {
                   onFocus={() => setShowToDropdown(true)}
                   onBlur={() => setTimeout(() => setShowToDropdown(false), 200)}
                   placeholder="Destination&#10;Pays, ville"
-                  className="pl-10 pr-4 h-16 text-sm border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 hover:border-gray-300 transition-all duration-200 bg-white shadow-sm"
+                  className="pl-10 pr-4 h-16 text-sm border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
                 />
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center">
                   <MapPin className="w-4 h-4 text-gray-400" />
@@ -277,7 +281,7 @@ export default function Home() {
                   <div 
                     role="listbox" 
                     aria-label="Sélectionnez un aéroport de destination"
-                    className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] z-50 max-h-60 overflow-y-auto"
+                    className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl z-50 max-h-60 overflow-y-auto"
                   >
                     {filterAirports(toSearch).map((airport) => (
                       <button
@@ -285,7 +289,7 @@ export default function Home() {
                         role="option"
                         aria-selected={false}
                         onClick={() => handleAirportSelect(airport, 'to')}
-                        className="w-full text-left px-3 py-3 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-transparent border-b border-gray-100 last:border-b-0 transition-all duration-150 group"
+                        className="w-full text-left px-4 py-4 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-transparent border-b border-gray-100 last:border-b-0 transition-all duration-200 group"
                       >
                         <div className="flex items-center space-x-3">
                           <div className="bg-emerald-100 p-2 rounded-lg">
@@ -520,7 +524,7 @@ export default function Home() {
             <div className="flex-shrink-0 lg:ml-2">
               <div className="mb-2 lg:mb-6"></div>
               <button 
-                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-8 py-3 text-sm font-semibold rounded-xl shadow-lg flex items-center justify-center space-x-2 transition-all duration-200 hover:shadow-xl h-16"
+                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-10 py-3 text-sm font-bold rounded-xl shadow-xl hover:shadow-2xl flex items-center justify-center space-x-2 transition-all duration-300 h-16 transform hover:scale-105"
                 onClick={() => {
                   // Validation
                   if (!fromValue || !toValue || !departureDate) {
