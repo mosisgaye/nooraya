@@ -211,15 +211,20 @@ export async function POST(request: NextRequest) {
     
     // Log critical error
     if (process.env.NODE_ENV === 'production') {
-      await supabase
-        .from('payment_logs')
-        .insert({
-          action: 'critical_error',
-          details: {
-            error: error instanceof Error ? error.message : 'Unknown error',
+      try {
+        const errorSupabase = await createClient();
+        await errorSupabase
+          .from('payment_logs')
+          .insert({
+            action: 'critical_error',
+            details: {
+              error: error instanceof Error ? error.message : 'Unknown error',
             stack: error instanceof Error ? error.stack : undefined
           }
         });
+      } catch {
+        // Ignore logging error
+      }
     }
 
     return NextResponse.json(

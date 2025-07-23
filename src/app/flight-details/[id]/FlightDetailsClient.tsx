@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   ArrowLeft, 
   Plane, 
   Clock, 
-  MapPin, 
   Users, 
   Luggage, 
   Shield,
@@ -109,10 +109,12 @@ export default function FlightDetailsClient({ flightId }: FlightDetailsClientPro
               
               {/* Compagnie aérienne */}
               <div className="flex items-center mb-6 pb-6 border-b">
-                <img 
-                  src={flight.logo || flight.airlineLogo} 
+                <Image 
+                  src={flight.logo || flight.airlineLogo || '/images/default-airline.svg'} 
                   alt={flight.airline}
-                  className="w-16 h-16 object-contain mr-4"
+                  width={64}
+                  height={64}
+                  className="object-contain mr-4"
                 />
                 <div>
                   <h2 className="text-xl font-semibold">{flight.airline}</h2>
@@ -225,7 +227,7 @@ export default function FlightDetailsClient({ flightId }: FlightDetailsClientPro
                   <p className="font-semibold mb-2">Conditions importantes</p>
                   <ul className="space-y-1">
                     <li>• Les horaires de vol peuvent être modifiés par la compagnie</li>
-                    <li>• Présentez-vous à l'aéroport au moins 2h avant le départ</li>
+                    <li>• Présentez-vous à l&apos;aéroport au moins 2h avant le départ</li>
                     <li>• Vérifiez les exigences de visa pour votre destination</li>
                     <li>• Assurez-vous que votre passeport est valide</li>
                   </ul>

@@ -1,8 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { kiwiClient } from '@/lib/kiwi/client';
+import { createKiwiClient } from '@/lib/kiwi/client';
 // import { createClient } from '@/lib/supabase/server';
 
 export async function POST(request: NextRequest) {
+  // Log environment info for debugging
+  console.log('=== Flight search API called ===');
+  console.log('Time:', new Date().toISOString());
+  console.log('NODE_ENV:', process.env.NODE_ENV);
+  console.log('VERCEL_ENV:', process.env.VERCEL_ENV);
+  console.log('RAPIDAPI_KEY exists:', !!process.env.RAPIDAPI_KEY);
+  console.log('RAPIDAPI_KEY length:', process.env.RAPIDAPI_KEY?.length || 0);
+  console.log('KIWI_API_HOST:', process.env.KIWI_API_HOST || 'using default');
+  console.log('Request origin:', request.headers.get('origin'));
+  console.log('Request host:', request.headers.get('host'));
+  
+  // Get API key from environment
+  const apiKey = process.env.RAPIDAPI_KEY;
+  
+  if (!apiKey) {
+    console.error('RAPIDAPI_KEY not found in environment variables');
+    console.error('Available env vars (non-sensitive):', Object.keys(process.env).filter(key => !key.includes('SECRET') && !key.includes('KEY') && !key.includes('PASSWORD')).join(', '));
+    return NextResponse.json(
+      { 
+        error: 'Configuration error: API key missing',
+        debug: {
+          message: 'RAPIDAPI_KEY environment variable is not set',
+          env: process.env.NODE_ENV,
+          vercel: process.env.VERCEL_ENV,
+          timestamp: new Date().toISOString()
+        }
+      },
+      { status: 500 }
+    );
+  }
+  
+  const kiwiClient = createKiwiClient(apiKey);
   try {
     const body = await request.json();
     const {
@@ -88,8 +120,7 @@ export async function POST(request: NextRequest) {
     console.log('Raw flight data type:', typeof flightData);
     console.log('Flight data keys:', flightData ? Object.keys(flightData) : 'null');
     
-    // Apply commission to prices and ensure data is serializable
-    const commissionRate = parseFloat(process.env.COMMISSION_RATE || '0.05');
+    // Commission rate would be applied here if needed
     
     // Return the raw data as-is to see what we're getting
     try {
@@ -112,7 +143,7 @@ export async function POST(request: NextRequest) {
       console.error('Error in response:', error);
       return NextResponse.json({
         success: false,
-        error: error.message,
+        error: error instanceof Error ? error.message : 'Unknown error',
         data: {}
       });
     }

@@ -2,17 +2,25 @@ import { KiwiSearchParams, KiwiFlightResponse, KiwiLocation } from './types';
 import { getKiwiLocation } from './airport-mapping';
 
 const KIWI_API_HOST = process.env.KIWI_API_HOST || 'kiwi-com-cheap-flights.p.rapidapi.com';
-const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY;
-
-if (!RAPIDAPI_KEY) {
-  throw new Error('RAPIDAPI_KEY is not defined in environment variables');
-}
 
 export class KiwiClient {
-  private headers = {
-    'x-rapidapi-host': KIWI_API_HOST,
-    'x-rapidapi-key': RAPIDAPI_KEY,
-  };
+  private apiKey: string;
+  
+  constructor(apiKey?: string) {
+    // Use provided API key or try to get from environment
+    this.apiKey = apiKey || process.env.RAPIDAPI_KEY || '';
+    
+    if (!this.apiKey) {
+      console.warn('RAPIDAPI_KEY not provided. Flight search will not work.');
+    }
+  }
+
+  private get headers() {
+    return {
+      'x-rapidapi-host': KIWI_API_HOST,
+      'x-rapidapi-key': this.apiKey,
+    };
+  }
 
   /**
    * Format date to YYYY-MM-DD
@@ -46,8 +54,8 @@ export class KiwiClient {
    */
   async searchRoundTrip(params: KiwiSearchParams): Promise<KiwiFlightResponse> {
     // Format dates properly
-    const outboundDate = new Date(params.departureDate);
-    const inboundDate = params.returnDate ? new Date(params.returnDate) : null;
+    // const outboundDate = new Date(params.departureDate);
+    // const inboundDate = params.returnDate ? new Date(params.returnDate) : null;
     
     const queryParams = new URLSearchParams({
       source: this.formatLocation(params.from),
@@ -220,5 +228,10 @@ export class KiwiClient {
   }
 }
 
-// Export singleton instance
+// Factory function to create client with API key
+export const createKiwiClient = (apiKey?: string) => {
+  return new KiwiClient(apiKey || process.env.RAPIDAPI_KEY);
+};
+
+// Export singleton instance for backward compatibility
 export const kiwiClient = new KiwiClient();

@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowLeft, Shield, Lock, CreditCard, Smartphone, AlertCircle } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
 import { useAuth } from '@/providers/AuthProvider';
 import { useAuthModal } from '@/contexts/AuthModalContext';
 import PaymentModal from '@/components/payment/PaymentModal';
@@ -15,35 +15,25 @@ export default function PaymentPageClient() {
   const { user, isAuthenticated } = useAuth();
   const { openAuthModal } = useAuthModal();
   const [flight, setFlight] = useState<Flight | null>(null);
-  const [passengers, setPassengers] = useState<any[]>([]);
+  interface PassengerData {
+    title: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    nationality: string;
+    passportNumber?: string;
+    passportExpiry?: string;
+    email?: string;
+    phone?: string;
+  }
+
+  const [passengers, setPassengers] = useState<PassengerData[]>([]);
   const [loading, setLoading] = useState(true);
   const [bookingId, setBookingId] = useState<string | null>(null);
   const [showPayment, setShowPayment] = useState(false);
   const [creatingBooking, setCreatingBooking] = useState(false);
 
-  useEffect(() => {
-    // Récupérer les données stockées
-    const storedFlight = sessionStorage.getItem('selectedFlight');
-    const storedPassengers = sessionStorage.getItem('passengers');
-    
-    if (storedFlight && storedPassengers) {
-      setFlight(JSON.parse(storedFlight));
-      setPassengers(JSON.parse(storedPassengers));
-      setLoading(false);
-    } else {
-      // Si pas de données, rediriger
-      router.push('/flights');
-    }
-  }, [router]);
-
-  useEffect(() => {
-    // Si l'utilisateur vient de se connecter, créer la réservation
-    if (isAuthenticated && flight && passengers.length > 0 && !bookingId && !creatingBooking) {
-      createBooking();
-    }
-  }, [isAuthenticated, flight, passengers, bookingId]);
-
-  const createBooking = async () => {
+  const createBooking = useCallback(async () => {
     if (!user || creatingBooking) return;
     
     setCreatingBooking(true);
@@ -90,7 +80,29 @@ export default function PaymentPageClient() {
       alert('Une erreur est survenue. Veuillez réessayer.');
       setCreatingBooking(false);
     }
-  };
+  }, [user, creatingBooking, flight, passengers]);
+
+  useEffect(() => {
+    // Récupérer les données stockées
+    const storedFlight = sessionStorage.getItem('selectedFlight');
+    const storedPassengers = sessionStorage.getItem('passengers');
+    
+    if (storedFlight && storedPassengers) {
+      setFlight(JSON.parse(storedFlight));
+      setPassengers(JSON.parse(storedPassengers));
+      setLoading(false);
+    } else {
+      // Si pas de données, rediriger
+      router.push('/flights');
+    }
+  }, [router]);
+
+  useEffect(() => {
+    // Si l'utilisateur vient de se connecter, créer la réservation
+    if (isAuthenticated && flight && passengers.length > 0 && !bookingId && !creatingBooking) {
+      createBooking();
+    }
+  }, [isAuthenticated, flight, passengers, bookingId, creatingBooking, createBooking]);
 
   const handlePaymentClick = () => {
     if (!isAuthenticated) {
@@ -297,10 +309,12 @@ export default function PaymentPageClient() {
               {/* Vol */}
               <div className="mb-6">
                 <div className="flex items-center mb-3">
-                  <img 
-                    src={flight.logo || flight.airlineLogo} 
+                  <Image 
+                    src={flight.logo || flight.airlineLogo || '/images/default-airline.svg'} 
                     alt={flight.airline}
-                    className="w-10 h-10 object-contain mr-3"
+                    width={40}
+                    height={40}
+                    className="object-contain mr-3"
                   />
                   <div>
                     <p className="font-medium">{flight.airline}</p>

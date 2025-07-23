@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { X, Smartphone, CreditCard, Loader2 } from 'lucide-react';
-import Image from 'next/image';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -13,7 +12,10 @@ interface PaymentModalProps {
     amount: number;
     currency: string;
     description: string;
-    details?: any;
+    details?: {
+      flight?: unknown;
+      passengers?: unknown[];
+    };
   };
   onSuccess: (paymentId: string) => void;
   onError: (error: string) => void;

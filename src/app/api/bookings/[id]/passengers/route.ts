@@ -3,8 +3,9 @@ import { createClient as createAdminClient } from '@supabase/supabase-js';
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const params = await context.params;
   try {
     const { passengers } = await request.json();
     

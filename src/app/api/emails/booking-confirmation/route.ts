@@ -4,7 +4,7 @@ import { bookingConfirmationTemplate } from '@/lib/email/templates/booking-confi
 
 export async function POST(request: NextRequest) {
   try {
-    const { bookingId, paymentId } = await request.json();
+    const { bookingId } = await request.json();
     
     const supabase = await createClient();
     
@@ -66,7 +66,8 @@ export async function POST(request: NextRequest) {
       currency: payment.currency
     };
 
-    const htmlContent = bookingConfirmationTemplate(emailData);
+    // Generate email content
+    bookingConfirmationTemplate(emailData);
 
     // Ici, intégrer avec votre service d'email (SendGrid, Resend, etc.)
     // Pour l'instant, on simule l'envoi

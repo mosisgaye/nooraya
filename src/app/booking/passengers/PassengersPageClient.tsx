@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, ChevronRight, User, AlertCircle } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowLeft, AlertCircle } from 'lucide-react';
 import PassengerForm from '@/components/booking/PassengerForm';
 import { Flight } from '@/types';
 
@@ -26,7 +27,19 @@ export default function PassengersPageClient() {
     }
   }, [router]);
 
-  const handleSubmit = (passengers: any[]) => {
+  interface Passenger {
+    id: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    passportNumber?: string;
+    passportExpiry?: string;
+    nationality?: string;
+    gender: 'M' | 'F';
+    type: 'adult' | 'child' | 'infant';
+  }
+
+  const handleSubmit = (passengers: Passenger[]) => {
     // Stocker les infos passagers
     sessionStorage.setItem('passengers', JSON.stringify(passengers));
     
@@ -151,10 +164,12 @@ export default function PassengersPageClient() {
                 {/* Vol */}
                 <div>
                   <div className="flex items-center mb-2">
-                    <img 
-                      src={flight.logo || flight.airlineLogo} 
+                    <Image 
+                      src={flight.logo || flight.airlineLogo || '/images/default-airline.svg'} 
                       alt={flight.airline}
-                      className="w-10 h-10 object-contain mr-3"
+                      width={40}
+                      height={40}
+                      className="object-contain mr-3"
                     />
                     <div>
                       <p className="font-medium">{flight.airline}</p>

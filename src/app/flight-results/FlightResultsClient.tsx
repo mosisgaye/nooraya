@@ -32,6 +32,7 @@ function FlightResultsContent() {
   const [flights, setFlights] = useState<Flight[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('price');
+  const [error, setError] = useState<string | null>(null);
   
   // Récupérer les paramètres de recherche
   const searchData = {
@@ -74,21 +75,51 @@ function FlightResultsContent() {
         });
         
         if (!response.ok) {
-          throw new Error('Erreur lors de la recherche des vols');
+          const errorText = await response.text();
+          console.error('API Error Response:', errorText);
+          let errorMessage = 'Erreur lors de la recherche des vols';
+          let debugInfo = null;
+          
+          try {
+            const errorJson = JSON.parse(errorText);
+            errorMessage = errorJson.error || errorMessage;
+            debugInfo = errorJson.debug || errorJson.details;
+            
+            // Special handling for missing API key
+            if (errorMessage.includes('API key missing')) {
+              errorMessage = 'Configuration manquante : Les variables d\'environnement ne sont pas configurées sur le serveur';
+            }
+          } catch (e) {
+            // If not JSON, use the raw text
+            errorMessage = errorText || errorMessage;
+          }
+          
+          console.error('Flight search failed:', { errorMessage, debugInfo });
+          throw new Error(errorMessage);
         }
         
         const result = await response.json();
         
         if (result.success && result.data?.itineraries && result.data.itineraries.length > 0) {
           // Transformer les données Kiwi en format Flight
-          const transformedFlights = result.data.itineraries.map((itinerary: any, index: number) => {
+          interface KiwiItinerary {
+            id?: string;
+            price?: { amount?: string };
+            outbound?: { sectorSegments?: Array<{ segment?: unknown }> };
+            inbound?: { sectorSegments?: Array<{ segment?: unknown }> };
+          }
+
+          const transformedFlights = result.data.itineraries.map((itinerary: KiwiItinerary, index: number) => {
             try {
               const outboundSegments = itinerary.outbound?.sectorSegments || [];
-              const firstSegment = outboundSegments[0]?.segment;
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const firstSegment = outboundSegments[0]?.segment as any;
               const inboundSegments = itinerary.inbound?.sectorSegments || [];
               const lastSegmentData = inboundSegments.length > 0 ? 
-                inboundSegments[inboundSegments.length - 1]?.segment : 
-                outboundSegments[outboundSegments.length - 1]?.segment;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                inboundSegments[inboundSegments.length - 1]?.segment as any : 
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                outboundSegments[outboundSegments.length - 1]?.segment as any;
               
               if (!firstSegment || !lastSegmentData) {
                 return null;
@@ -154,6 +185,7 @@ function FlightResultsContent() {
       } catch (error) {
         console.error('Erreur:', error);
         setFlights([]);
+        setError(error instanceof Error ? error.message : 'Une erreur inattendue s\'est produite');
       } finally {
         setLoading(false);
       }
@@ -270,7 +302,27 @@ function FlightResultsContent() {
             </div>
 
             <div className="space-y-4">
-              {flights.length === 0 && (
+              {error && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                  <p className="text-red-800 font-medium">Erreur</p>
+                  <p className="text-red-600 text-sm mt-1">{error}</p>
+                  {(error.includes('API key missing') || error.includes('Configuration manquante')) && (
+                    <div className="mt-3 p-3 bg-red-100 rounded text-xs">
+                      <p className="font-semibold text-red-800 mb-2">Pour l'administrateur :</p>
+                      <p className="text-red-700">Les variables d'environnement suivantes doivent être configurées sur Vercel :</p>
+                      <ul className="list-disc list-inside mt-1 text-red-700 space-y-1">
+                        <li><code className="bg-red-200 px-1 rounded">RAPIDAPI_KEY</code> = 01da4a3c6amsh37ce35310ab8e77p10fdcajsn89d68f9c9df5</li>
+                        <li><code className="bg-red-200 px-1 rounded">KIWI_API_HOST</code> = kiwi-com-cheap-flights.p.rapidapi.com</li>
+                      </ul>
+                      <p className="text-red-700 mt-2">
+                        Allez dans Vercel → Settings → Environment Variables pour les ajouter.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              {flights.length === 0 && !error && (
                 <div className="bg-white rounded-lg p-8 text-center">
                   <p className="text-gray-600">Aucun vol trouvé pour cette recherche.</p>
                   <p className="text-sm text-gray-500 mt-2">Essayez de modifier vos critères de recherche.</p>

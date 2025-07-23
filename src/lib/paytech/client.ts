@@ -1,4 +1,3 @@
-import { createHmac } from 'crypto';
 
 export interface PayTechConfig {
   apiKey: string;
@@ -13,7 +12,7 @@ export interface PayTechTransaction {
   codeService: string;
   externalTransactionId: string;
   callbackUrl?: string;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
 }
 
 export interface PayTechResponse {
@@ -23,7 +22,7 @@ export interface PayTechResponse {
   data?: {
     transactionId?: string;
     status?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }
 
@@ -184,13 +183,13 @@ export class PayTechClient {
   /**
    * Verify callback hash
    */
-  static verifyCallbackHash(
+  static async verifyCallbackHash(
     transactionId: string,
     externalTransactionId: string,
     receivedHash: string,
     apiKey: string
-  ): boolean {
-    const crypto = require('crypto');
+  ): Promise<boolean> {
+    const crypto = await import('crypto');
     const expectedHash = crypto
       .createHash('sha256')
       .update(`${transactionId}|${externalTransactionId}|${apiKey}`)

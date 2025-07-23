@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { TrendingUp, TrendingDown, DollarSign, Users, AlertCircle } from 'lucide-react';
+import { TrendingDown, DollarSign, Users, AlertCircle } from 'lucide-react';
 
 interface PaymentStats {
   total_revenue: number;
@@ -59,7 +59,7 @@ export default function PaymentsDashboard() {
         // Group by date for daily revenue
         const dailyRevenue = payments
           .filter(p => p.status === 'success')
-          .reduce((acc: any, payment) => {
+          .reduce((acc: Record<string, number>, payment) => {
             const date = new Date(payment.created_at).toLocaleDateString();
             if (!acc[date]) acc[date] = 0;
             acc[date] += parseFloat(payment.amount);
@@ -69,7 +69,7 @@ export default function PaymentsDashboard() {
         // Group by payment method
         const methodStats = payments
           .filter(p => p.status === 'success')
-          .reduce((acc: any, payment) => {
+          .reduce((acc: Record<string, { count: number; amount: number }>, payment) => {
             if (!acc[payment.payment_method]) {
               acc[payment.payment_method] = { count: 0, amount: 0 };
             }
@@ -88,7 +88,7 @@ export default function PaymentsDashboard() {
             date,
             amount: amount as number
           })),
-          payment_methods: Object.entries(methodStats).map(([method, stats]: [string, any]) => ({
+          payment_methods: Object.entries(methodStats).map(([method, stats]) => ({
             method,
             count: stats.count,
             amount: stats.amount

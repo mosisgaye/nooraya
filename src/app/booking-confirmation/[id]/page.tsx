@@ -1,14 +1,16 @@
 import { Suspense } from 'react';
 import BookingConfirmationClient from './BookingConfirmationClient';
 
-export default function BookingConfirmationPage({
+export default async function BookingConfirmationPage({
   params
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = await params;
+  
   return (
     <Suspense fallback={<div>Chargement...</div>}>
-      <BookingConfirmationClient bookingId={params.id} />
+      <BookingConfirmationClient bookingId={id} />
     </Suspense>
   );
 }

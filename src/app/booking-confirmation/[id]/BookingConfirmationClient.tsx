@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { CheckCircle, Download, Send, Printer, Calendar, MapPin, Clock, User } from 'lucide-react';
+import { CheckCircle, Download, Send, Printer, MapPin, Clock, User } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 
 interface BookingDetails {
@@ -13,10 +13,33 @@ interface BookingDetails {
   total_amount: number;
   currency: string;
   flight_details: {
-    flight: any;
-    searchParams: any;
+    flight: {
+      airline?: string;
+      flightNumber?: string;
+      cabinClass?: string;
+      departure: {
+        city: string;
+        airport: string;
+        time: string;
+      };
+      arrival: {
+        city: string;
+        airport: string;
+        time: string;
+      };
+      duration: string;
+      stops: number;
+    };
+    searchParams: {
+      departureDate: string;
+      returnDate?: string;
+    };
   };
-  passenger_details: any[];
+  passenger_details: Array<{
+    firstName: string;
+    lastName: string;
+    dateOfBirth?: string;
+  }>;
   created_at: string;
   payments?: Array<{
     id: string;
@@ -69,7 +92,7 @@ export default function BookingConfirmationClient({ bookingId }: { bookingId: st
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ bookingId, paymentId })
             });
-          } catch (err) {
+          } catch {
             console.log('Could not send email');
           }
         }
@@ -97,7 +120,7 @@ export default function BookingConfirmationClient({ bookingId }: { bookingId: st
         <div className="text-center">
           <p className="text-gray-600">Réservation introuvable</p>
           <Link href="/" className="text-green-600 hover:underline mt-2 inline-block">
-            Retour à l'accueil
+            Retour à l&apos;accueil
           </Link>
         </div>
       </div>
@@ -217,7 +240,7 @@ export default function BookingConfirmationClient({ bookingId }: { bookingId: st
           <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
             <h2 className="text-xl font-bold mb-4">Passagers</h2>
             <div className="space-y-3">
-              {booking.passenger_details.map((passenger: any, index: number) => (
+              {booking.passenger_details.map((passenger, index) => (
                 <div key={index} className="flex items-center p-3 bg-gray-50 rounded-lg">
                   <User className="text-gray-600 mr-3" size={20} />
                   <div>
@@ -278,8 +301,8 @@ export default function BookingConfirmationClient({ bookingId }: { bookingId: st
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mt-6">
           <h3 className="font-bold text-yellow-800 mb-3">Informations Importantes</h3>
           <ul className="space-y-2 text-sm text-yellow-700">
-            <li>• Présentez-vous à l'aéroport au moins 2 heures avant le départ</li>
-            <li>• Munissez-vous de votre passeport ou carte d'identité valide</li>
+            <li>• Présentez-vous à l&apos;aéroport au moins 2 heures avant le départ</li>
+            <li>• Munissez-vous de votre passeport ou carte d&apos;identité valide</li>
             <li>• Vérifiez les exigences de visa pour votre destination</li>
             <li>• Conservez cette référence de réservation : {bookingRef}</li>
           </ul>
