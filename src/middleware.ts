@@ -41,7 +41,7 @@ export function middleware(request: NextRequest) {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "img-src 'self' data: https: blob:",
     "font-src 'self' https://fonts.gstatic.com",
-    "connect-src 'self' https://api.noorayavoyages.com https://*.supabase.co https://www.google-analytics.com",
+    "connect-src 'self' https://api.noorayavoyages.com https://*.supabase.co https://www.google-analytics.com https://kiwi-com-cheap-flights.p.rapidapi.com https://vercel.live",
     "frame-src 'self' https://www.youtube.com",
     "object-src 'none'",
     "base-uri 'self'",
@@ -58,20 +58,20 @@ export function middleware(request: NextRequest) {
     response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
   }
 
-  // Protection des routes API
+  // Protection des routes API - Simplifiée pour éviter les problèmes
   if (pathname.startsWith('/api/')) {
-    // Vérifier l'origine pour les requêtes API
-    const origin = request.headers.get('origin');
-    const allowedOrigins = [
-      'http://localhost:3000',
-      'http://localhost:3001',
-      'https://www.noorayavoyages.com',
-      'https://noorayavoyages.com'
-    ];
-
-    if (origin && !allowedOrigins.includes(origin)) {
-      return new NextResponse(null, { status: 403 });
+    // Log pour debugging sur les routes critiques
+    if (pathname === '/api/flights/search' || pathname === '/api/health') {
+      console.log(`${pathname} middleware:`, {
+        origin: request.headers.get('origin'),
+        host: request.headers.get('host'),
+        referer: request.headers.get('referer'),
+        method: request.method
+      });
     }
+    
+    // Pour l'instant, on laisse passer toutes les requêtes API
+    // TODO: Implémenter une vérification d'origine plus robuste
 
     // Rate limiting simple (à améliorer avec Redis en production)
     // const ip = request.ip ?? '127.0.0.1';

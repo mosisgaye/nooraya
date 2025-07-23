@@ -154,7 +154,7 @@ const AuthModal: React.FC = () => {
   };
 
   if (!isAuthModalOpen) {
-    console.log('AuthModal not open, returning null');
+    // console.log('AuthModal not open, returning null');
     return null;
   }
   

@@ -28,8 +28,8 @@ const Header: React.FC = () => {
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
   const pathname = usePathname();
 
-  // Debug
-  console.log('Header - isAuthenticated:', isAuthenticated, 'user:', user);
+  // Debug - commented out to reduce console noise
+  // console.log('Header - isAuthenticated:', isAuthenticated, 'user:', user);
 
   useEffect(() => {
     const handleScroll = () => {
