@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Filter, SortAsc } from 'lucide-react';
 import FlightCard from '@/components/cards/FlightCard';
+import PaymentModal from '@/components/payment/PaymentModal';
 import { Flight } from '@/types';
 
 export default function FlightResultsClient() {
@@ -29,6 +30,8 @@ function FlightResultsContent() {
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('price');
   const [error, setError] = useState<string | null>(null);
+  const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   
   // Récupérer les paramètres de recherche
   const searchData = {
@@ -206,26 +209,21 @@ function FlightResultsContent() {
   const handleSelectFlight = (flight: Flight) => {
     console.log('Sélection du vol:', flight);
     
-    // Stocker les résultats de recherche pour les récupérer dans la page de détails
-    const currentFlights = sortedFlights;
-    sessionStorage.setItem('searchResults', JSON.stringify(currentFlights));
-    console.log('Flights stockés dans sessionStorage');
-    
-    // Construire l'URL avec les paramètres de recherche
-    const params = new URLSearchParams({
-      date: searchData.departureDate,
-      returnDate: searchData.returnDate || '',
-      passengers: searchData.passengers,
-      tripType: searchData.tripType,
-      from: searchData.from,
-      to: searchData.to
-    });
-    
-    const url = `/flight-details/${flight.id}?${params.toString()}`;
-    console.log('Redirection vers:', url);
-    
-    // Rediriger vers la page de détails du vol
-    router.push(url);
+    // Définir le vol sélectionné et ouvrir le modal de paiement
+    setSelectedFlight(flight);
+    setShowPaymentModal(true);
+  };
+
+  const handlePaymentSuccess = (paymentId: string) => {
+    console.log('Paiement réussi:', paymentId);
+    // Rediriger vers la page de confirmation ou afficher un message de succès
+    router.push(`/booking/confirmation?paymentId=${paymentId}`);
+  };
+
+  const handlePaymentError = (error: string) => {
+    console.error('Erreur de paiement:', error);
+    // Afficher l'erreur à l'utilisateur
+    setError(error);
   };
 
 
@@ -338,6 +336,30 @@ function FlightResultsContent() {
           </div>
         </div>
       </div>
+
+      {/* Payment Modal */}
+      {selectedFlight && (
+        <PaymentModal
+          isOpen={showPaymentModal}
+          onClose={() => {
+            setShowPaymentModal(false);
+            setSelectedFlight(null);
+          }}
+          bookingData={{
+            id: selectedFlight.id,
+            type: 'flight',
+            amount: selectedFlight.price,
+            currency: selectedFlight.currency,
+            description: `Vol ${selectedFlight.departure.code} → ${selectedFlight.arrival.code}`,
+            details: {
+              flight: selectedFlight,
+              passengers: []
+            }
+          }}
+          onSuccess={handlePaymentSuccess}
+          onError={handlePaymentError}
+        />
+      )}
 
     </div>
   );
