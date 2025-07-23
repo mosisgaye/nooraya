@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { bookingId, paymentMethod, phone, amount, bookingType, bookingData } = body;
+    const { bookingId, paymentMethod, phone, amount, bookingType } = body;
 
     // Valider les données
     if (!bookingId || !paymentMethod || !phone || !amount) {

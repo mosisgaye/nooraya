@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { Suspense } from 'react';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Confirmation de Réservation - Nooraya Voyages',
@@ -52,19 +53,19 @@ async function ConfirmationContent() {
           </div>
           
           <div className="space-y-4">
-            <a
+            <Link
               href="/"
-              className="block w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+              className="block w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors text-center"
             >
-              Retour à l'accueil
-            </a>
+              Retour à l&apos;accueil
+            </Link>
             
-            <a
+            <Link
               href="/account/bookings"
-              className="block w-full bg-gray-100 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
+              className="block w-full bg-gray-100 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-200 transition-colors text-center"
             >
               Voir mes réservations
-            </a>
+            </Link>
           </div>
         </div>
         
