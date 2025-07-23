@@ -89,7 +89,7 @@ function FlightResultsContent() {
             if (errorMessage.includes('API key missing')) {
               errorMessage = 'Configuration manquante : Les variables d\'environnement ne sont pas configurées sur le serveur';
             }
-          } catch (e) {
+          } catch {
             // If not JSON, use the raw text
             errorMessage = errorText || errorMessage;
           }
@@ -308,8 +308,8 @@ function FlightResultsContent() {
                   <p className="text-red-600 text-sm mt-1">{error}</p>
                   {(error.includes('API key missing') || error.includes('Configuration manquante')) && (
                     <div className="mt-3 p-3 bg-red-100 rounded text-xs">
-                      <p className="font-semibold text-red-800 mb-2">Pour l'administrateur :</p>
-                      <p className="text-red-700">Les variables d'environnement suivantes doivent être configurées sur Vercel :</p>
+                      <p className="font-semibold text-red-800 mb-2">Pour l&apos;administrateur :</p>
+                      <p className="text-red-700">Les variables d&apos;environnement suivantes doivent être configurées sur Vercel :</p>
                       <ul className="list-disc list-inside mt-1 text-red-700 space-y-1">
                         <li><code className="bg-red-200 px-1 rounded">RAPIDAPI_KEY</code> = 01da4a3c6amsh37ce35310ab8e77p10fdcajsn89d68f9c9df5</li>
                         <li><code className="bg-red-200 px-1 rounded">KIWI_API_HOST</code> = kiwi-com-cheap-flights.p.rapidapi.com</li>
