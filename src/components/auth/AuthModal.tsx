@@ -435,13 +435,13 @@ const AuthModal: React.FC = () => {
                     />
                     <span className="text-sm text-gray-600">
                       J&apos;accepte les{' '}
-                      <a href="/terms" className="text-green-600 hover:underline">
+                      <span className="text-green-600">
                         conditions d&apos;utilisation
-                      </a>{' '}
+                      </span>{' '}
                       et la{' '}
-                      <a href="/privacy" className="text-green-600 hover:underline">
+                      <span className="text-green-600">
                         politique de confidentialité
-                      </a>
+                      </span>
                     </span>
                   </label>
                   {errors.acceptTerms && (

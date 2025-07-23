@@ -68,7 +68,7 @@ const SpecialOffers: React.FC = () => {
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">Promotions exclusives</h2>
             <p className="text-xl text-gray-600">Économisez jusqu&apos;à 25% sur ces destinations</p>
           </div>
-          <a href="/offers" className="hidden md:flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-3 rounded-full font-semibold hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+          <a href="/packages" className="hidden md:flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-3 rounded-full font-semibold hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl">
             <span>Voir toutes les offres</span>
             <ArrowRight size={20} />
           </a>
@@ -81,7 +81,7 @@ const SpecialOffers: React.FC = () => {
         </div>
 
         <div className="mt-8 text-center md:hidden">
-          <a href="/offers" className="inline-flex items-center text-green-500 hover:text-green-700 transition-colors">
+          <a href="/packages" className="inline-flex items-center text-green-500 hover:text-green-700 transition-colors">
             <span className="mr-1">Voir toutes les offres</span>
             <ArrowRight size={18} />
           </a>
