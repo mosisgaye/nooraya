@@ -8,11 +8,7 @@ import FlightCard from '@/components/cards/FlightCard';
 import { Flight } from '@/types';
 
 export default function FlightResultsClient() {
-  return (
-    <Suspense fallback={<LoadingFlights />}>
-      <FlightResultsContent />
-    </Suspense>
-  );
+  return <FlightResultsContent />;
 }
 
 function LoadingFlights() {
