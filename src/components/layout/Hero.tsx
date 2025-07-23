@@ -210,7 +210,7 @@ export default function Hero() {
                   onFocus={() => setShowFromDropdown(true)}
                   onBlur={() => setTimeout(() => setShowFromDropdown(false), 200)}
                   placeholder="Départ - Pays, ville"
-                  className="pl-10 pr-4 h-16 text-sm border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
+                  className="pl-10 pr-4 h-16 text-base border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
                 />
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center">
                   <MapPin className="w-4 h-4 text-gray-400" />
@@ -220,7 +220,7 @@ export default function Hero() {
                   <div 
                     role="listbox" 
                     aria-label="Sélectionnez un aéroport de départ"
-                    className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl z-50 max-h-60 overflow-y-auto"
+                    className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl z-50 max-h-72 overflow-y-auto w-[28rem] min-w-full"
                   >
                     {filterAirports(fromSearch).map((airport) => (
                       <button
@@ -228,17 +228,17 @@ export default function Hero() {
                         role="option"
                         aria-selected={false}
                         onClick={() => handleAirportSelect(airport, 'from')}
-                        className="w-full text-left px-4 py-4 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-transparent border-b border-gray-100 last:border-b-0 transition-all duration-200 group"
+                        className="w-full text-left px-4 py-4 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-transparent border-b border-gray-100 last:border-b-0 transition-all duration-200 group overflow-hidden"
                       >
                         <div className="flex items-center space-x-3">
-                          <div className="bg-emerald-100 p-2 rounded-lg">
+                          <div className="bg-emerald-100 p-2.5 rounded-lg flex-shrink-0">
                             <Plane className="w-5 h-5 text-emerald-600" />
                           </div>
-                          <div>
-                            <div className="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">
+                          <div className="flex-1 min-w-0">
+                            <div className="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors text-base">
                               {airport.city} <span className="text-emerald-600">({airport.code})</span>
                             </div>
-                            <div className="text-sm text-gray-600 group-hover:text-gray-700">{airport.name}, {airport.country}</div>
+                            <div className="text-sm text-gray-600 group-hover:text-gray-700 truncate pr-4">{airport.name}, {airport.country}</div>
                           </div>
                         </div>
                       </button>
@@ -271,7 +271,7 @@ export default function Hero() {
                   onFocus={() => setShowToDropdown(true)}
                   onBlur={() => setTimeout(() => setShowToDropdown(false), 200)}
                   placeholder="Destination - Pays, ville"
-                  className="pl-10 pr-4 h-16 text-sm border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
+                  className="pl-10 pr-4 h-16 text-base border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
                 />
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center">
                   <MapPin className="w-4 h-4 text-gray-400" />
@@ -281,7 +281,7 @@ export default function Hero() {
                   <div 
                     role="listbox" 
                     aria-label="Sélectionnez un aéroport de destination"
-                    className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl z-50 max-h-60 overflow-y-auto"
+                    className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl z-50 max-h-72 overflow-y-auto w-[28rem] min-w-full"
                   >
                     {filterAirports(toSearch).map((airport) => (
                       <button
@@ -289,17 +289,17 @@ export default function Hero() {
                         role="option"
                         aria-selected={false}
                         onClick={() => handleAirportSelect(airport, 'to')}
-                        className="w-full text-left px-4 py-4 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-transparent border-b border-gray-100 last:border-b-0 transition-all duration-200 group"
+                        className="w-full text-left px-4 py-4 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-transparent border-b border-gray-100 last:border-b-0 transition-all duration-200 group overflow-hidden"
                       >
                         <div className="flex items-center space-x-3">
-                          <div className="bg-emerald-100 p-2 rounded-lg">
+                          <div className="bg-emerald-100 p-2.5 rounded-lg flex-shrink-0">
                             <Plane className="w-5 h-5 text-emerald-600" />
                           </div>
-                          <div>
-                            <div className="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">
+                          <div className="flex-1 min-w-0">
+                            <div className="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors text-base">
                               {airport.city} <span className="text-emerald-600">({airport.code})</span>
                             </div>
-                            <div className="text-sm text-gray-600 group-hover:text-gray-700">{airport.name}, {airport.country}</div>
+                            <div className="text-sm text-gray-600 group-hover:text-gray-700 truncate pr-4">{airport.name}, {airport.country}</div>
                           </div>
                         </div>
                       </button>

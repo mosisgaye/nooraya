@@ -23,7 +23,7 @@ const nextConfig: NextConfig = {
       },
     ],
     formats: ['image/webp', 'image/avif'],
-    minimumCacheTTL: 31536000, // 1 an
+    minimumCacheTTL: process.env.NODE_ENV === 'development' ? 0 : 31536000, // 0 en dev, 1 an en prod
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     loader: 'default',
@@ -40,6 +40,8 @@ const nextConfig: NextConfig = {
   
   // Headers de sécurité et SEO
   async headers() {
+    const isDev = process.env.NODE_ENV === 'development';
+    
     return [
       {
         source: '/(.*)',
@@ -95,12 +97,13 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // Cache pour les fichiers statiques
       {
         source: '/_next/static/(.*)',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            value: isDev ? 'no-store, must-revalidate' : 'public, max-age=31536000, immutable',
           },
         ],
       },
@@ -109,7 +112,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            value: isDev ? 'no-store, must-revalidate' : 'public, max-age=31536000, immutable',
           },
         ],
       },
@@ -118,10 +121,20 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            value: isDev ? 'no-store, must-revalidate' : 'public, max-age=31536000, immutable',
           },
         ],
       },
+      // Désactiver le cache pour toutes les pages en développement
+      ...(isDev ? [{
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-store, must-revalidate',
+          },
+        ],
+      }] : []),
     ];
   },
   

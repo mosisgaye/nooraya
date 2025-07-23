@@ -55,9 +55,7 @@ export function middleware(request: NextRequest) {
   response.headers.set('Content-Security-Policy', csp);
 
   // Gestion du cache pour les assets statiques
-  if (pathname.startsWith('/_next/static/') || pathname.startsWith('/images/')) {
-    response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
-  }
+  // Retiré - déjà géré dans next.config.ts pour éviter la duplication
 
   // Protection des routes API - Simplifiée pour éviter les problèmes
   if (pathname.startsWith('/api/')) {
