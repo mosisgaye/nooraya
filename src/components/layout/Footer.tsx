@@ -48,7 +48,7 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Liens rapides</h4>
             <div className="grid grid-cols-2 gap-2 mb-6">
-              <Link href="/flights" className="text-sm text-gray-300 hover:text-green-400 transition-colors">
+              <Link href="/" className="text-sm text-gray-300 hover:text-green-400 transition-colors">
                 Vols
               </Link>
               <Link href="/hotels" className="text-sm text-gray-300 hover:text-green-400 transition-colors">

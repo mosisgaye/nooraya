@@ -8,10 +8,11 @@ export function middleware(request: NextRequest) {
   // Gérer les redirections
   const redirects: Record<string, string> = {
     '/home': '/',
-    '/flight': '/flights',
+    '/flight': '/',
+    '/flights': '/',
     '/hotel': '/hotels',
     '/package': '/packages',
-    '/offer': '/offers',
+    '/offer': '/packages',
   };
 
   if (redirects[pathname]) {

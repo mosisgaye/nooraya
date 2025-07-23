@@ -64,7 +64,7 @@ export default function PassengersPageClient() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-gray-600 mb-4">Session expirée</p>
-          <Link href="/flights" className="text-green-600 hover:underline">
+          <Link href="/" className="text-green-600 hover:underline">
             Retour à la recherche
           </Link>
         </div>

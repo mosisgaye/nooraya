@@ -76,7 +76,7 @@ export default function FlightDetailsClient({ flightId }: FlightDetailsClientPro
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-gray-600 mb-4">Vol introuvable</p>
-          <Link href="/flights" className="text-green-600 hover:underline">
+          <Link href="/" className="text-green-600 hover:underline">
             Retour à la recherche
           </Link>
         </div>

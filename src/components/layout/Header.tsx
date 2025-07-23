@@ -81,10 +81,10 @@ const Header: React.FC = () => {
         {/* Navigation desktop simplifiée */}
         <nav className="hidden lg:flex items-center space-x-1">
           <NavLink
-            href="/flights"
+            href="/"
             icon={<Plane size={18} />}
             label="Vols"
-            isActive={isActive('/flights') || isActive('/flight-results')}
+            isActive={isActive('/') || isActive('/flight-results')}
           />
           <NavLink
             href="/hotels"
@@ -197,10 +197,10 @@ const Header: React.FC = () => {
         >
           <div className="px-4 pt-4 pb-3 space-y-2">
             <MobileNavLink
-              href="/flights"
+              href="/"
               icon={<Plane size={18} />}
               label="Vols"
-              isActive={isActive('/flights')}
+              isActive={isActive('/') || isActive('/flight-results')}
               onClick={closeAllDropdowns}
             />
             <MobileNavLink
