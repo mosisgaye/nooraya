@@ -56,7 +56,7 @@ const airports = [
   { code: "BOG", name: "El Dorado", city: "Bogotá", country: "Colombie" },
 ];
 
-export default function Home() {
+export default function Hero() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("flights");
   const [fromValue, setFromValue] = useState("");
@@ -209,7 +209,7 @@ export default function Home() {
                   }}
                   onFocus={() => setShowFromDropdown(true)}
                   onBlur={() => setTimeout(() => setShowFromDropdown(false), 200)}
-                  placeholder="Départ&#10;Pays, ville"
+                  placeholder="Départ - Pays, ville"
                   className="pl-10 pr-4 h-16 text-sm border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
                 />
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center">
@@ -270,7 +270,7 @@ export default function Home() {
                   }}
                   onFocus={() => setShowToDropdown(true)}
                   onBlur={() => setTimeout(() => setShowToDropdown(false), 200)}
-                  placeholder="Destination&#10;Pays, ville"
+                  placeholder="Destination - Pays, ville"
                   className="pl-10 pr-4 h-16 text-sm border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
                 />
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center">

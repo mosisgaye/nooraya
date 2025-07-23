@@ -2,7 +2,7 @@
 
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { User } from '@/types';
-import { getSupabaseClient } from '@/lib/supabase-client';
+import { createClient } from '@/lib/supabase/client';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 
 export interface AuthState {
@@ -25,22 +25,52 @@ interface AuthProviderProps {
 
 // Convertir un utilisateur Supabase en User de notre app
 const mapSupabaseUserToUser = async (supabaseUser: SupabaseUser): Promise<User> => {
+  console.log('Mapping user:', supabaseUser.email);
+  
   // Récupérer le profil depuis la table profiles
-  const supabase = getSupabaseClient();
-  const { data: profile } = await supabase
+  const supabase = createClient();
+  const { data: profile, error } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', supabaseUser.id)
     .single();
 
-  return {
+  console.log('Profile data:', profile, 'Error:', error);
+
+  // Utiliser les métadonnées de l'utilisateur si le profil n'existe pas
+  const userMetadata = supabaseUser.user_metadata || {};
+  
+  // Essayer d'extraire le nom depuis l'email si pas de données
+  let firstName = '';
+  let lastName = '';
+  
+  if (profile?.first_name) {
+    firstName = profile.first_name;
+    lastName = profile.last_name || '';
+  } else if (userMetadata.full_name) {
+    const names = userMetadata.full_name.split(' ');
+    firstName = names[0] || '';
+    lastName = names.slice(1).join(' ') || '';
+  } else if (userMetadata.name) {
+    const names = userMetadata.name.split(' ');
+    firstName = names[0] || '';
+    lastName = names.slice(1).join(' ') || '';
+  } else if (supabaseUser.email) {
+    // Utiliser la partie avant @ comme nom par défaut
+    firstName = supabaseUser.email.split('@')[0];
+  }
+
+  const mappedUser = {
     id: supabaseUser.id,
     email: supabaseUser.email || '',
-    firstName: (profile?.first_name && typeof profile.first_name === 'string') ? profile.first_name : '',
-    lastName: (profile?.last_name && typeof profile.last_name === 'string') ? profile.last_name : '',
-    phone: (profile?.phone && typeof profile.phone === 'string') ? profile.phone : undefined,
-    avatar: (profile?.avatar_url && typeof profile.avatar_url === 'string') ? profile.avatar_url : undefined
+    firstName: firstName,
+    lastName: lastName,
+    phone: profile?.phone || userMetadata.phone || undefined,
+    avatar: profile?.avatar_url || userMetadata.avatar_url || userMetadata.picture || undefined
   };
+
+  console.log('Mapped user:', mappedUser);
+  return mappedUser;
 };
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
@@ -51,7 +81,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // Vérifier la session actuelle
     const checkAuth = async () => {
       try {
-        const supabase = getSupabaseClient();
+        const supabase = createClient();
         const { data: { session } } = await supabase.auth.getSession();
         
         if (session?.user) {
@@ -68,7 +98,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     checkAuth();
 
     // Écouter les changements d'authentification
-    const supabase = getSupabaseClient();
+    const supabase = createClient();
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session?.user) {
         const mappedUser = await mapSupabaseUserToUser(session.user);
@@ -84,7 +114,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string): Promise<void> => {
     setIsLoading(true);
     try {
-      const supabase = getSupabaseClient();
+      const supabase = createClient();
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -108,7 +138,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const loginWithGoogle = async (): Promise<void> => {
     try {
-      const supabase = getSupabaseClient();
+      const supabase = createClient();
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -127,7 +157,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const sendMagicLink = async (email: string): Promise<void> => {
     try {
-      const supabase = getSupabaseClient();
+      const supabase = createClient();
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
@@ -146,7 +176,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = async (): Promise<void> => {
     try {
-      const supabase = getSupabaseClient();
+      const supabase = createClient();
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
       setUser(null);
@@ -160,7 +190,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(true);
     try {
       // Créer l'utilisateur
-      const supabase = getSupabaseClient();
+      const supabase = createClient();
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -201,7 +231,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (!user) throw new Error('Utilisateur non connecté');
 
     try {
-      const supabase = getSupabaseClient();
+      const supabase = createClient();
       const { error } = await supabase
         .from('profiles')
         .update({

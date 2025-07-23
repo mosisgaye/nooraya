@@ -13,8 +13,14 @@ const AuthModalContext = createContext<AuthModalContextType | undefined>(undefin
 export const AuthModalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  const openAuthModal = () => setIsAuthModalOpen(true);
-  const closeAuthModal = () => setIsAuthModalOpen(false);
+  const openAuthModal = () => {
+    console.log('Opening auth modal');
+    setIsAuthModalOpen(true);
+  };
+  const closeAuthModal = () => {
+    console.log('Closing auth modal');
+    setIsAuthModalOpen(false);
+  };
 
   return (
     <AuthModalContext.Provider value={{ isAuthModalOpen, openAuthModal, closeAuthModal }}>

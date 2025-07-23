@@ -99,6 +99,7 @@ const AuthModal: React.FC = () => {
     try {
       if (mode === 'login') {
         await login(formData.email, formData.password);
+        // Fermer le modal après connexion réussie
         closeAuthModal();
       } else if (mode === 'register') {
         await register(
@@ -121,8 +122,10 @@ const AuthModal: React.FC = () => {
   const handleGoogleLogin = async () => {
     try {
       await loginWithGoogle();
-      closeAuthModal();
-    } catch {
+      // Ne pas fermer le modal ici car Google OAuth ouvre une nouvelle fenêtre
+      // Le modal se fermera automatiquement après la redirection
+    } catch (error) {
+      console.error('Google login error:', error);
       setErrors({ 
         general: 'Erreur de connexion avec Google. Veuillez réessayer.' 
       });
@@ -150,7 +153,12 @@ const AuthModal: React.FC = () => {
     return { strength: 3, label: 'Fort', color: 'bg-green-500' };
   };
 
-  if (!isAuthModalOpen) return null;
+  if (!isAuthModalOpen) {
+    console.log('AuthModal not open, returning null');
+    return null;
+  }
+  
+  console.log('AuthModal is open, rendering...');
 
   const passwordStrength = mode === 'register' ? getPasswordStrength(formData.password) : null;
 

@@ -28,6 +28,9 @@ const Header: React.FC = () => {
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
   const pathname = usePathname();
 
+  // Debug
+  console.log('Header - isAuthenticated:', isAuthenticated, 'user:', user);
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);

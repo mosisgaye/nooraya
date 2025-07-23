@@ -9,6 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Image from 'next/image';
 import { useFlightSearch } from '@/features/flights/hooks/useFlightSearch';
 import { TripType } from '@/types';
+import { Hero } from '@/components/layout';
 
 export default function FlightsPageClient() {
   const router = useRouter();
@@ -58,227 +59,8 @@ export default function FlightsPageClient() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-indigo-100">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-green-600 to-indigo-700 text-white py-16">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Trouvez votre vol idéal
-          </h1>
-          <p className="text-xl opacity-90 mb-8">
-            Comparez des millions de vols et économisez jusqu&apos;à 70%
-          </p>
-        </div>
-      </div>
+      <Hero />
 
-      {/* Search Form */}
-      <div className="max-w-6xl mx-auto px-4 -mt-8 relative z-10">
-        <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-8">
-          {/* Trip Type Selector */}
-          <div className="flex flex-wrap gap-4 mb-6">
-            <label className="flex items-center">
-              <input
-                type="radio"
-                name="tripType"
-                value="round-trip"
-                checked={tripType === 'round-trip'}
-                onChange={(e) => setTripType(e.target.value as TripType)}
-                className="mr-2"
-              />
-              <span className="font-medium">Aller-retour</span>
-            </label>
-            <label className="flex items-center">
-              <input
-                type="radio"
-                name="tripType"
-                value="one-way"
-                checked={tripType === 'one-way'}
-                onChange={(e) => setTripType(e.target.value as TripType)}
-                className="mr-2"
-              />
-              <span className="font-medium">Aller simple</span>
-            </label>
-            <label className="flex items-center">
-              <input
-                type="radio"
-                name="tripType"
-                value="multi-city"
-                checked={tripType === 'multi-city'}
-                onChange={(e) => setTripType(e.target.value as TripType)}
-                className="mr-2"
-              />
-              <span className="font-medium">Multi-destinations</span>
-            </label>
-          </div>
-
-          <form onSubmit={handleSearch} className="space-y-6">
-            {/* Origin and Destination */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Départ de
-                </label>
-                <div className="relative">
-                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                  <input
-                    type="text"
-                    name="departure"
-                    placeholder="Ville ou aéroport de départ"
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Destination
-                </label>
-                <div className="relative">
-                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                  <input
-                    type="text"
-                    name="destination"
-                    placeholder="Ville ou aéroport de destination"
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Dates */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Date de départ
-                </label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                  <DatePicker
-                    selected={departureDate}
-                    onChange={(date: Date | null) => setDepartureDate(date)}
-                    dateFormat="dd/MM/yyyy"
-                    minDate={new Date()}
-                    placeholderText="Sélectionner une date"
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    required
-                  />
-                </div>
-              </div>
-
-              {tripType === 'round-trip' && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Date de retour
-                  </label>
-                  <div className="relative">
-                    <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                    <DatePicker
-                      selected={returnDate}
-                      onChange={(date: Date | null) => setReturnDate(date)}
-                      dateFormat="dd/MM/yyyy"
-                      minDate={departureDate || new Date()}
-                      placeholderText="Sélectionner une date"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Passengers and Class */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Voyageurs
-                </label>
-                <div className="relative">
-                  <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassengersDropdown(!showPassengersDropdown)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg text-left focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  >
-                    {totalPassengers} voyageur{totalPassengers > 1 ? 's' : ''}
-                  </button>
-                  
-                  {showPassengersDropdown && (
-                    <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 p-4 z-50">
-                      <PassengerSelector
-                        type="adults"
-                        label="Adultes"
-                        value={passengers.adults}
-                        onChange={(type, operation) => {
-                          setPassengers(prev => ({
-                            ...prev,
-                            [type]: operation === 'add' ? prev[type] + 1 : Math.max(type === 'adults' ? 1 : 0, prev[type] - 1)
-                          }));
-                        }}
-                      />
-                      <PassengerSelector
-                        type="children"
-                        label="Enfants (2-11 ans)"
-                        value={passengers.children}
-                        onChange={(type, operation) => {
-                          setPassengers(prev => ({
-                            ...prev,
-                            [type]: operation === 'add' ? prev[type] + 1 : Math.max(0, prev[type] - 1)
-                          }));
-                        }}
-                      />
-                      <PassengerSelector
-                        type="infants"
-                        label="Bébés (0-2 ans)"
-                        value={passengers.infants}
-                        onChange={(type, operation) => {
-                          setPassengers(prev => ({
-                            ...prev,
-                            [type]: operation === 'add' ? prev[type] + 1 : Math.max(0, prev[type] - 1)
-                          }));
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Classe
-                </label>
-                <select
-                  value={cabinClass}
-                  onChange={(e) => setCabinClass(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                >
-                  <option value="economy">Économique</option>
-                  <option value="premium">Premium</option>
-                  <option value="business">Affaires</option>
-                  <option value="first">Première</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Search Button */}
-            <div className="flex justify-center pt-4">
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="bg-gradient-to-r from-green-600 to-indigo-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:from-green-700 hover:to-indigo-700 transition-all transform hover:scale-105 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <Search className="mr-2" size={20} />
-                {isLoading ? 'Recherche en cours...' : 'Rechercher des vols'}
-              </button>
-            </div>
-            
-            {error && (
-              <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-                {error}
-              </div>
-            )}
-          </form>
-        </div>
-      </div>
 
       {/* Popular Destinations */}
       <div className="max-w-7xl mx-auto px-4 py-16">
@@ -287,7 +69,7 @@ export default function FlightsPageClient() {
           {popularDestinations.map((dest) => (
             <div key={dest.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
               <div className="relative h-32 w-full">
-                <Image src={dest.image} alt={dest.name} fill className="object-cover" />
+                <Image src={dest.image} alt={dest.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw" className="object-cover" />
               </div>
               <div className="p-4">
                 <h3 className="font-semibold text-lg">{dest.name}</h3>

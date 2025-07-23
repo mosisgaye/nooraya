@@ -9,9 +9,12 @@ interface FlightCardProps {
   flight: Flight;
   onAddToComparison: (flight: Flight) => void;
   isInComparison: boolean;
+  onSelect?: (flight: Flight) => void;
 }
 
-const FlightCard: React.FC<FlightCardProps> = ({ flight, onAddToComparison, isInComparison }) => {
+const FlightCard: React.FC<FlightCardProps> = ({ flight, onAddToComparison, isInComparison, onSelect }) => {
+  console.log('FlightCard - onSelect existe?', !!onSelect);
+  
   return (
     <article className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow" role="article" aria-label={`Vol ${flight.airline} de ${flight.departure.airport} à ${flight.arrival.airport}`}>
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
@@ -19,7 +22,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, onAddToComparison, isIn
           <div className="flex items-center mb-4">
             <div className="relative w-8 h-8 mr-3">
               <LazyImage 
-                src={flight.logo} 
+                src={flight.logo || flight.airlineLogo || '/placeholder-airline.png'} 
                 alt={`Logo de la compagnie aérienne ${flight.airline}`}
                 width={32}
                 height={32}
@@ -35,8 +38,8 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, onAddToComparison, isIn
           <div className="flex items-center space-x-8" role="group" aria-label="Détails du vol">
             <div className="text-center">
               <div className="text-2xl font-bold text-gray-900" aria-label={`Départ à ${flight.departure.time}`}>{flight.departure.time}</div>
-              <div className="text-sm text-gray-600">{flight.departure.code}</div>
-              <div className="text-xs text-gray-500">{flight.departure.airport}</div>
+              <div className="text-sm text-gray-600">{flight.departure.airport}</div>
+              <div className="text-xs text-gray-500">{flight.departure.city}</div>
             </div>
 
             <div className="flex-1 flex items-center" aria-hidden="true">
@@ -58,21 +61,23 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, onAddToComparison, isIn
 
             <div className="text-center">
               <div className="text-2xl font-bold text-gray-900" aria-label={`Arrivée à ${flight.arrival.time}`}>{flight.arrival.time}</div>
-              <div className="text-sm text-gray-600">{flight.arrival.code}</div>
-              <div className="text-xs text-gray-500">{flight.arrival.airport}</div>
+              <div className="text-sm text-gray-600">{flight.arrival.airport}</div>
+              <div className="text-xs text-gray-500">{flight.arrival.city}</div>
             </div>
           </div>
 
-          <div className="flex items-center mt-4 space-x-4" role="list" aria-label="Services disponibles">
-            {flight.amenities.map((amenity, index) => (
-              <div key={index} className="flex items-center text-xs text-gray-500" role="listitem">
-                {amenity === 'wifi' && <Wifi size={12} className="mr-1" aria-hidden="true" />}
-                {amenity === 'meal' && <Coffee size={12} className="mr-1" aria-hidden="true" />}
-                {amenity === 'entertainment' && <Star size={12} className="mr-1" aria-hidden="true" />}
-                <span className="capitalize">{amenity}</span>
-              </div>
-            ))}
-          </div>
+          {flight.amenities && flight.amenities.length > 0 && (
+            <div className="flex items-center mt-4 space-x-4" role="list" aria-label="Services disponibles">
+              {flight.amenities.map((amenity, index) => (
+                <div key={index} className="flex items-center text-xs text-gray-500" role="listitem">
+                  {amenity === 'wifi' && <Wifi size={12} className="mr-1" aria-hidden="true" />}
+                  {amenity === 'meal' && <Coffee size={12} className="mr-1" aria-hidden="true" />}
+                  {amenity === 'entertainment' && <Star size={12} className="mr-1" aria-hidden="true" />}
+                  <span className="capitalize">{amenity}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="lg:ml-8 mt-4 lg:mt-0 text-center lg:text-right">
@@ -81,6 +86,10 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, onAddToComparison, isIn
           
           <div className="space-y-2" role="group" aria-label="Actions pour ce vol">
             <button 
+              onClick={() => {
+                console.log('Bouton cliqué!', flight);
+                onSelect?.(flight);
+              }}
               className="w-full lg:w-auto bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
               aria-label={`Sélectionner le vol ${flight.airline} à ${flight.price} euros`}
             >

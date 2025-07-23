@@ -1,144 +1,121 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-const DUFFEL_API_URL = 'https://api.duffel.com';
-const DUFFEL_TOKEN = process.env.DUFFEL_API_TOKEN || '';
-
-interface SearchRequest {
-  origin: string;
-  destination: string;
-  departureDate: string;
-  returnDate?: string;
-  passengers: {
-    adults: number;
-    children?: number;
-    infants?: number;
-  };
-  cabinClass?: 'economy' | 'premium_economy' | 'business' | 'first';
-}
-
-interface DuffelOffer {
-  id: string;
-  total_amount: string;
-  total_currency: string;
-  owner: {
-    name: string;
-    logo_symbol_url: string;
-  };
-  slices: Array<{
-    duration?: string;
-    segments: Array<{
-      departing_at: string;
-      arriving_at: string;
-      origin: {
-        iata_code: string;
-        city_name: string;
-      };
-      destination: {
-        iata_code: string;
-        city_name: string;
-      };
-      origin_terminal?: string;
-      destination_terminal?: string;
-      passengers: Array<{
-        cabin_class?: string;
-      }>;
-    }>;
-  }>;
-  passengers: Array<{
-    type: string;
-  }>;
-}
+import { kiwiClient } from '@/lib/kiwi/client';
+// import { createClient } from '@/lib/supabase/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const body: SearchRequest = await request.json();
+    const body = await request.json();
+    const {
+      from,
+      to,
+      departureDate,
+      returnDate,
+      adults,
+      children,
+      infants,
+      cabinClass,
+      tripType
+    } = body;
 
-    // Créer la requête de recherche Duffel
-    const duffelRequest = {
-      data: {
-        slices: [
-          {
-            origin: body.origin,
-            destination: body.destination,
-            departure_date: body.departureDate,
-          },
-          ...(body.returnDate
-            ? [
-                {
-                  origin: body.destination,
-                  destination: body.origin,
-                  departure_date: body.returnDate,
-                },
-              ]
-            : []),
-        ],
-        passengers: [
-          ...Array(body.passengers.adults).fill({ type: 'adult' }),
-          ...Array(body.passengers.children || 0).fill({
-            type: 'child',
-            age: 10,
-          }),
-          ...Array(body.passengers.infants || 0).fill({
-            type: 'infant_without_seat',
-            age: 1,
-          }),
-        ],
-        cabin_class: body.cabinClass || 'economy',
-        max_connections: 2,
-      },
-    };
-
-    // Appeler l'API Duffel
-    const response = await fetch(`${DUFFEL_API_URL}/air/offer_requests`, {
-      method: 'POST',
-      headers: {
-        'Accept-Encoding': 'gzip',
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Duffel-Version': 'v1',
-        'Authorization': `Bearer ${DUFFEL_TOKEN}`,
-      },
-      body: JSON.stringify(duffelRequest),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Duffel API error: ${response.statusText}`);
+    // Validate required fields
+    if (!from || !to || !departureDate || !adults) {
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      );
     }
 
-    const data = await response.json();
+    // Save search to database (optional - for analytics)
+    // Commenting out for now as it's not critical for search functionality
+    // const supabase = createClient();
+    // const { data: { user } } = await supabase.auth.getUser();
+    
+    // if (user) {
+    //   await supabase.from('flight_searches').insert({
+    //     user_id: user.id,
+    //     from_airport: from,
+    //     to_airport: to,
+    //     departure_date: departureDate,
+    //     return_date: returnDate,
+    //     adults,
+    //     children,
+    //     infants,
+    //     cabin_class: cabinClass,
+    //     trip_type: tripType,
+    //   });
+    // }
 
-    // Transformer les données Duffel pour notre format
-    const flights = data.data.offers.map((offer: DuffelOffer) => ({
-      id: offer.id,
-      price: parseFloat(offer.total_amount),
-      currency: offer.total_currency,
-      airline: offer.owner.name,
-      logo: offer.owner.logo_symbol_url,
-      departure: {
-        time: new Date(offer.slices[0].segments[0].departing_at).toISOString(),
-        airport: offer.slices[0].segments[0].origin.iata_code,
-        city: offer.slices[0].segments[0].origin.city_name,
-        terminal: offer.slices[0].segments[0].origin_terminal,
-      },
-      arrival: {
-        time: new Date(
-          offer.slices[0].segments[offer.slices[0].segments.length - 1].arriving_at
-        ).toISOString(),
-        airport:
-          offer.slices[0].segments[offer.slices[0].segments.length - 1]
-            .destination.iata_code,
-        city: offer.slices[0].segments[offer.slices[0].segments.length - 1]
-          .destination.city_name,
-        terminal:
-          offer.slices[0].segments[offer.slices[0].segments.length - 1]
-            .destination_terminal,
-      },
-      duration: offer.slices[0].duration,
-      stops: offer.slices[0].segments.length - 1,
-      cabinClass: offer.slices[0].segments[0].passengers[0].cabin_class,
-    }));
+    // Search flights based on trip type
+    let flightData;
+    try {
+      if (tripType === 'round-trip' && returnDate) {
+        console.log('Searching round-trip flights...');
+        flightData = await kiwiClient.searchRoundTrip({
+          from,
+          to,
+          departureDate,
+          returnDate,
+          adults: adults || 1,
+          children: children || 0,
+          infants: infants || 0,
+          cabinClass: cabinClass || 'economy',
+          tripType,
+        });
+      } else if (tripType === 'one-way') {
+        console.log('Searching one-way flights...');
+        flightData = await kiwiClient.searchOneWay({
+          from,
+          to,
+          departureDate,
+          adults: adults || 1,
+          children: children || 0,
+          infants: infants || 0,
+          cabinClass: cabinClass || 'economy',
+          tripType,
+        });
+      } else {
+        return NextResponse.json(
+          { error: 'Multi-city search not yet implemented' },
+          { status: 400 }
+        );
+      }
+    } catch (apiError) {
+      console.error('Kiwi API error:', apiError);
+      throw apiError;
+    }
 
-    return NextResponse.json({ flights });
+    // Log the raw response to understand the structure
+    console.log('Raw flight data type:', typeof flightData);
+    console.log('Flight data keys:', flightData ? Object.keys(flightData) : 'null');
+    
+    // Apply commission to prices and ensure data is serializable
+    const commissionRate = parseFloat(process.env.COMMISSION_RATE || '0.05');
+    
+    // Return the raw data as-is to see what we're getting
+    try {
+      const dataToReturn = {
+        success: true,
+        data: flightData || {},
+        debug: {
+          hasData: !!flightData,
+          dataType: typeof flightData,
+          keys: flightData ? Object.keys(flightData) : [],
+          itinerariesCount: flightData?.itineraries?.length || 0
+        }
+      };
+      
+      // Log what we're returning
+      console.log('Returning data with', dataToReturn.debug.itinerariesCount, 'itineraries');
+      
+      return NextResponse.json(dataToReturn);
+    } catch (error) {
+      console.error('Error in response:', error);
+      return NextResponse.json({
+        success: false,
+        error: error.message,
+        data: {}
+      });
+    }
   } catch (error) {
     console.error('Flight search error:', error);
     return NextResponse.json(

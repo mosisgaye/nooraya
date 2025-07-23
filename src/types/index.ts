@@ -3,6 +3,7 @@ export interface Flight {
   id: string;
   airline: string;
   logo: string;
+  airlineLogo?: string; // Pour compatibilité temporaire
   departure: {
     time: string;
     airport: string;

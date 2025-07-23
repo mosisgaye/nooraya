@@ -1,23 +1,22 @@
 import { Hero } from '@/components/layout';
-import { SpecialOffers, PopularDestinations, WhyChooseUs } from '@/components/content';
+// import HeroSimple from '@/components/layout/HeroSimple';
+import { PopularDestinations } from '@/components/content';
 import WhatsAppButton from '@/components/WhatsAppButton';
 
 export const metadata = {
-  title: 'Nooraya Voyages Paris & Sénégal - Vols Pas Cher, Hôtels & Séjours Tout Compris 2024',
-  description: 'Agence de voyage Nooraya Voyages Paris & Sénégal : réservez vos vols pas cher, hôtels discount, séjours tout compris. Spécialiste vols Paris-Dakar, voyages Sénégal, séjours Saly. Assistance 24/7 et réservation sécurisée.',
-  keywords: 'agence voyage Paris, agence voyage Sénégal, vols pas cher 2024, hôtels discount, séjour tout compris, voyage sur mesure, vols Paris Dakar, voyage Sénégal, billets avion Sénégal, séjour Saly, voyage Casamance, vols Air Sénégal, voyage Thiès, Saint-Louis Sénégal, weekend romantique, vacances famille, voyage affaires, Nooraya Voyages, réservation vol Paris, offres spéciales voyage, assistance voyage 24/7, voyage dernière minute, agence voyage Dakar',
+  title: 'Réservation de Vols - Nooraya Voyages | Billets d\'avion au Meilleur Prix',
+  description: 'Trouvez et réservez vos billets d\'avion aux meilleurs prix avec Nooraya Voyages. Comparez des millions de vols aller-retour et aller simple. Économisez jusqu\'à 70% sur vos voyages.',
+  keywords: 'billets avion, vol pas cher, réservation vol, vols aller retour, vols aller simple, comparer vols, voyage, aéroport, compagnie aérienne, vol économique, vol premium, vol affaires, vol première classe',
   openGraph: {
-    title: 'Nooraya Voyages Paris & Sénégal - Vols Pas Cher & Séjours',
-    description: 'Agence de voyage Nooraya Voyages Paris & Sénégal : réservez vos vols pas cher, hôtels discount, séjours tout compris. Spécialiste vols Paris-Dakar et voyages Sénégal.',
-    images: ['/og-home.jpg'],
-    url: '/',
+    title: 'Réservation de Vols - Nooraya Voyages',
+    description: 'Trouvez et réservez vos billets d\'avion aux meilleurs prix. Comparez des millions de vols et économisez jusqu\'à 70%.',
+    type: 'website',
+    url: 'https://nooraya-voyages.com',
   },
   twitter: {
-    title: 'Nooraya Voyages Paris & Sénégal - Vols Pas Cher & Séjours',
-    description: 'Agence de voyage Nooraya Voyages Paris & Sénégal : réservez vos vols pas cher, hôtels discount, séjours tout compris. Spécialiste vols Paris-Dakar.',
-  },
-  alternates: {
-    canonical: 'https://www.noorayavoyages.com',
+    card: 'summary_large_image',
+    title: 'Réservation de Vols - Nooraya Voyages',
+    description: 'Trouvez et réservez vos billets d\'avion aux meilleurs prix. Comparez des millions de vols et économisez jusqu\'à 70%.',
   },
 };
 
@@ -25,9 +24,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <SpecialOffers />
       <PopularDestinations />
-      <WhyChooseUs />
       <WhatsAppButton />
     </>
   );

@@ -64,6 +64,7 @@ export function middleware(request: NextRequest) {
     const origin = request.headers.get('origin');
     const allowedOrigins = [
       'http://localhost:3000',
+      'http://localhost:3001',
       'https://www.noorayavoyages.com',
       'https://noorayavoyages.com'
     ];
