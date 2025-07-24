@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/providers/AuthProvider';
 import { useAuthModal } from '@/contexts/AuthModalContext';
+import { CurrencySelector } from '@/components/ui/CurrencySelector';
 
 const Header: React.FC = () => {
   const router = useRouter();
@@ -115,7 +116,8 @@ const Header: React.FC = () => {
 
         {/* Contrôles utilisateur simplifiés */}
         <div className="hidden lg:flex items-center space-x-3">
-
+          <CurrencySelector />
+          
           {isAuthenticated ? (
             <div className="relative">
               <button
@@ -235,6 +237,9 @@ const Header: React.FC = () => {
           </div>
 
           <div className="px-4 py-4 border-t border-gray-100 bg-gray-50 space-y-3">
+            <div className="mb-3">
+              <CurrencySelector />
+            </div>
             {isAuthenticated ? (
               <>
                 <div className="px-4 py-3 bg-white rounded-2xl border border-gray-200 mb-3">

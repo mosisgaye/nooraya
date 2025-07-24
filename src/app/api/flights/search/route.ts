@@ -120,13 +120,15 @@ export async function POST(request: NextRequest) {
     console.log('Raw flight data type:', typeof flightData);
     console.log('Flight data keys:', flightData ? Object.keys(flightData) : 'null');
     
-    // Commission rate would be applied here if needed
+    // For now, just return the data as-is
+    // Commission is applied in the frontend when displaying prices
+    const processedData = flightData;
     
-    // Return the raw data as-is to see what we're getting
+    // Return the processed data with commission
     try {
       const dataToReturn = {
         success: true,
-        data: flightData || {},
+        data: processedData || {},
         debug: {
           hasData: !!flightData,
           dataType: typeof flightData,

@@ -123,14 +123,17 @@ export function hasCommissionIncluded(
 /**
  * Ajouter la commission à un tableau de vols
  */
-export function addCommissionToFlights(flights: any[], currency: string = 'XOF'): any[] {
-  return flights.map(flight => ({
-    ...flight,
-    originalPrice: flight.price,
-    price: flight.price + getCommissionAmount(currency),
-    priceBreakdown: calculatePriceWithCommission(flight.price, currency),
-    includesCommission: true
-  }));
+export function addCommissionToFlights<T extends Record<string, unknown> & { price?: number }>(flights: T[], currency: string = 'XOF'): (T & { originalPrice: number; price: number; priceBreakdown: PriceWithCommission; includesCommission: boolean })[] {
+  return flights.map(flight => {
+    const price = flight.price || 0;
+    return {
+      ...flight,
+      originalPrice: price,
+      price: price + getCommissionAmount(currency),
+      priceBreakdown: calculatePriceWithCommission(price, currency),
+      includesCommission: true
+    };
+  });
 }
 
 /**

@@ -152,7 +152,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="min-h-screen sm:min-h-[80vh] md:min-h-[60vh] bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-800">
+    <div className="min-h-[70vh] sm:min-h-[60vh] md:min-h-[50vh] lg:min-h-[60vh] bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-800">
       {/* Navigation */}
       <nav className="pt-4 pb-3 sm:pt-6 sm:pb-4">
         <div className="max-w-7xl mx-auto px-3 sm:px-4">
@@ -183,21 +183,21 @@ export default function Hero() {
       {/* Hero Content */}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-4">
         {/* Search Form */}
-        <div className="p-4 sm:p-6 md:p-8 max-w-6xl">
+        <div className="p-3 sm:p-6 md:p-8 max-w-6xl">
           {/* Title */}
-          <div className="text-center sm:text-left mb-6 sm:mb-8">
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-3 sm:px-5 py-1.5 sm:py-2 rounded-full mb-3 sm:mb-6">
+          <div className="text-center sm:text-left mb-4 sm:mb-6 md:mb-8">
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-3 sm:px-5 py-1 sm:py-1.5 rounded-full mb-2 sm:mb-4">
               <span className="text-xs sm:text-sm font-semibold text-white/90 uppercase tracking-wider">Voyagez en toute sérénité</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 leading-tight tracking-tight">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-2 sm:mb-3 leading-tight tracking-tight">
               Explorez le monde avec <span className="text-emerald-300 font-extrabold">élégance</span>
             </h1>
-            <p className="text-sm sm:text-base md:text-lg text-white/80 max-w-2xl mx-auto sm:mx-0">Découvrez nos offres exceptionnelles et créez des souvenirs inoubliables</p>
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/80 max-w-2xl mx-auto sm:mx-0">Découvrez nos offres exceptionnelles et créez des souvenirs inoubliables</p>
           </div>
           {/* Trip Type Selector */}
-          <div className="mb-4 sm:mb-6">
+          <div className="mb-3 sm:mb-4">
             <Select value={tripType} onValueChange={setTripType}>
-              <SelectTrigger className="w-full sm:w-48 bg-emerald-600/80 backdrop-blur-md border-white/40 border-2 h-10 text-xs sm:text-sm font-semibold text-white hover:bg-emerald-700 transition-all duration-300 focus:ring-4 focus:ring-white/20 rounded-xl shadow-lg">
+              <SelectTrigger className="w-full sm:w-48 bg-emerald-600/80 backdrop-blur-md border-white/40 border-2 h-9 sm:h-10 text-xs sm:text-sm font-semibold text-white hover:bg-emerald-700 transition-all duration-300 focus:ring-4 focus:ring-white/20 rounded-xl shadow-lg">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="rounded-lg shadow-lg bg-white">
@@ -209,7 +209,7 @@ export default function Hero() {
           </div>
 
           {/* Search Fields */}
-          <div className="flex flex-col lg:flex-row lg:items-end gap-2 sm:gap-0.5 mb-4">
+          <div className="flex flex-col lg:flex-row lg:items-end gap-2 sm:gap-0.5 mb-3">
             {/* From Field */}
             <div className="relative flex-1 w-full lg:w-auto">
               <div className="relative">
@@ -223,7 +223,7 @@ export default function Hero() {
                   onFocus={() => setShowFromDropdown(true)}
                   onBlur={() => setTimeout(() => setShowFromDropdown(false), 200)}
                   placeholder="Départ - Pays, ville"
-                  className="pl-10 pr-4 h-14 sm:h-16 md:h-20 text-sm sm:text-base border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
+                  className="pl-10 pr-4 h-12 sm:h-14 md:h-16 lg:h-20 text-sm sm:text-base border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
                 />
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center">
                   <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" />
@@ -284,7 +284,7 @@ export default function Hero() {
                   onFocus={() => setShowToDropdown(true)}
                   onBlur={() => setTimeout(() => setShowToDropdown(false), 200)}
                   placeholder="Destination - Pays, ville"
-                  className="pl-10 pr-4 h-14 sm:h-16 md:h-20 text-sm sm:text-base border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
+                  className="pl-10 pr-4 h-12 sm:h-14 md:h-16 lg:h-20 text-sm sm:text-base border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
                 />
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center">
                   <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" />
@@ -328,7 +328,7 @@ export default function Hero() {
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-full h-14 sm:h-16 md:h-20 justify-start text-left font-normal text-xs sm:text-sm border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200 bg-white shadow-sm flex-col items-start"
+                    className="w-full h-12 sm:h-14 md:h-16 lg:h-20 justify-start text-left font-normal text-xs sm:text-sm border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200 bg-white shadow-sm flex-col items-start"
                   >
                     <div className="flex items-center w-full">
                       <CalendarIcon className="mr-2 h-4 w-4" />
@@ -360,7 +360,7 @@ export default function Hero() {
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className="w-full h-14 sm:h-16 md:h-20 justify-start text-left font-normal text-xs sm:text-sm border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200 bg-white shadow-sm flex-col items-start"
+                      className="w-full h-12 sm:h-14 md:h-16 lg:h-20 justify-start text-left font-normal text-xs sm:text-sm border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200 bg-white shadow-sm flex-col items-start"
                     >
                       <div className="flex items-center w-full">
                         <CalendarIcon className="mr-2 h-4 w-4" />
@@ -390,7 +390,7 @@ export default function Hero() {
             <div className="relative flex-1 w-full lg:w-auto" ref={passengerRef}>
               <button
                 onClick={() => setShowPassengerDropdown(!showPassengerDropdown)}
-                className="w-full h-14 sm:h-16 md:h-20 px-3 text-left text-xs sm:text-sm border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 bg-white shadow-sm flex items-center justify-between transition-all duration-200"
+                className="w-full h-12 sm:h-14 md:h-16 lg:h-20 px-3 text-left text-xs sm:text-sm border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 bg-white shadow-sm flex items-center justify-between transition-all duration-200"
               >
                 <div className="flex items-center space-x-2">
                   <div className="bg-emerald-100 p-1.5 rounded-md">
@@ -537,7 +537,7 @@ export default function Hero() {
             <div className="flex-shrink-0 lg:ml-2">
               <div className="mb-2 lg:mb-6"></div>
               <button 
-                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-6 sm:px-8 md:px-10 py-2 sm:py-3 text-xs sm:text-sm font-bold rounded-xl shadow-xl hover:shadow-2xl flex items-center justify-center space-x-2 transition-all duration-300 h-14 sm:h-16 md:h-20 transform hover:scale-105 w-full lg:w-auto"
+                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-6 sm:px-8 md:px-10 py-2 sm:py-3 text-xs sm:text-sm font-bold rounded-xl shadow-xl hover:shadow-2xl flex items-center justify-center space-x-2 transition-all duration-300 h-12 sm:h-14 md:h-16 lg:h-20 transform hover:scale-105 w-full lg:w-auto"
                 onClick={() => {
                   // Validation
                   if (!fromValue || !toValue || !departureDate) {

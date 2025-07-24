@@ -7,6 +7,7 @@ import { Footer } from '@/components/layout';
 import { generateStructuredData } from '@/lib/seo';
 import { AuthProvider } from '@/providers/AuthProvider';
 import { AuthModalProvider } from '@/contexts/AuthModalContext';
+import { CurrencyProvider } from '@/contexts/CurrencyContext';
 import { AuthModal } from '@/components/auth';
 
 const inter = Inter({ 
@@ -116,14 +117,16 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased`}>
         <AuthProvider>
           <AuthModalProvider>
-            <div className="flex flex-col min-h-screen font-sans text-gray-800">
-              <Header />
-              <main className="flex-grow">
-                {children}
-              </main>
-              <Footer />
-              <AuthModal />
-            </div>
+            <CurrencyProvider>
+              <div className="flex flex-col min-h-screen font-sans text-gray-800">
+                <Header />
+                <main className="flex-grow">
+                  {children}
+                </main>
+                <Footer />
+                <AuthModal />
+              </div>
+            </CurrencyProvider>
           </AuthModalProvider>
         </AuthProvider>
       </body>

@@ -3,6 +3,7 @@
 import React from 'react';
 import { Plane, Star, Wifi, Coffee, Plus } from 'lucide-react';
 import LazyImage from '../ui/lazy-image';
+import { PriceDisplay } from '../ui/PriceDisplay';
 import { Flight } from '@/types';
 
 interface FlightCardProps {
@@ -81,8 +82,17 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, onAddToComparison, isIn
         </div>
 
         <div className="lg:ml-8 mt-4 lg:mt-0 text-center lg:text-right">
-          <div className="text-3xl font-bold text-green-600 mb-2" aria-label={`Prix : ${flight.price} euros par personne`}>{flight.price}€</div>
+          <div className="mb-2">
+            <PriceDisplay 
+              amount={flight.price} 
+              currency="EUR" 
+              size="xl"
+              className="text-green-600 font-bold"
+              showCommissionLabel={false}
+            />
+          </div>
           <div className="text-sm text-gray-500 mb-4">par personne</div>
+          <div className="text-xs text-green-600">Frais de service inclus</div>
           
           <div className="space-y-2" role="group" aria-label="Actions pour ce vol">
             <button 

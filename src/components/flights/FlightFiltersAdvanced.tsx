@@ -7,8 +7,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 
 interface FlightFiltersAdvancedProps {
-  filters: any;
-  onFilterChange: (filters: any) => void;
+  filters: Record<string, unknown>;
+  onFilterChange: (filters: Record<string, unknown>) => void;
   availableAirlines: Array<{ code: string; name: string; count: number }>;
 }
 
@@ -50,7 +50,7 @@ export default function FlightFiltersAdvanced({
     }));
   };
 
-  const handleFilterUpdate = (key: string, value: any) => {
+  const handleFilterUpdate = (key: string, value: unknown) => {
     onFilterChange({
       ...filters,
       [key]: value
@@ -90,15 +90,15 @@ export default function FlightFiltersAdvanced({
               <div>
                 <Label className="text-sm font-medium mb-2 block">Alliances</Label>
                 <div className="space-y-2">
-                  {Object.entries(AIRLINE_ALLIANCES).map(([alliance, airlines]) => (
+                  {Object.entries(AIRLINE_ALLIANCES).map(([alliance]) => (
                     <div key={alliance} className="flex items-center space-x-2">
                       <Checkbox
                         id={alliance}
-                        checked={filters.alliances?.includes(alliance)}
+                        checked={(filters.alliances as string[] | undefined)?.includes(alliance) || false}
                         onCheckedChange={(checked) => {
                           const newAlliances = checked
-                            ? [...(filters.alliances || []), alliance]
-                            : (filters.alliances || []).filter((a: string) => a !== alliance);
+                            ? [...((filters.alliances as string[]) || []), alliance]
+                            : ((filters.alliances as string[]) || []).filter((a: string) => a !== alliance);
                           handleFilterUpdate('alliances', newAlliances);
                         }}
                       />
@@ -118,11 +118,11 @@ export default function FlightFiltersAdvanced({
                     <div key={airline.code} className="flex items-center space-x-2">
                       <Checkbox
                         id={airline.code}
-                        checked={filters.airlines?.includes(airline.code)}
+                        checked={(filters.airlines as string[] | undefined)?.includes(airline.code) || false}
                         onCheckedChange={(checked) => {
                           const newAirlines = checked
-                            ? [...(filters.airlines || []), airline.code]
-                            : (filters.airlines || []).filter((a: string) => a !== airline.code);
+                            ? [...((filters.airlines as string[]) || []), airline.code]
+                            : ((filters.airlines as string[]) || []).filter((a: string) => a !== airline.code);
                           handleFilterUpdate('airlines', newAirlines);
                         }}
                       />
@@ -155,10 +155,10 @@ export default function FlightFiltersAdvanced({
               {/* Flight Duration */}
               <div>
                 <Label className="text-sm font-medium mb-2 block">
-                  Durée maximale: {filters.maxDuration || 24}h
+                  Durée maximale: {(filters.maxDuration as number) || 24}h
                 </Label>
                 <Slider
-                  value={[filters.maxDuration || 24]}
+                  value={[(filters.maxDuration as number) || 24]}
                   onValueChange={([value]) => handleFilterUpdate('maxDuration', value)}
                   max={24}
                   min={1}
@@ -169,7 +169,7 @@ export default function FlightFiltersAdvanced({
 
               {/* Number of Stops */}
               <div>
-                <Label className="text-sm font-medium mb-2 block">Nombre d'escales</Label>
+                <Label className="text-sm font-medium mb-2 block">Nombre d&apos;escales</Label>
                 <div className="space-y-2">
                   {[
                     { value: 0, label: 'Vol direct' },
@@ -180,7 +180,7 @@ export default function FlightFiltersAdvanced({
                     <div key={option.value} className="flex items-center space-x-2">
                       <Checkbox
                         id={`stops-${option.value}`}
-                        checked={filters.maxStops === option.value}
+                        checked={(filters.maxStops as number) === option.value}
                         onCheckedChange={(checked) => {
                           handleFilterUpdate('maxStops', checked ? option.value : -1);
                         }}
@@ -196,11 +196,11 @@ export default function FlightFiltersAdvanced({
               {/* Layover Duration */}
               <div>
                 <Label className="text-sm font-medium mb-2 block">
-                  Temps d'escale: {filters.minLayover || 30}min - {filters.maxLayover || 360}min
+                  Temps d&apos;escale: {(filters.minLayover as number) || 30}min - {(filters.maxLayover as number) || 360}min
                 </Label>
                 <div className="space-y-2">
                   <Slider
-                    value={[filters.minLayover || 30, filters.maxLayover || 360]}
+                    value={[(filters.minLayover as number) || 30, (filters.maxLayover as number) || 360]}
                     onValueChange={([min, max]) => {
                       handleFilterUpdate('minLayover', min);
                       handleFilterUpdate('maxLayover', max);
@@ -239,11 +239,11 @@ export default function FlightFiltersAdvanced({
                     <div key={key} className="flex items-center space-x-2">
                       <Checkbox
                         id={`depart-${key}`}
-                        checked={filters.departureTime?.includes(key)}
+                        checked={(filters.departureTime as string[] | undefined)?.includes(key) || false}
                         onCheckedChange={(checked) => {
                           const newTimes = checked
-                            ? [...(filters.departureTime || []), key]
-                            : (filters.departureTime || []).filter((t: string) => t !== key);
+                            ? [...((filters.departureTime as string[]) || []), key]
+                            : ((filters.departureTime as string[]) || []).filter((t: string) => t !== key);
                           handleFilterUpdate('departureTime', newTimes);
                         }}
                       />
@@ -258,17 +258,17 @@ export default function FlightFiltersAdvanced({
 
               {/* Arrival Time */}
               <div>
-                <Label className="text-sm font-medium mb-2 block">Heure d'arrivée</Label>
+                <Label className="text-sm font-medium mb-2 block">Heure d&apos;arrivée</Label>
                 <div className="grid grid-cols-2 gap-2">
                   {Object.entries(TIME_PERIODS).map(([key, period]) => (
                     <div key={key} className="flex items-center space-x-2">
                       <Checkbox
                         id={`arrival-${key}`}
-                        checked={filters.arrivalTime?.includes(key)}
+                        checked={(filters.arrivalTime as string[] | undefined)?.includes(key) || false}
                         onCheckedChange={(checked) => {
                           const newTimes = checked
-                            ? [...(filters.arrivalTime || []), key]
-                            : (filters.arrivalTime || []).filter((t: string) => t !== key);
+                            ? [...((filters.arrivalTime as string[]) || []), key]
+                            : ((filters.arrivalTime as string[]) || []).filter((t: string) => t !== key);
                           handleFilterUpdate('arrivalTime', newTimes);
                         }}
                       />
@@ -294,7 +294,7 @@ export default function FlightFiltersAdvanced({
               <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
               </svg>
-              Type d'avion
+              Type d&apos;avion
             </h3>
             {expandedSections.aircraft ? <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" /> : <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />}
           </button>
@@ -305,11 +305,11 @@ export default function FlightFiltersAdvanced({
                 <div key={type.id} className="flex items-center space-x-2">
                   <Checkbox
                     id={type.id}
-                    checked={filters.aircraftTypes?.includes(type.id)}
+                    checked={(filters.aircraftTypes as string[] | undefined)?.includes(type.id) || false}
                     onCheckedChange={(checked) => {
                       const newTypes = checked
-                        ? [...(filters.aircraftTypes || []), type.id]
-                        : (filters.aircraftTypes || []).filter((t: string) => t !== type.id);
+                        ? [...((filters.aircraftTypes as string[]) || []), type.id]
+                        : ((filters.aircraftTypes as string[]) || []).filter((t: string) => t !== type.id);
                       handleFilterUpdate('aircraftTypes', newTypes);
                     }}
                   />

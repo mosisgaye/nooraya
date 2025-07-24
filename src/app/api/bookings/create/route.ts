@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient as createAdminClient } from '@supabase/supabase-js';
+import { calculatePriceWithCommission } from '@/lib/utils/commission';
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,18 +29,26 @@ export async function POST(request: NextRequest) {
       }
     );
     
-    // Créer la réservation
+    // Calculer le prix avec commission
+    const priceData = calculatePriceWithCommission(flight.price, flight.currency || 'EUR');
+    
+    // Créer la réservation avec les détails de la commission
     const { data: booking, error } = await supabaseAdmin
       .from('bookings')
       .insert({
         user_id: userId,
         booking_type: 'flight',
         status: 'pending',
-        total_amount: flight.price,
-        currency: flight.currency || 'XOF',
+        total_amount: priceData.totalPrice,
+        currency: flight.currency || 'EUR',
         flight_details: {
           flight,
-          searchParams: body.searchParams
+          searchParams: body.searchParams,
+          priceBreakdown: {
+            basePrice: priceData.basePrice,
+            commission: priceData.commission,
+            totalPrice: priceData.totalPrice
+          }
         },
         passenger_details: {
           count: parseInt(body.searchParams?.passengers || '1') || 1,

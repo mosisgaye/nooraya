@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Filter, SortAsc } from 'lucide-react';
+import { SortAsc } from 'lucide-react';
 import FlightCard from '@/components/cards/FlightCard';
 import PaymentModal from '@/components/payment/PaymentModal';
 import { FlightCardSkeletonGroup } from '@/components/flights/FlightCardSkeleton';
@@ -64,7 +64,7 @@ function FlightResultsContent() {
   const [error, setError] = useState<string | null>(null);
   const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [filters, setFilters] = useState<any>({});
+  const [filters, setFilters] = useState<Record<string, unknown>>({});
   
   // Récupérer les paramètres de recherche
   const searchData = {
@@ -144,28 +144,25 @@ function FlightResultsContent() {
           const transformedFlights = result.data.itineraries.map((itinerary: KiwiItinerary, index: number) => {
             try {
               const outboundSegments = itinerary.outbound?.sectorSegments || [];
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              const firstSegment = outboundSegments[0]?.segment as any;
+              const firstSegment = outboundSegments[0]?.segment as Record<string, unknown>;
               const inboundSegments = itinerary.inbound?.sectorSegments || [];
               const lastSegmentData = inboundSegments.length > 0 ? 
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                inboundSegments[inboundSegments.length - 1]?.segment as any : 
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                outboundSegments[outboundSegments.length - 1]?.segment as any;
+                inboundSegments[inboundSegments.length - 1]?.segment as Record<string, unknown> : 
+                outboundSegments[outboundSegments.length - 1]?.segment as Record<string, unknown>;
               
               if (!firstSegment || !lastSegmentData) {
                 return null;
               }
               
               const totalStops = (outboundSegments.length - 1) + (inboundSegments.length > 0 ? inboundSegments.length - 1 : 0);
-              const carrier = firstSegment.carrier || firstSegment.operatingCarrier;
-              const airline = carrier?.name || 'Unknown Airline';
-              const airlineCode = carrier?.code || '';
-              const departureInfo = firstSegment.source;
-              const arrivalInfo = lastSegmentData.destination;
-              const duration = firstSegment.duration || 0;
-              const departureCode = departureInfo?.station?.code || searchData.from || '';
-              const arrivalCode = arrivalInfo?.station?.code || searchData.to || '';
+              const carrier = firstSegment.carrier as Record<string, unknown> | undefined || firstSegment.operatingCarrier as Record<string, unknown> | undefined;
+              const airline = (carrier?.name as string | undefined) || 'Unknown Airline';
+              const airlineCode = (carrier?.code as string | undefined) || '';
+              const departureInfo = firstSegment.source as Record<string, unknown> | undefined;
+              const arrivalInfo = lastSegmentData.destination as Record<string, unknown> | undefined;
+              const duration = (firstSegment.duration as number | undefined) || 0;
+              const departureCode = ((departureInfo?.station as Record<string, unknown> | undefined)?.code as string | undefined) || searchData.from || '';
+              const arrivalCode = ((arrivalInfo?.station as Record<string, unknown> | undefined)?.code as string | undefined) || searchData.to || '';
               
               return {
                 id: itinerary.id || `flight-${index}`,
@@ -173,19 +170,19 @@ function FlightResultsContent() {
                 logo: airlineCode ? `https://images.kiwi.com/airlines/64/${airlineCode}.png` : '/placeholder-airline.png',
                 departure: {
                   time: departureInfo?.localTime ? 
-                    new Date(departureInfo.localTime).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) 
+                    new Date(departureInfo.localTime as string).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) 
                     : '00:00',
-                  airport: departureInfo?.station?.name || departureCode,
+                  airport: ((departureInfo?.station as Record<string, unknown> | undefined)?.name as string | undefined) || departureCode,
                   code: departureCode,
-                  city: departureInfo?.station?.city?.name || searchData.from || ''
+                  city: (((departureInfo?.station as Record<string, unknown> | undefined)?.city as Record<string, unknown> | undefined)?.name as string | undefined) || searchData.from || ''
                 },
                 arrival: {
                   time: arrivalInfo?.localTime ? 
-                    new Date(arrivalInfo.localTime).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) 
+                    new Date(arrivalInfo.localTime as string).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) 
                     : '00:00',
-                  airport: arrivalInfo?.station?.name || arrivalCode,
+                  airport: ((arrivalInfo?.station as Record<string, unknown> | undefined)?.name as string | undefined) || arrivalCode,
                   code: arrivalCode,
-                  city: arrivalInfo?.station?.city?.name || searchData.to || ''
+                  city: (((arrivalInfo?.station as Record<string, unknown> | undefined)?.city as Record<string, unknown> | undefined)?.name as string | undefined) || searchData.to || ''
                 },
                 duration: duration ? 
                   `${Math.floor(duration / 60)}h ${duration % 60}m` 
@@ -193,7 +190,7 @@ function FlightResultsContent() {
                 stops: totalStops,
                 price: parseFloat(itinerary.price?.amount || '0'),
                 currency: 'EUR',
-                cabinClass: (firstSegment.cabinClass || searchData.cabinClass || 'economy') as 'economy' | 'premium' | 'business' | 'first',
+                cabinClass: ((firstSegment.cabinClass as string | undefined) || searchData.cabinClass || 'economy') as 'economy' | 'premium' | 'business' | 'first',
                 amenities: [],
                 baggage: {
                   cabin: '7kg',
@@ -201,7 +198,7 @@ function FlightResultsContent() {
                 },
                 availability: 10,
                 carrier: airlineCode || 'XX',
-                flightNumber: firstSegment.flightNumber || 'XX000',
+                flightNumber: (firstSegment.flightNumber as string | undefined) || 'XX000',
                 airlineLogo: airlineCode ? `https://images.kiwi.com/airlines/64/${airlineCode}.png` : '/placeholder-airline.png'
               };
             } catch (error) {
@@ -251,19 +248,19 @@ function FlightResultsContent() {
   const filteredFlights = React.useMemo(() => {
     return flights.filter(flight => {
       // Filtre par compagnie
-      if (filters.airlines?.length > 0 && !filters.airlines.includes(flight.carrier)) {
+      if ((filters.airlines as string[] | undefined)?.length && !(filters.airlines as string[]).includes(flight.carrier)) {
         return false;
       }
       
       // Filtre par alliance
-      if (filters.alliances?.length > 0) {
+      if ((filters.alliances as string[] | undefined)?.length) {
         const AIRLINE_ALLIANCES: Record<string, string[]> = {
           'Star Alliance': ['LH', 'UA', 'AC', 'SQ', 'NH', 'OS', 'LX', 'TG', 'TP', 'SN', 'MS', 'ET', 'SA', 'CM', 'CA'],
           'OneWorld': ['AA', 'BA', 'CX', 'QF', 'IB', 'JL', 'LA', 'MH', 'QR', 'RJ', 'S7', 'UL'],
           'SkyTeam': ['DL', 'AF', 'KL', 'AM', 'KE', 'CZ', 'OK', 'SV', 'RO', 'CI', 'MU', 'VN']
         };
         
-        const belongsToSelectedAlliance = filters.alliances.some((alliance: string) => 
+        const belongsToSelectedAlliance = (filters.alliances as string[]).some((alliance: string) => 
           AIRLINE_ALLIANCES[alliance]?.includes(flight.carrier)
         );
         
@@ -271,28 +268,28 @@ function FlightResultsContent() {
       }
       
       // Filtre par durée maximale
-      if (filters.maxDuration) {
+      if (filters.maxDuration as number | undefined) {
         const durationInHours = parseInt(flight.duration.split('h')[0]);
-        if (durationInHours > filters.maxDuration) return false;
+        if (durationInHours > (filters.maxDuration as number)) return false;
       }
       
       // Filtre par nombre d'escales
-      if (filters.maxStops !== undefined && filters.maxStops !== -1) {
-        if (flight.stops > filters.maxStops) return false;
+      if ((filters.maxStops as number | undefined) !== undefined && filters.maxStops !== -1) {
+        if (flight.stops > (filters.maxStops as number)) return false;
       }
       
       // Filtre par heure de départ
-      if (filters.departureTime?.length > 0) {
+      if ((filters.departureTime as string[] | undefined)?.length) {
         const hour = parseInt(flight.departure.time.split(':')[0]);
         const timeOfDay = hour < 6 ? 'night' : hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
-        if (!filters.departureTime.includes(timeOfDay)) return false;
+        if (!(filters.departureTime as string[]).includes(timeOfDay)) return false;
       }
       
       // Filtre par heure d'arrivée
-      if (filters.arrivalTime?.length > 0) {
+      if ((filters.arrivalTime as string[] | undefined)?.length) {
         const hour = parseInt(flight.arrival.time.split(':')[0]);
         const timeOfDay = hour < 6 ? 'night' : hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
-        if (!filters.arrivalTime.includes(timeOfDay)) return false;
+        if (!(filters.arrivalTime as string[]).includes(timeOfDay)) return false;
       }
       
       return true;
@@ -342,19 +339,19 @@ function FlightResultsContent() {
 
       {/* Search Summary */}
       <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-            <div className="mb-4 md:mb-0">
-              <h1 className="text-2xl font-bold text-gray-900">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
                 {searchData.from} → {searchData.to}
               </h1>
-              <p className="text-gray-600">
+              <p className="text-sm sm:text-base text-gray-600">
                 {searchData.departureDate} • {searchData.passengers} voyageur{Number(searchData.passengers) > 1 ? 's' : ''} • {searchData.cabinClass}
               </p>
             </div>
             <Link
               href="/"
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm"
+              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm inline-block w-full sm:w-auto text-center"
             >
               Modifier la recherche
             </Link>
@@ -362,10 +359,10 @@ function FlightResultsContent() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* Filters Sidebar */}
-          <div className="lg:w-1/4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
+        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
+          {/* Filters Sidebar - Hidden on mobile by default */}
+          <div className="hidden lg:block lg:w-1/4">
             <FlightFiltersAdvanced
               filters={filters}
               onFilterChange={setFilters}
@@ -374,21 +371,24 @@ function FlightResultsContent() {
           </div>
 
           {/* Results */}
-          <div className="lg:w-3/4">
-            <div className="mb-4 flex items-center justify-between">
-              <p className="text-gray-600">
+          <div className="w-full lg:w-3/4">
+            <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <p className="text-sm sm:text-base text-gray-600">
                 {sortedFlights.length} vols trouvés
                 {filters && Object.keys(filters).length > 0 && sortedFlights.length < flights.length && (
-                  <span className="text-sm text-gray-500"> (sur {flights.length} au total)</span>
+                  <span className="text-xs sm:text-sm text-gray-500"> (sur {flights.length} au total)</span>
                 )}
               </p>
               <div className="flex items-center space-x-4">
+                <button className="lg:hidden bg-green-50 text-green-600 px-3 py-1.5 rounded-lg text-sm font-medium border border-green-200">
+                  Filtres
+                </button>
                 <div className="flex items-center space-x-2">
-                  <SortAsc size={16} />
+                  <SortAsc size={16} className="hidden sm:block" />
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="text-sm border border-gray-300 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="text-xs sm:text-sm border border-gray-300 rounded-lg px-2 sm:px-3 py-1 focus:outline-none focus:ring-2 focus:ring-green-500"
                   >
                     <option value="price">Prix (croissant)</option>
                     <option value="duration">Durée</option>
@@ -400,16 +400,16 @@ function FlightResultsContent() {
 
             <div className="space-y-4">
               {error && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-                  <p className="text-red-800 font-medium">Erreur</p>
-                  <p className="text-red-600 text-sm mt-1">{error}</p>
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 mb-4">
+                  <p className="text-red-800 font-medium text-sm sm:text-base">Erreur</p>
+                  <p className="text-red-600 text-xs sm:text-sm mt-1">{error}</p>
                   {(error.includes('API key missing') || error.includes('Configuration manquante')) && (
-                    <div className="mt-3 p-3 bg-red-100 rounded text-xs">
+                    <div className="mt-3 p-2 sm:p-3 bg-red-100 rounded text-xs">
                       <p className="font-semibold text-red-800 mb-2">Pour l&apos;administrateur :</p>
                       <p className="text-red-700">Les variables d&apos;environnement suivantes doivent être configurées sur Vercel :</p>
                       <ul className="list-disc list-inside mt-1 text-red-700 space-y-1">
-                        <li><code className="bg-red-200 px-1 rounded">RAPIDAPI_KEY</code> = 01da4a3c6amsh37ce35310ab8e77p10fdcajsn89d68f9c9df5</li>
-                        <li><code className="bg-red-200 px-1 rounded">KIWI_API_HOST</code> = kiwi-com-cheap-flights.p.rapidapi.com</li>
+                        <li><code className="bg-red-200 px-1 rounded text-xs">RAPIDAPI_KEY</code> = 01da4a3c6amsh37ce35310ab8e77p10fdcajsn89d68f9c9df5</li>
+                        <li><code className="bg-red-200 px-1 rounded text-xs">KIWI_API_HOST</code> = kiwi-com-cheap-flights.p.rapidapi.com</li>
                       </ul>
                       <p className="text-red-700 mt-2">
                         Allez dans Vercel → Settings → Environment Variables pour les ajouter.
@@ -420,9 +420,9 @@ function FlightResultsContent() {
               )}
               
               {flights.length === 0 && !error && (
-                <div className="bg-white rounded-lg p-8 text-center">
-                  <p className="text-gray-600">Aucun vol trouvé pour cette recherche.</p>
-                  <p className="text-sm text-gray-500 mt-2">Essayez de modifier vos critères de recherche.</p>
+                <div className="bg-white rounded-lg p-6 sm:p-8 text-center">
+                  <p className="text-sm sm:text-base text-gray-600">Aucun vol trouvé pour cette recherche.</p>
+                  <p className="text-xs sm:text-sm text-gray-500 mt-2">Essayez de modifier vos critères de recherche.</p>
                 </div>
               )}
               
