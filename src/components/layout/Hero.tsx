@@ -210,8 +210,10 @@ export default function Hero() {
 
           {/* Search Fields */}
           <div className="flex flex-col lg:flex-row lg:items-end gap-2 sm:gap-0.5 mb-3">
-            {/* From Field */}
-            <div className="relative flex-1 w-full lg:w-auto">
+            {/* Container for From/To fields with centered swap button */}
+            <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-0 lg:relative lg:w-auto">
+              {/* From Field */}
+              <div className="relative flex-1 lg:flex-none w-full lg:w-[220px] lg:pr-5">
               <div className="relative">
                 <Input
                   id="from"
@@ -261,18 +263,16 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Swap Button */}
-            <div className="hidden lg:flex items-center justify-center px-0.5 mb-1">
+              {/* Swap Button - Positioned absolutely for perfect centering */}
               <button
-                className="h-14 sm:h-16 md:h-20 w-14 sm:w-16 md:w-20 rounded-full bg-white border-2 border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center"
+                className="hidden lg:flex lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:top-1/2 lg:-translate-y-1/2 h-10 w-10 rounded-full bg-white border-2 border-gray-300 hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-200 shadow-xl hover:shadow-2xl items-center justify-center z-30"
                 onClick={swapAirports}
               >
-                <ArrowUpDown className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500 hover:text-emerald-600" />
+                <ArrowUpDown className="w-3 h-3 text-gray-600" />
               </button>
-            </div>
 
-            {/* To Field */}
-            <div className="relative flex-1 w-full lg:w-auto">
+              {/* To Field */}
+              <div className="relative flex-1 lg:flex-none w-full lg:w-[220px] lg:pl-5">
               <div className="relative">
                 <Input
                   id="to"
@@ -321,6 +321,7 @@ export default function Hero() {
                 )}
               </div>
             </div>
+          </div>
 
             {/* Departure Date */}
             <div className="flex-1 w-full lg:w-auto">
@@ -387,7 +388,7 @@ export default function Hero() {
             )}
 
             {/* Passengers */}
-            <div className="relative flex-1 w-full lg:w-auto" ref={passengerRef}>
+            <div className="relative flex-1 w-full lg:w-[320px]" ref={passengerRef}>
               <button
                 onClick={() => setShowPassengerDropdown(!showPassengerDropdown)}
                 className="w-full h-12 sm:h-14 md:h-16 lg:h-20 px-3 text-left text-xs sm:text-sm border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 bg-white shadow-sm flex items-center justify-between transition-all duration-200"
@@ -405,7 +406,7 @@ export default function Hero() {
               </button>
 
               {showPassengerDropdown && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] z-50 p-4">
+                <div className="absolute top-full left-0 w-full lg:w-[320px] mt-2 bg-white border border-gray-200 rounded-lg shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] z-50 p-4">
                   <div className="space-y-4">
                     {/* Adults */}
                     <div className="flex items-center justify-between">
