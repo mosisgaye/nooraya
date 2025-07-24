@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 import FlightResultsClient from './FlightResultsClient';
+import { FlightCardSkeletonGroup } from '@/components/flights/FlightCardSkeleton';
 
 export const metadata: Metadata = {
   title: 'Résultats de Recherche de Vols - Nooraya Voyages | Comparez les Prix',
@@ -26,10 +27,28 @@ export const metadata: Metadata = {
 export default function FlightResultsPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p className="text-lg text-gray-600">Recherche des meilleurs vols...</p>
+      <div className="min-h-screen bg-gray-50">
+        <div className="container mx-auto px-4 py-8">
+          <div className="mb-6">
+            <div className="h-8 bg-gray-200 rounded w-64 animate-pulse mb-2"></div>
+            <div className="h-4 bg-gray-200 rounded w-48 animate-pulse"></div>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="lg:col-span-1">
+              <div className="bg-white rounded-xl shadow-sm p-6 h-96 animate-pulse">
+                <div className="h-6 bg-gray-200 rounded w-24 mb-4"></div>
+                <div className="space-y-3">
+                  <div className="h-10 bg-gray-200 rounded"></div>
+                  <div className="h-10 bg-gray-200 rounded"></div>
+                  <div className="h-10 bg-gray-200 rounded"></div>
+                  <div className="h-10 bg-gray-200 rounded"></div>
+                </div>
+              </div>
+            </div>
+            <div className="lg:col-span-3">
+              <FlightCardSkeletonGroup />
+            </div>
+          </div>
         </div>
       </div>
     }>

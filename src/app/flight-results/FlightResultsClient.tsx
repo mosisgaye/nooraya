@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { Filter, SortAsc } from 'lucide-react';
 import FlightCard from '@/components/cards/FlightCard';
 import PaymentModal from '@/components/payment/PaymentModal';
+import { FlightCardSkeletonGroup } from '@/components/flights/FlightCardSkeleton';
+import FlightFiltersAdvanced from '@/components/flights/FlightFiltersAdvanced';
 import { Flight } from '@/types';
 
 export default function FlightResultsClient() {
@@ -14,10 +16,40 @@ export default function FlightResultsClient() {
 
 function LoadingFlights() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto mb-4"></div>
-        <p className="text-lg text-gray-600">Recherche des meilleurs vols...</p>
+    <div className="min-h-screen bg-gray-50">
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+            <div className="mb-4 md:mb-0">
+              <div className="h-8 bg-gray-200 rounded w-64 animate-pulse mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-48 animate-pulse"></div>
+            </div>
+            <div className="h-10 bg-gray-200 rounded w-40 animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-xl shadow-sm p-6 h-96 animate-pulse">
+              <div className="h-6 bg-gray-200 rounded w-24 mb-4"></div>
+              <div className="space-y-3">
+                <div className="h-10 bg-gray-200 rounded"></div>
+                <div className="h-10 bg-gray-200 rounded"></div>
+                <div className="h-10 bg-gray-200 rounded"></div>
+                <div className="h-10 bg-gray-200 rounded"></div>
+              </div>
+            </div>
+          </div>
+          <div className="lg:col-span-3">
+            <div className="mb-4 flex justify-between items-center">
+              <div className="h-4 bg-gray-200 rounded w-32 animate-pulse"></div>
+              <div className="h-10 bg-gray-200 rounded w-48 animate-pulse"></div>
+            </div>
+            <FlightCardSkeletonGroup />
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -32,6 +64,7 @@ function FlightResultsContent() {
   const [error, setError] = useState<string | null>(null);
   const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [filters, setFilters] = useState<any>({});
   
   // Récupérer les paramètres de recherche
   const searchData = {
@@ -193,7 +226,80 @@ function FlightResultsContent() {
     fetchFlights();
   }, [searchParams, searchData.from, searchData.to, searchData.departureDate, searchData.returnDate, searchData.cabinClass, searchData.tripType]);
 
-  const sortedFlights = [...flights].sort((a, b) => {
+  // Calculer les compagnies disponibles
+  const availableAirlines = React.useMemo(() => {
+    const airlineMap = new Map<string, { code: string; name: string; count: number }>();
+    
+    flights.forEach(flight => {
+      const code = flight.carrier;
+      if (!airlineMap.has(code)) {
+        airlineMap.set(code, {
+          code,
+          name: flight.airline,
+          count: 1
+        });
+      } else {
+        const airline = airlineMap.get(code)!;
+        airline.count++;
+      }
+    });
+    
+    return Array.from(airlineMap.values()).sort((a, b) => b.count - a.count);
+  }, [flights]);
+
+  // Appliquer les filtres
+  const filteredFlights = React.useMemo(() => {
+    return flights.filter(flight => {
+      // Filtre par compagnie
+      if (filters.airlines?.length > 0 && !filters.airlines.includes(flight.carrier)) {
+        return false;
+      }
+      
+      // Filtre par alliance
+      if (filters.alliances?.length > 0) {
+        const AIRLINE_ALLIANCES: Record<string, string[]> = {
+          'Star Alliance': ['LH', 'UA', 'AC', 'SQ', 'NH', 'OS', 'LX', 'TG', 'TP', 'SN', 'MS', 'ET', 'SA', 'CM', 'CA'],
+          'OneWorld': ['AA', 'BA', 'CX', 'QF', 'IB', 'JL', 'LA', 'MH', 'QR', 'RJ', 'S7', 'UL'],
+          'SkyTeam': ['DL', 'AF', 'KL', 'AM', 'KE', 'CZ', 'OK', 'SV', 'RO', 'CI', 'MU', 'VN']
+        };
+        
+        const belongsToSelectedAlliance = filters.alliances.some((alliance: string) => 
+          AIRLINE_ALLIANCES[alliance]?.includes(flight.carrier)
+        );
+        
+        if (!belongsToSelectedAlliance) return false;
+      }
+      
+      // Filtre par durée maximale
+      if (filters.maxDuration) {
+        const durationInHours = parseInt(flight.duration.split('h')[0]);
+        if (durationInHours > filters.maxDuration) return false;
+      }
+      
+      // Filtre par nombre d'escales
+      if (filters.maxStops !== undefined && filters.maxStops !== -1) {
+        if (flight.stops > filters.maxStops) return false;
+      }
+      
+      // Filtre par heure de départ
+      if (filters.departureTime?.length > 0) {
+        const hour = parseInt(flight.departure.time.split(':')[0]);
+        const timeOfDay = hour < 6 ? 'night' : hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
+        if (!filters.departureTime.includes(timeOfDay)) return false;
+      }
+      
+      // Filtre par heure d'arrivée
+      if (filters.arrivalTime?.length > 0) {
+        const hour = parseInt(flight.arrival.time.split(':')[0]);
+        const timeOfDay = hour < 6 ? 'night' : hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
+        if (!filters.arrivalTime.includes(timeOfDay)) return false;
+      }
+      
+      return true;
+    });
+  }, [flights, filters]);
+
+  const sortedFlights = [...filteredFlights].sort((a, b) => {
     switch (sortBy) {
       case 'price':
         return a.price - b.price;
@@ -260,38 +366,35 @@ function FlightResultsContent() {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Filters Sidebar */}
           <div className="lg:w-1/4">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold flex items-center mb-4">
-                <Filter className="mr-2" size={20} />
-                Filtres
-              </h3>
-              
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Trier par
-                </label>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                >
-                  <option value="price">Prix (croissant)</option>
-                  <option value="duration">Durée</option>
-                  <option value="departure">Heure de départ</option>
-                </select>
-              </div>
-            </div>
+            <FlightFiltersAdvanced
+              filters={filters}
+              onFilterChange={setFilters}
+              availableAirlines={availableAirlines}
+            />
           </div>
 
           {/* Results */}
           <div className="lg:w-3/4">
             <div className="mb-4 flex items-center justify-between">
               <p className="text-gray-600">
-                {flights.length} vols trouvés
+                {sortedFlights.length} vols trouvés
+                {filters && Object.keys(filters).length > 0 && sortedFlights.length < flights.length && (
+                  <span className="text-sm text-gray-500"> (sur {flights.length} au total)</span>
+                )}
               </p>
-              <div className="flex items-center space-x-2">
-                <SortAsc size={16} />
-                <span className="text-sm text-gray-600">Triés par prix</span>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <SortAsc size={16} />
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="text-sm border border-gray-300 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  >
+                    <option value="price">Prix (croissant)</option>
+                    <option value="duration">Durée</option>
+                    <option value="departure">Heure de départ</option>
+                  </select>
+                </div>
               </div>
             </div>
 

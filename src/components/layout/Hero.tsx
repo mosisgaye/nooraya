@@ -152,26 +152,26 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="min-h-[60vh] bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-800">
+    <div className="min-h-screen sm:min-h-[80vh] md:min-h-[60vh] bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-800">
       {/* Navigation */}
-      <nav className="pt-6 pb-4">
-        <div className="max-w-7xl mx-auto px-4">
+      <nav className="pt-4 pb-3 sm:pt-6 sm:pb-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4">
           <div className="max-w-6xl">
-            <div className="flex space-x-2 justify-start pl-6 sm:pl-7 md:pl-8">
+            <div className="flex flex-wrap gap-2 sm:flex-nowrap sm:space-x-2 justify-center sm:justify-start sm:pl-6 md:pl-8">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center space-x-2 px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
+                  className={`flex items-center space-x-1 sm:space-x-2 px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${
                     activeTab === tab.id
                       ? 'bg-white text-gray-900 shadow-xl'
                       : 'text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm'
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
-                  <span>{tab.label}</span>
+                  <Icon className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span className="hidden xs:inline">{tab.label}</span>
                 </button>
               );
             })}
@@ -181,23 +181,23 @@ export default function Hero() {
       </nav>
 
       {/* Hero Content */}
-      <div className="max-w-7xl mx-auto px-4 py-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-4">
         {/* Search Form */}
-        <div className="p-6 sm:p-7 md:p-8 max-w-6xl">
+        <div className="p-4 sm:p-6 md:p-8 max-w-6xl">
           {/* Title */}
-          <div className="text-left mb-8">
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-5 py-2 rounded-full mb-6">
-              <span className="text-sm font-semibold text-white/90 uppercase tracking-wider">Voyagez en toute sérénité</span>
+          <div className="text-center sm:text-left mb-6 sm:mb-8">
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-3 sm:px-5 py-1.5 sm:py-2 rounded-full mb-3 sm:mb-6">
+              <span className="text-xs sm:text-sm font-semibold text-white/90 uppercase tracking-wider">Voyagez en toute sérénité</span>
             </div>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight tracking-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 leading-tight tracking-tight">
               Explorez le monde avec <span className="text-emerald-300 font-extrabold">élégance</span>
             </h1>
-            <p className="text-lg text-white/80 max-w-2xl">Découvrez nos offres exceptionnelles et créez des souvenirs inoubliables</p>
+            <p className="text-sm sm:text-base md:text-lg text-white/80 max-w-2xl mx-auto sm:mx-0">Découvrez nos offres exceptionnelles et créez des souvenirs inoubliables</p>
           </div>
           {/* Trip Type Selector */}
-          <div className="mb-6">
+          <div className="mb-4 sm:mb-6">
             <Select value={tripType} onValueChange={setTripType}>
-              <SelectTrigger className="w-48 bg-emerald-600/80 backdrop-blur-md border-white/40 border-2 h-10 text-sm font-semibold text-white hover:bg-emerald-700 transition-all duration-300 focus:ring-4 focus:ring-white/20 rounded-xl shadow-lg">
+              <SelectTrigger className="w-full sm:w-48 bg-emerald-600/80 backdrop-blur-md border-white/40 border-2 h-10 text-xs sm:text-sm font-semibold text-white hover:bg-emerald-700 transition-all duration-300 focus:ring-4 focus:ring-white/20 rounded-xl shadow-lg">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="rounded-lg shadow-lg bg-white">
@@ -209,7 +209,7 @@ export default function Hero() {
           </div>
 
           {/* Search Fields */}
-          <div className="flex flex-col lg:flex-row lg:items-end gap-0.5 mb-4">
+          <div className="flex flex-col lg:flex-row lg:items-end gap-2 sm:gap-0.5 mb-4">
             {/* From Field */}
             <div className="relative flex-1 w-full lg:w-auto">
               <div className="relative">
@@ -223,10 +223,10 @@ export default function Hero() {
                   onFocus={() => setShowFromDropdown(true)}
                   onBlur={() => setTimeout(() => setShowFromDropdown(false), 200)}
                   placeholder="Départ - Pays, ville"
-                  className="pl-10 pr-4 h-20 text-base border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
+                  className="pl-10 pr-4 h-14 sm:h-16 md:h-20 text-sm sm:text-base border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
                 />
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center">
-                  <MapPin className="w-4 h-4 text-gray-400" />
+                  <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" />
                 </div>
                 
                 {showFromDropdown && (
@@ -264,10 +264,10 @@ export default function Hero() {
             {/* Swap Button */}
             <div className="hidden lg:flex items-center justify-center px-0.5 mb-1">
               <button
-                className="h-20 w-20 rounded-full bg-white border-2 border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center"
+                className="h-14 sm:h-16 md:h-20 w-14 sm:w-16 md:w-20 rounded-full bg-white border-2 border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center"
                 onClick={swapAirports}
               >
-                <ArrowUpDown className="w-4 h-4 text-gray-500 hover:text-emerald-600" />
+                <ArrowUpDown className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500 hover:text-emerald-600" />
               </button>
             </div>
 
@@ -284,10 +284,10 @@ export default function Hero() {
                   onFocus={() => setShowToDropdown(true)}
                   onBlur={() => setTimeout(() => setShowToDropdown(false), 200)}
                   placeholder="Destination - Pays, ville"
-                  className="pl-10 pr-4 h-20 text-base border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
+                  className="pl-10 pr-4 h-14 sm:h-16 md:h-20 text-sm sm:text-base border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
                 />
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center">
-                  <MapPin className="w-4 h-4 text-gray-400" />
+                  <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" />
                 </div>
                 
                 {showToDropdown && (
@@ -328,7 +328,7 @@ export default function Hero() {
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-full h-20 justify-start text-left font-normal text-sm border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200 bg-white shadow-sm flex-col items-start"
+                    className="w-full h-14 sm:h-16 md:h-20 justify-start text-left font-normal text-xs sm:text-sm border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200 bg-white shadow-sm flex-col items-start"
                   >
                     <div className="flex items-center w-full">
                       <CalendarIcon className="mr-2 h-4 w-4" />
@@ -360,7 +360,7 @@ export default function Hero() {
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className="w-full h-20 justify-start text-left font-normal text-sm border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200 bg-white shadow-sm flex-col items-start"
+                      className="w-full h-14 sm:h-16 md:h-20 justify-start text-left font-normal text-xs sm:text-sm border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200 bg-white shadow-sm flex-col items-start"
                     >
                       <div className="flex items-center w-full">
                         <CalendarIcon className="mr-2 h-4 w-4" />
@@ -390,7 +390,7 @@ export default function Hero() {
             <div className="relative flex-1 w-full lg:w-auto" ref={passengerRef}>
               <button
                 onClick={() => setShowPassengerDropdown(!showPassengerDropdown)}
-                className="w-full h-20 px-3 text-left text-sm border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 bg-white shadow-sm flex items-center justify-between transition-all duration-200"
+                className="w-full h-14 sm:h-16 md:h-20 px-3 text-left text-xs sm:text-sm border-2 border-gray-200 rounded-xl hover:border-gray-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 bg-white shadow-sm flex items-center justify-between transition-all duration-200"
               >
                 <div className="flex items-center space-x-2">
                   <div className="bg-emerald-100 p-1.5 rounded-md">
@@ -537,7 +537,7 @@ export default function Hero() {
             <div className="flex-shrink-0 lg:ml-2">
               <div className="mb-2 lg:mb-6"></div>
               <button 
-                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-10 py-3 text-sm font-bold rounded-xl shadow-xl hover:shadow-2xl flex items-center justify-center space-x-2 transition-all duration-300 h-20 transform hover:scale-105"
+                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-6 sm:px-8 md:px-10 py-2 sm:py-3 text-xs sm:text-sm font-bold rounded-xl shadow-xl hover:shadow-2xl flex items-center justify-center space-x-2 transition-all duration-300 h-14 sm:h-16 md:h-20 transform hover:scale-105 w-full lg:w-auto"
                 onClick={() => {
                   // Validation
                   if (!fromValue || !toValue || !departureDate) {
@@ -573,14 +573,14 @@ export default function Hero() {
                   router.push(`/flight-results?${searchParams.toString()}`);
                 }}
               >
-                <Plane className="w-4 h-4" />
+                <Plane className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span>Rechercher</span>
               </button>
             </div>
           </div>
 
           {/* Checkboxes */}
-          <div className="flex flex-wrap gap-6 mb-4 px-1">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 mb-4 px-1">
             <div className="flex items-center space-x-2">
               <Checkbox 
                 id="nearby-airports-from" 
