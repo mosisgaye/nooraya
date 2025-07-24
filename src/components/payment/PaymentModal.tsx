@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, Smartphone, CreditCard, Loader2 } from 'lucide-react';
+import { X, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 
 interface PaymentModalProps {

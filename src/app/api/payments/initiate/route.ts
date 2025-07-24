@@ -81,7 +81,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Retourner la réponse appropriée selon la méthode de paiement
-    const responseData: any = {
+    const responseData: {
+      success: boolean;
+      paymentId: string;
+      message: string;
+      redirect_url?: string;
+      requiresValidation?: boolean;
+      validationMessage?: string;
+    } = {
       success: true,
       paymentId: externalTransactionId,
       message: 'Paiement initié avec succès'
