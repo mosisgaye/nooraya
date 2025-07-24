@@ -1,21 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-
-const PAYTECH_API_URL = 'https://api.paytech.sn/payment/request';
-const PAYTECH_API_KEY = process.env.PAYTECH_API_KEY;
-const PAYTECH_API_SECRET = process.env.PAYTECH_API_SECRET;
+import { paytechClient, PAYTECH_SERVICES } from '@/lib/paytech/client';
 
 export async function POST(request: NextRequest) {
   try {
-    // Vérifier que les clés API sont configurées
-    if (!PAYTECH_API_KEY || !PAYTECH_API_SECRET) {
-      console.error('PayTech API credentials not configured');
-      return NextResponse.json(
-        { error: 'Configuration PayTech manquante. Veuillez configurer les variables d\'environnement.' },
-        { status: 500 }
-      );
-    }
-
     const body = await request.json();
     const { bookingId, paymentMethod, phone, amount, bookingType } = body;
 
@@ -27,50 +15,46 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Créer un ID de paiement unique
-    const paymentId = `PAY-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    // Mapper la méthode de paiement au code service Intech
+    const serviceCodeMap: Record<string, string> = {
+      'orange_money': PAYTECH_SERVICES.ORANGE_CASH_IN,
+      'wave': PAYTECH_SERVICES.WAVE_CASH_IN,
+      'card': PAYTECH_SERVICES.CARD_PAYMENT
+    };
 
-    // Préparer les données pour PayTech
-    const paytechData = {
-      item_name: `Réservation ${bookingType} - ${bookingId}`,
-      item_price: amount,
-      currency: 'XOF',
-      ref_command: paymentId,
-      command_name: `Réservation ${bookingType}`,
-      env: 'test', // Changer en 'prod' pour la production
-      ipn_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://www.noorayavoyage.com'}/api/payments/webhook`,
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://www.noorayavoyage.com'}/booking/confirmation?paymentId=${paymentId}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://www.noorayavoyage.com'}/flight-results`,
-      custom_field: JSON.stringify({
+    const codeService = serviceCodeMap[paymentMethod];
+    if (!codeService) {
+      return NextResponse.json(
+        { error: 'Méthode de paiement non supportée' },
+        { status: 400 }
+      );
+    }
+
+    // Créer un ID de transaction externe unique
+    const externalTransactionId = `NV-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+    // Préparer les données pour l'API Intech
+    const transactionData = {
+      phone,
+      amount,
+      codeService,
+      externalTransactionId,
+      data: {
         bookingId,
         bookingType,
-        paymentMethod,
-        phone
-      })
+        paymentMethod
+      }
     };
 
-    // Headers pour PayTech
-    const headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'API_KEY': PAYTECH_API_KEY,
-      'API_SECRET': PAYTECH_API_SECRET
-    };
+    console.log('Envoi à Intech API:', transactionData);
 
-    console.log('Envoi à PayTech:', paytechData);
+    // Appeler l'API Intech via le client
+    const response = await paytechClient.createPayment(transactionData);
 
-    // Appeler l'API PayTech
-    const response = await fetch(PAYTECH_API_URL, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(paytechData)
-    });
+    console.log('Réponse Intech:', response);
 
-    const responseData = await response.json();
-    console.log('Réponse PayTech:', responseData);
-
-    if (!response.ok || !responseData.success) {
-      throw new Error(responseData.message || 'Erreur PayTech');
+    if (!response.success) {
+      throw new Error(response.msg || 'Erreur lors de l\'initiation du paiement');
     }
 
     // Sauvegarder le paiement dans la base de données
@@ -79,15 +63,15 @@ export async function POST(request: NextRequest) {
     const { error: dbError } = await supabase
       .from('payments')
       .insert({
-        id: paymentId,
+        id: externalTransactionId,
         booking_id: bookingId,
         amount,
         currency: 'XOF',
         payment_method: paymentMethod,
         phone,
         status: 'pending',
-        paytech_token: responseData.token,
-        paytech_response: responseData,
+        paytech_external_id: externalTransactionId,
+        paytech_response: response.data,
         created_at: new Date().toISOString()
       });
 
@@ -96,27 +80,25 @@ export async function POST(request: NextRequest) {
       // Ne pas faire échouer la requête si la DB a un problème
     }
 
-    // Pour le mode test, simuler un succès après quelques secondes
-    if (paytechData.env === 'test') {
-      setTimeout(async () => {
-        try {
-          await supabase
-            .from('payments')
-            .update({ status: 'success', updated_at: new Date().toISOString() })
-            .eq('id', paymentId);
-        } catch (error) {
-          console.error('Erreur mise à jour statut:', error);
-        }
-      }, 5000); // Simuler un succès après 5 secondes
+    // Retourner la réponse appropriée selon la méthode de paiement
+    const responseData: any = {
+      success: true,
+      paymentId: externalTransactionId,
+      message: 'Paiement initié avec succès'
+    };
+
+    // Pour les paiements par carte, rediriger vers une page de paiement
+    if (paymentMethod === 'card') {
+      responseData.redirect_url = `${process.env.NEXT_PUBLIC_APP_URL}/payment/card?id=${externalTransactionId}`;
     }
 
-    return NextResponse.json({
-      success: true,
-      paymentId,
-      token: responseData.token,
-      redirect_url: responseData.redirect_url,
-      message: 'Paiement initié avec succès'
-    });
+    // Pour les paiements mobiles, informer l'utilisateur de valider sur son téléphone
+    if (paymentMethod === 'orange_money' || paymentMethod === 'wave') {
+      responseData.requiresValidation = true;
+      responseData.validationMessage = `Veuillez valider le paiement sur votre téléphone ${paymentMethod === 'orange_money' ? 'Orange Money' : 'Wave'}`;
+    }
+
+    return NextResponse.json(responseData);
 
   } catch (error) {
     console.error('Erreur initiation paiement:', error);

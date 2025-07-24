@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { X, Smartphone, CreditCard, Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -39,21 +40,21 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     {
       id: 'orange_money',
       name: 'Orange Money',
-      icon: '/images/orange-money.png',
+      icon: 'https://intech-apiv2.s3.amazonaws.com/icons/om_sn.png',
       description: 'Paiement rapide et sécurisé',
       color: 'bg-orange-50 border-orange-200 hover:border-orange-400'
     },
     {
       id: 'wave',
       name: 'Wave',
-      icon: '/images/wave.png',
+      icon: 'https://intech-apiv2.s3.amazonaws.com/icons/wave.png',
       description: 'Simple et instantané',
       color: 'bg-blue-50 border-blue-200 hover:border-blue-400'
     },
     {
       id: 'card',
       name: 'Carte Bancaire',
-      icon: '/images/card-payment.png',
+      icon: 'https://intech-apiv2.s3.amazonaws.com/icons/CB.png',
       description: 'Visa, Mastercard',
       color: 'bg-gray-50 border-gray-200 hover:border-gray-400'
     }
@@ -197,12 +198,14 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
                   className={`w-full p-4 rounded-xl border-2 transition-all ${method.color}`}
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                      {method.id === 'card' ? (
-                        <CreditCard className="w-6 h-6 text-gray-600" />
-                      ) : (
-                        <Smartphone className="w-6 h-6 text-gray-600" />
-                      )}
+                    <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center p-1">
+                      <Image
+                        src={method.icon}
+                        alt={method.name}
+                        width={40}
+                        height={40}
+                        className="object-contain"
+                      />
                     </div>
                     <div className="flex-1 text-left">
                       <p className="font-semibold">{method.name}</p>
@@ -290,7 +293,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         <div className="border-t px-6 py-4 bg-gray-50">
           <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
             <span>Paiement sécurisé par</span>
-            <span className="font-semibold">PayTech</span>
+            <span className="font-semibold">Intech</span>
           </div>
         </div>
       </div>

@@ -21,6 +21,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'intech-apiv2.s3.amazonaws.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: process.env.NODE_ENV === 'development' ? 0 : 31536000, // 0 en dev, 1 an en prod
