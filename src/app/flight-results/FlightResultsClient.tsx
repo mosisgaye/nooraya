@@ -10,6 +10,11 @@ import { FlightCardSkeletonGroup } from '@/components/flights/FlightCardSkeleton
 import FlightFiltersAdvanced from '@/components/flights/FlightFiltersAdvanced';
 import { Flight } from '@/types';
 
+interface Badge {
+  type: 'best-price' | 'fastest' | 'direct' | 'popular';
+  label: string;
+}
+
 export default function FlightResultsClient() {
   return <FlightResultsContent />;
 }
@@ -329,30 +334,47 @@ function FlightResultsContent() {
     setError(error);
   };
 
-
   if (loading) {
     return <LoadingFlights />;
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-
       {/* Search Summary */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="bg-gradient-to-r from-emerald-600 to-green-600 text-white shadow-lg">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
                 {searchData.from} → {searchData.to}
               </h1>
-              <p className="text-sm sm:text-base text-gray-600">
-                {searchData.departureDate} • {searchData.passengers} voyageur{Number(searchData.passengers) > 1 ? 's' : ''} • {searchData.cabinClass}
-              </p>
+              <div className="flex flex-wrap items-center gap-2 text-sm sm:text-base text-emerald-100">
+                <span className="flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  {searchData.departureDate}
+                </span>
+                <span className="text-emerald-300">•</span>
+                <span className="flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  {searchData.passengers} voyageur{Number(searchData.passengers) > 1 ? 's' : ''}
+                </span>
+                <span className="text-emerald-300">•</span>
+                <span className="capitalize bg-white/20 px-3 py-1 rounded-full">
+                  {searchData.cabinClass === 'economy' ? 'Économique' : searchData.cabinClass === 'business' ? 'Affaires' : 'Première'}
+                </span>
+              </div>
             </div>
             <Link
               href="/"
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm inline-block w-full sm:w-auto text-center"
+              className="bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-full hover:bg-white/30 transition-all font-medium text-sm inline-flex items-center gap-2 w-full sm:w-auto justify-center border border-white/30"
             >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
               Modifier la recherche
             </Link>
           </div>
@@ -372,28 +394,36 @@ function FlightResultsContent() {
 
           {/* Results */}
           <div className="w-full lg:w-3/4">
-            <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <p className="text-sm sm:text-base text-gray-600">
-                {sortedFlights.length} vols trouvés
-                {filters && Object.keys(filters).length > 0 && sortedFlights.length < flights.length && (
-                  <span className="text-xs sm:text-sm text-gray-500"> (sur {flights.length} au total)</span>
-                )}
-              </p>
-              <div className="flex items-center space-x-4">
-                <button className="lg:hidden bg-green-50 text-green-600 px-3 py-1.5 rounded-lg text-sm font-medium border border-green-200">
-                  Filtres
-                </button>
-                <div className="flex items-center space-x-2">
-                  <SortAsc size={16} className="hidden sm:block" />
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="text-xs sm:text-sm border border-gray-300 rounded-lg px-2 sm:px-3 py-1 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  >
-                    <option value="price">Prix (croissant)</option>
-                    <option value="duration">Durée</option>
-                    <option value="departure">Heure de départ</option>
-                  </select>
+            {/* Results Header */}
+            <div className="bg-white rounded-xl shadow-sm p-4 mb-6 border border-gray-100">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                  <h2 className="text-lg font-semibold text-gray-900">
+                    {sortedFlights.length} vols disponibles
+                  </h2>
+                  {filters && Object.keys(filters).length > 0 && sortedFlights.length < flights.length && (
+                    <p className="text-sm text-gray-500 mt-1">Filtres actifs : {Object.keys(filters).length} • {flights.length} vols au total</p>
+                  )}
+                </div>
+                <div className="flex items-center gap-3">
+                  <button className="lg:hidden bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg text-sm font-medium border border-emerald-200 hover:bg-emerald-100 transition-colors flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                    </svg>
+                    Filtres
+                  </button>
+                  <div className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg">
+                    <SortAsc size={16} className="text-gray-500" />
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="bg-transparent text-sm font-medium text-gray-700 focus:outline-none cursor-pointer"
+                    >
+                      <option value="price">Prix le plus bas</option>
+                      <option value="duration">Plus rapide</option>
+                      <option value="departure">Départ le plus tôt</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
@@ -426,20 +456,33 @@ function FlightResultsContent() {
                 </div>
               )}
               
-              {sortedFlights.map((flight) => (
-                <FlightCard 
-                  key={flight.id} 
-                  flight={flight} 
-                  onAddToComparison={() => {}}
-                  isInComparison={false}
-                  onSelect={handleSelectFlight}
-                />
-              ))}
+              {sortedFlights.map((flight, index) => {
+                // Déterminer les badges à afficher
+                const isLowestPrice = index === 0 && sortBy === 'price';
+                const isFastest = index === 0 && sortBy === 'duration';
+                const isDirect = flight.stops === 0;
+                const isPopular = flight.airline.includes('Air France') || flight.airline.includes('Emirates');
+                
+                return (
+                  <FlightCard 
+                    key={flight.id} 
+                    flight={flight} 
+                    onAddToComparison={() => {}}
+                    isInComparison={false}
+                    onSelect={handleSelectFlight}
+                    badges={[
+                      isLowestPrice && { type: 'best-price' as const, label: 'Meilleur prix' },
+                      isFastest && { type: 'fastest' as const, label: 'Plus rapide' },
+                      isDirect && { type: 'direct' as const, label: 'Vol direct' },
+                      isPopular && { type: 'popular' as const, label: 'Populaire' }
+                    ].filter((badge): badge is Badge => badge !== false)}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>
       </div>
-
       {/* Payment Modal */}
       {selectedFlight && (
         <PaymentModal
@@ -463,7 +506,6 @@ function FlightResultsContent() {
           onError={handlePaymentError}
         />
       )}
-
     </div>
   );
 }

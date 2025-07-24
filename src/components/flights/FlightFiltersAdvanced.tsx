@@ -57,80 +57,127 @@ export default function FlightFiltersAdvanced({
     });
   };
 
+  // Compter les filtres actifs
+  const activeFiltersCount = Object.entries(filters).reduce((count, [, value]) => {
+    if (Array.isArray(value) && value.length > 0) return count + 1;
+    if (value !== undefined && value !== null && value !== -1) return count + 1;
+    return count;
+  }, 0);
+
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-      <div className="p-4 sm:p-6 border-b bg-gradient-to-r from-emerald-50 to-green-50">
-        <h2 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">
-          <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
-            <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-            </svg>
-          </div>
-          Filtres avancés
-        </h2>
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="p-6 bg-gradient-to-br from-gray-50 to-white">
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-xl font-bold text-gray-900">Affiner la recherche</h2>
+          {activeFiltersCount > 0 && (
+            <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-medium">
+              {activeFiltersCount} actif{activeFiltersCount > 1 ? 's' : ''}
+            </span>
+          )}
+        </div>
+        {activeFiltersCount > 0 && (
+          <button 
+            onClick={() => onFilterChange({})}
+            className="text-sm text-gray-500 hover:text-emerald-600 transition-colors"
+          >
+            Réinitialiser tous les filtres
+          </button>
+        )}
       </div>
 
       <div className="divide-y">
         {/* Airlines & Alliances Section */}
-        <div className="p-4 sm:p-6">
+        <div className="">
           <button
             onClick={() => toggleSection('airlines')}
-            className="w-full flex items-center justify-between text-left hover:bg-gray-50 -m-4 sm:-m-6 p-4 sm:p-6 rounded-lg transition-colors"
+            className="w-full flex items-center justify-between text-left hover:bg-gray-50 p-6 transition-colors group"
           >
-            <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-              <Plane className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" />
-              Compagnies & Alliances
+            <h3 className="font-semibold text-gray-900 flex items-center gap-3">
+              <div className="w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
+                <Plane className="w-5 h-5 text-emerald-600" />
+              </div>
+              <div>
+                <div className="font-semibold">Compagnies aériennes</div>
+                <div className="text-sm text-gray-500 font-normal">{availableAirlines.length} disponibles</div>
+              </div>
             </h3>
-            {expandedSections.airlines ? <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" /> : <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />}
+            {expandedSections.airlines ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
           </button>
           
           {expandedSections.airlines && (
-            <div className="mt-4 space-y-4">
+            <div className="px-6 pb-6 space-y-6">
               {/* Airline Alliances */}
               <div>
-                <Label className="text-sm font-medium mb-2 block">Alliances</Label>
-                <div className="space-y-2">
-                  {Object.entries(AIRLINE_ALLIANCES).map(([alliance]) => (
-                    <div key={alliance} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={alliance}
-                        checked={(filters.alliances as string[] | undefined)?.includes(alliance) || false}
-                        onCheckedChange={(checked) => {
-                          const newAlliances = checked
-                            ? [...((filters.alliances as string[]) || []), alliance]
-                            : ((filters.alliances as string[]) || []).filter((a: string) => a !== alliance);
-                          handleFilterUpdate('alliances', newAlliances);
-                        }}
-                      />
-                      <Label htmlFor={alliance} className="text-sm cursor-pointer">
-                        {alliance}
-                      </Label>
-                    </div>
-                  ))}
+                <Label className="text-sm font-semibold text-gray-700 mb-3 block">Alliances</Label>
+                <div className="grid grid-cols-1 gap-3">
+                  {Object.entries(AIRLINE_ALLIANCES).map(([alliance]) => {
+                    const isChecked = (filters.alliances as string[] | undefined)?.includes(alliance) || false;
+                    return (
+                      <label
+                        key={alliance}
+                        className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
+                          isChecked 
+                            ? 'border-emerald-500 bg-emerald-50' 
+                            : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                        }`}
+                      >
+                        <Checkbox
+                          id={alliance}
+                          checked={isChecked}
+                          onCheckedChange={(checked) => {
+                            const newAlliances = checked
+                              ? [...((filters.alliances as string[]) || []), alliance]
+                              : ((filters.alliances as string[]) || []).filter((a: string) => a !== alliance);
+                            handleFilterUpdate('alliances', newAlliances);
+                          }}
+                          className="data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
+                        />
+                        <span className={`text-sm font-medium ${isChecked ? 'text-emerald-700' : 'text-gray-700'}`}>
+                          {alliance}
+                        </span>
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* Individual Airlines */}
               <div>
-                <Label className="text-sm font-medium mb-2 block">Compagnies aériennes</Label>
-                <div className="max-h-48 overflow-y-auto space-y-2">
-                  {availableAirlines.map(airline => (
-                    <div key={airline.code} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={airline.code}
-                        checked={(filters.airlines as string[] | undefined)?.includes(airline.code) || false}
-                        onCheckedChange={(checked) => {
-                          const newAirlines = checked
-                            ? [...((filters.airlines as string[]) || []), airline.code]
-                            : ((filters.airlines as string[]) || []).filter((a: string) => a !== airline.code);
-                          handleFilterUpdate('airlines', newAirlines);
-                        }}
-                      />
-                      <Label htmlFor={airline.code} className="text-sm cursor-pointer flex-1">
-                        {airline.name} ({airline.count})
-                      </Label>
-                    </div>
-                  ))}
+                <Label className="text-sm font-semibold text-gray-700 mb-3 block">Compagnies individuelles</Label>
+                <div className="max-h-60 overflow-y-auto space-y-2 pr-2">
+                  {availableAirlines.map(airline => {
+                    const isChecked = (filters.airlines as string[] | undefined)?.includes(airline.code) || false;
+                    return (
+                      <label
+                        key={airline.code}
+                        className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all ${
+                          isChecked 
+                            ? 'border-emerald-500 bg-emerald-50' 
+                            : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <Checkbox
+                            id={airline.code}
+                            checked={isChecked}
+                            onCheckedChange={(checked) => {
+                              const newAirlines = checked
+                                ? [...((filters.airlines as string[]) || []), airline.code]
+                                : ((filters.airlines as string[]) || []).filter((a: string) => a !== airline.code);
+                              handleFilterUpdate('airlines', newAirlines);
+                            }}
+                            className="data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
+                          />
+                          <span className={`text-sm font-medium ${isChecked ? 'text-emerald-700' : 'text-gray-700'}`}>
+                            {airline.name}
+                          </span>
+                        </div>
+                        <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                          {airline.count}
+                        </span>
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -138,25 +185,33 @@ export default function FlightFiltersAdvanced({
         </div>
 
         {/* Practical Filters Section */}
-        <div className="p-4 sm:p-6">
+        <div className="">
           <button
             onClick={() => toggleSection('practical')}
-            className="w-full flex items-center justify-between text-left hover:bg-gray-50 -m-4 sm:-m-6 p-4 sm:p-6 rounded-lg transition-colors"
+            className="w-full flex items-center justify-between text-left hover:bg-gray-50 p-6 transition-colors group"
           >
-            <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" />
-              Filtres pratiques
+            <h3 className="font-semibold text-gray-900 flex items-center gap-3">
+              <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                <Clock className="w-5 h-5 text-blue-600" />
+              </div>
+              <div>
+                <div className="font-semibold">Options pratiques</div>
+                <div className="text-sm text-gray-500 font-normal">Durée, escales, temps d&apos;attente</div>
+              </div>
             </h3>
-            {expandedSections.practical ? <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" /> : <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />}
+            {expandedSections.practical ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
           </button>
           
           {expandedSections.practical && (
-            <div className="mt-4 space-y-4">
+            <div className="px-6 pb-6 space-y-6">
               {/* Flight Duration */}
               <div>
-                <Label className="text-sm font-medium mb-2 block">
-                  Durée maximale: {(filters.maxDuration as number) || 24}h
-                </Label>
+                <div className="flex items-center justify-between mb-3">
+                  <Label className="text-sm font-semibold text-gray-700">Durée maximale du vol</Label>
+                  <span className="text-sm font-medium text-emerald-600">
+                    {(filters.maxDuration as number) || 24} heures
+                  </span>
+                </div>
                 <Slider
                   value={[(filters.maxDuration as number) || 24]}
                   onValueChange={([value]) => handleFilterUpdate('maxDuration', value)}
@@ -165,6 +220,11 @@ export default function FlightFiltersAdvanced({
                   step={1}
                   className="w-full"
                 />
+                <div className="flex justify-between mt-2 text-xs text-gray-500">
+                  <span>1h</span>
+                  <span>12h</span>
+                  <span>24h</span>
+                </div>
               </div>
 
               {/* Number of Stops */}

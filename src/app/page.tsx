@@ -1,6 +1,6 @@
 import { Hero } from '@/components/layout';
 // import HeroSimple from '@/components/layout/HeroSimple';
-import { PopularDestinations } from '@/components/content';
+import { PopularDestinations, Testimonials, FAQ } from '@/components/content';
 import WhatsAppButton from '@/components/WhatsAppButton';
 
 export const metadata = {
@@ -25,6 +25,8 @@ export default function HomePage() {
     <>
       <Hero />
       <PopularDestinations />
+      <Testimonials />
+      <FAQ />
       <WhatsAppButton />
     </>
   );

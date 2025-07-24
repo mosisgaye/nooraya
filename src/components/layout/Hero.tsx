@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon, Plane, Hotel, Car, ArrowUpDown, MapPin, Users, ChevronDown } from "lucide-react";
+import { CalendarIcon, Plane, ArrowUpDown, MapPin, Users, ChevronDown } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
@@ -71,7 +71,6 @@ const airports = [
 
 export default function Hero() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("flights");
   const [fromValue, setFromValue] = useState("");
   const [toValue, setToValue] = useState("");
   const [fromSearch, setFromSearch] = useState("");
@@ -87,11 +86,6 @@ export default function Hero() {
   const [nearbyAirports, setNearbyAirports] = useState(false);
   const [directFlights, setDirectFlights] = useState(false);
 
-  const tabs = [
-    { id: "flights", label: "Vols", icon: Plane },
-    { id: "hotels", label: "Hôtels", icon: Hotel },
-    { id: "cars", label: "Location de voiture", icon: Car },
-  ];
 
   const filterAirports = (searchTerm: string) => {
     if (!searchTerm) return airports;
@@ -152,36 +146,9 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="min-h-[70vh] sm:min-h-[60vh] md:min-h-[50vh] lg:min-h-[60vh] bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-800">
-      {/* Navigation */}
-      <nav className="pt-4 pb-3 sm:pt-6 sm:pb-4">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4">
-          <div className="max-w-6xl">
-            <div className="flex flex-wrap gap-2 sm:flex-nowrap sm:space-x-2 justify-center sm:justify-start sm:pl-6 md:pl-8">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center space-x-1 sm:space-x-2 px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${
-                    activeTab === tab.id
-                      ? 'bg-white text-gray-900 shadow-xl'
-                      : 'text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm'
-                  }`}
-                >
-                  <Icon className="w-3 h-3 sm:w-4 sm:h-4" />
-                  <span className="hidden xs:inline">{tab.label}</span>
-                </button>
-              );
-            })}
-            </div>
-          </div>
-        </div>
-      </nav>
-
+    <div className="min-h-[50vh] sm:min-h-[45vh] md:min-h-[40vh] lg:min-h-[45vh] bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-800">
       {/* Hero Content */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
         {/* Search Form */}
         <div className="p-3 sm:p-6 md:p-8 max-w-6xl">
           {/* Title */}
@@ -225,6 +192,7 @@ export default function Hero() {
                   onFocus={() => setShowFromDropdown(true)}
                   onBlur={() => setTimeout(() => setShowFromDropdown(false), 200)}
                   placeholder="Départ - Pays, ville"
+                  autoComplete="off"
                   className="pl-10 pr-4 h-12 sm:h-14 md:h-16 lg:h-20 text-sm sm:text-base border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
                 />
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center">
@@ -284,6 +252,7 @@ export default function Hero() {
                   onFocus={() => setShowToDropdown(true)}
                   onBlur={() => setTimeout(() => setShowToDropdown(false), 200)}
                   placeholder="Destination - Pays, ville"
+                  autoComplete="off"
                   className="pl-10 pr-4 h-12 sm:h-14 md:h-16 lg:h-20 text-sm sm:text-base border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-emerald-400 transition-all duration-200 bg-white shadow-lg hover:shadow-xl"
                 />
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center">

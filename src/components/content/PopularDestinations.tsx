@@ -1,10 +1,8 @@
 'use client';
 
-'use client';
-
 import React, { useState, memo } from 'react';
 import { Map, ChevronLeft, ChevronRight } from 'lucide-react';
-import LazyImage from '../ui/lazy-image';
+import Image from 'next/image';
 
 interface Destination {
   id: number;
@@ -18,43 +16,51 @@ interface Destination {
 const destinations: Destination[] = [
   {
     id: 1,
-    name: 'Tokyo',
-    country: 'Japon',
-    image: 'https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg',
-    bestTime: 'Avril - Mai',
-    averagePrice: 1200
-  },
-  {
-    id: 2,
-    name: 'Rome',
-    country: 'Italie',
-    image: 'https://images.pexels.com/photos/532263/pexels-photo-532263.jpeg',
-    bestTime: 'Avril - Juin',
-    averagePrice: 850
-  },
-  {
-    id: 3,
-    name: 'Cancún',
-    country: 'Mexique',
-    image: 'https://images.pexels.com/photos/1802255/pexels-photo-1802255.jpeg',
-    bestTime: 'Décembre - Avril',
-    averagePrice: 950
-  },
-  {
-    id: 4,
     name: 'Marrakech',
     country: 'Maroc',
-    image: 'https://images.pexels.com/photos/4245826/pexels-photo-4245826.jpeg',
+    image: '/images/marrakech.jpg',
     bestTime: 'Mars - Mai',
     averagePrice: 700
   },
   {
-    id: 5,
-    name: 'Santorini',
-    country: 'Grèce',
-    image: 'https://images.pexels.com/photos/1010657/pexels-photo-1010657.jpeg',
+    id: 2,
+    name: 'Dubaï',
+    country: 'Émirats Arabes Unis',
+    image: '/images/dubai.jpg',
+    bestTime: 'Octobre - Avril',
+    averagePrice: 1200
+  },
+  {
+    id: 3,
+    name: 'Côte d&apos;Azur',
+    country: 'France',
+    image: '/images/piscine.jpg',
     bestTime: 'Mai - Septembre',
-    averagePrice: 1100
+    averagePrice: 950
+  },
+  {
+    id: 4,
+    name: 'Séjour Détente',
+    country: 'Destinations Variées',
+    image: '/images/vacance.jpg',
+    bestTime: 'Toute l&apos;année',
+    averagePrice: 850
+  },
+  {
+    id: 5,
+    name: 'Hôtels de Luxe',
+    country: 'International',
+    image: '/images/hotel1.jpg',
+    bestTime: 'Selon destination',
+    averagePrice: 1500
+  },
+  {
+    id: 6,
+    name: 'Resorts & Spas',
+    country: 'International',
+    image: '/images/hotel2.jpg',
+    bestTime: 'Toute l&apos;année',
+    averagePrice: 1300
   }
 ];
 
@@ -148,7 +154,7 @@ const PopularDestinations: React.FC = () => {
           </button>
           <button 
             onClick={handleNext}
-            disabled={currentIndex >= destinations.length - 1}
+            disabled={currentIndex >= destinations.length - visibleCount}
             className="p-3 rounded-full bg-white shadow-lg border-2 border-gray-200 text-gray-600 hover:border-green-500 hover:text-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-green-500/20"
             aria-label="Destination suivante"
           >
@@ -172,14 +178,14 @@ const DestinationCard: React.FC<DestinationCardProps> = memo(({ destination }) =
       tabIndex={0}
       aria-label={`Découvrir ${destination.name}, ${destination.country} - Meilleure période: ${destination.bestTime}, Prix moyen: ${destination.averagePrice} euros`}
     >
-      <LazyImage 
+      <Image 
         src={destination.image} 
         alt={`${destination.name}, ${destination.country} - Destination populaire`}
         fill
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         className="object-cover transition-transform duration-300 group-hover:scale-110 will-change-transform"
-        placeholder="blur"
         quality={80}
+        priority={destination.id <= 3}
       />
       
       {/* Overlay avec gradient */}
