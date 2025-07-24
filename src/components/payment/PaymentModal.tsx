@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, Loader2 } from 'lucide-react';
+import { X, Loader2, CreditCard, Calendar, Lock } from 'lucide-react';
 import Image from 'next/image';
+import { useCurrency } from '@/hooks/useCurrency';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -35,6 +36,18 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   const [step, setStep] = useState<'method' | 'details' | 'processing'>('method');
   const [retryCount, setRetryCount] = useState(0);
   const [statusMessage, setStatusMessage] = useState<string>('');
+  
+  // Card payment fields
+  const [cardDetails, setCardDetails] = useState({
+    cardNumber: '',
+    cardholderName: '',
+    cardholderSurname: '',
+    expiryMonth: '',
+    expiryYear: '',
+    cvv: ''
+  });
+  
+  const { currentCurrency, formatPrice, convertPrice } = useCurrency();
 
   const paymentMethods = [
     {
@@ -61,15 +74,42 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   ];
 
   const handlePayment = async (isRetry: boolean = false) => {
-    if (!selectedMethod || !phoneNumber) {
-      onError('Veuillez remplir tous les champs');
+    if (!selectedMethod) {
+      onError('Veuillez sélectionner un moyen de paiement');
       return;
     }
 
-    // Validate phone number format
-    if (phoneNumber.length !== 9 || !/^[0-9]+$/.test(phoneNumber)) {
-      onError('Le numéro doit contenir exactement 9 chiffres');
-      return;
+    // Validation pour carte bancaire
+    if (selectedMethod === 'card') {
+      if (!cardDetails.cardNumber || !cardDetails.cardholderName || !cardDetails.cardholderSurname || 
+          !cardDetails.expiryMonth || !cardDetails.expiryYear || !cardDetails.cvv) {
+        onError('Veuillez remplir tous les champs de la carte');
+        return;
+      }
+      
+      // Valider le numéro de carte (16 chiffres)
+      if (!/^[0-9]{16}$/.test(cardDetails.cardNumber.replace(/\s/g, ''))) {
+        onError('Le numéro de carte doit contenir 16 chiffres');
+        return;
+      }
+      
+      // Valider le CVV (3 ou 4 chiffres)
+      if (!/^[0-9]{3,4}$/.test(cardDetails.cvv)) {
+        onError('Le code CVV doit contenir 3 ou 4 chiffres');
+        return;
+      }
+    } else {
+      // Validation pour mobile money
+      if (!phoneNumber) {
+        onError('Veuillez entrer votre numéro de téléphone');
+        return;
+      }
+      
+      // Validate phone number format
+      if (phoneNumber.length !== 9 || !/^[0-9]+$/.test(phoneNumber)) {
+        onError('Le numéro doit contenir exactement 9 chiffres');
+        return;
+      }
     }
 
     setIsProcessing(true);
@@ -85,7 +125,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         body: JSON.stringify({
           bookingId: bookingData.id,
           paymentMethod: selectedMethod,
-          phone: phoneNumber,
+          phone: selectedMethod === 'card' ? undefined : phoneNumber,
+          cardDetails: selectedMethod === 'card' ? cardDetails : undefined,
           amount: bookingData.amount,
           bookingType: bookingData.type,
           bookingData: bookingData.details
@@ -178,7 +219,11 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-gray-600">Montant à payer</span>
               <span className="text-2xl font-bold text-green-600">
-                {bookingData.amount.toLocaleString('fr-FR')} {bookingData.currency}
+                {formatPrice(
+                  convertPrice(bookingData.amount, 'EUR', currentCurrency),
+                  currentCurrency,
+                  false
+                )}
               </span>
             </div>
             <p className="text-sm text-gray-600">{bookingData.description}</p>
@@ -217,7 +262,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             </div>
           )}
 
-          {/* Phone Number Input */}
+          {/* Payment Details Input */}
           {step === 'details' && (
             <div className="space-y-4">
               <button
@@ -227,27 +272,158 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
                 ← Changer de méthode
               </button>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Numéro de téléphone
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                    +221
-                  </span>
-                  <input
-                    type="tel"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, ''))}
-                    placeholder="77 123 45 67"
-                    className="w-full pl-14 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    maxLength={9}
-                  />
-                </div>
-                <p className="text-xs text-gray-500 mt-1">
-                  Vous recevrez une demande de validation sur ce numéro
-                </p>
-              </div>
+              {/* Formulaire pour carte bancaire */}
+              {selectedMethod === 'card' ? (
+                <>
+                  <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Lock className="w-4 h-4 text-gray-600" />
+                      <span className="text-sm font-medium text-gray-700">Paiement sécurisé</span>
+                    </div>
+                    <p className="text-xs text-gray-500">Vos informations sont protégées et cryptées</p>
+                  </div>
+
+                  {/* Numéro de carte */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Numéro de carte
+                    </label>
+                    <div className="relative">
+                      <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                      <input
+                        type="text"
+                        value={cardDetails.cardNumber}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
+                          const formatted = value.match(/.{1,4}/g)?.join(' ') || value;
+                          setCardDetails({ ...cardDetails, cardNumber: formatted });
+                        }}
+                        placeholder="1234 5678 9012 3456"
+                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        maxLength={19}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Nom et prénom */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Prénom
+                      </label>
+                      <input
+                        type="text"
+                        value={cardDetails.cardholderName}
+                        onChange={(e) => setCardDetails({ ...cardDetails, cardholderName: e.target.value })}
+                        placeholder="Jean"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Nom
+                      </label>
+                      <input
+                        type="text"
+                        value={cardDetails.cardholderSurname}
+                        onChange={(e) => setCardDetails({ ...cardDetails, cardholderSurname: e.target.value })}
+                        placeholder="Dupont"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Date d'expiration et CVV */}
+                  <div className="grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Mois
+                      </label>
+                      <div className="relative">
+                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                        <input
+                          type="text"
+                          value={cardDetails.expiryMonth}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/\D/g, '');
+                            if (value.length <= 2 && parseInt(value) <= 12) {
+                              setCardDetails({ ...cardDetails, expiryMonth: value });
+                            }
+                          }}
+                          placeholder="MM"
+                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                          maxLength={2}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Année
+                      </label>
+                      <input
+                        type="text"
+                        value={cardDetails.expiryYear}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, '');
+                          setCardDetails({ ...cardDetails, expiryYear: value });
+                        }}
+                        placeholder="YY"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        maxLength={2}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        CVV
+                      </label>
+                      <div className="relative">
+                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                        <input
+                          type="text"
+                          value={cardDetails.cvv}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/\D/g, '');
+                            setCardDetails({ ...cardDetails, cvv: value });
+                          }}
+                          placeholder="123"
+                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                          maxLength={4}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-700">
+                    <p className="font-medium mb-1">Information importante :</p>
+                    <p>Le montant sera débité immédiatement de votre compte. Assurez-vous d&apos;avoir des fonds suffisants.</p>
+                  </div>
+                </>
+              ) : (
+                /* Formulaire pour mobile money */
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Numéro de téléphone
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                        +221
+                      </span>
+                      <input
+                        type="tel"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, ''))}
+                        placeholder="77 123 45 67"
+                        className="w-full pl-14 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        maxLength={9}
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Vous recevrez une demande de validation sur ce numéro
+                    </p>
+                  </div>
+                </>
+              )}
 
               {retryCount > 0 && (
                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-sm text-yellow-700">
@@ -257,7 +433,9 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
               <button
                 onClick={() => handlePayment(false)}
-                disabled={!phoneNumber || phoneNumber.length < 9 || isProcessing}
+                disabled={isProcessing || (selectedMethod === 'card' ? 
+                  (!cardDetails.cardNumber || !cardDetails.cardholderName || !cardDetails.cvv) : 
+                  (!phoneNumber || phoneNumber.length < 9))}
                 className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
                 {retryCount > 0 ? 'Réessayer le paiement' : 'Procéder au paiement'}

@@ -2,11 +2,13 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-export type Currency = 'XOF' | 'EUR' | 'USD';
+export type Currency = 'XOF' | 'EUR' | 'USD' | 'MAD';
 
 interface ExchangeRates {
   EUR_TO_XOF: number;
   USD_TO_XOF: number;
+  EUR_TO_MAD: number;
+  USD_TO_MAD: number;
   lastUpdated: string;
 }
 
@@ -24,10 +26,13 @@ const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined
 const DEFAULT_RATES: ExchangeRates = {
   EUR_TO_XOF: 655.957,
   USD_TO_XOF: 615.5,
+  EUR_TO_MAD: 10.8,
+  USD_TO_MAD: 10.1,
   lastUpdated: new Date().toISOString(),
 };
 
 const WEST_AFRICA_COUNTRIES = ['SN', 'ML', 'CI', 'BF', 'BJ', 'TG', 'NE', 'GW'];
+const MOROCCO_COUNTRY = 'MA';
 const CURRENCY_STORAGE_KEY = 'nooraya_currency_preference';
 const RATES_STORAGE_KEY = 'nooraya_exchange_rates';
 const RATES_CACHE_DURATION = 3600000; // 1 hour in milliseconds
@@ -43,7 +48,7 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
       try {
         // Load currency preference
         const savedCurrency = localStorage.getItem(CURRENCY_STORAGE_KEY) as Currency;
-        if (savedCurrency && ['XOF', 'EUR', 'USD'].includes(savedCurrency)) {
+        if (savedCurrency && ['XOF', 'EUR', 'USD', 'MAD'].includes(savedCurrency)) {
           setCurrentCurrency(savedCurrency);
         } else {
           // Auto-detect based on location (simplified version)
@@ -82,6 +87,8 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
       
       if (WEST_AFRICA_COUNTRIES.includes(data.country_code)) {
         setCurrentCurrency('XOF');
+      } else if (data.country_code === MOROCCO_COUNTRY) {
+        setCurrentCurrency('MAD');
       } else if (data.continent_code === 'EU') {
         setCurrentCurrency('EUR');
       } else {
@@ -123,10 +130,24 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
       return amount * exchangeRates.USD_TO_XOF;
     } else if (fromCurrency === 'XOF' && targetCurrency === 'USD') {
       return amount / exchangeRates.USD_TO_XOF;
+    } else if (fromCurrency === 'EUR' && targetCurrency === 'MAD') {
+      return amount * exchangeRates.EUR_TO_MAD;
+    } else if (fromCurrency === 'MAD' && targetCurrency === 'EUR') {
+      return amount / exchangeRates.EUR_TO_MAD;
+    } else if (fromCurrency === 'USD' && targetCurrency === 'MAD') {
+      return amount * exchangeRates.USD_TO_MAD;
+    } else if (fromCurrency === 'MAD' && targetCurrency === 'USD') {
+      return amount / exchangeRates.USD_TO_MAD;
     } else if (fromCurrency === 'EUR' && targetCurrency === 'USD') {
       return (amount * exchangeRates.EUR_TO_XOF) / exchangeRates.USD_TO_XOF;
     } else if (fromCurrency === 'USD' && targetCurrency === 'EUR') {
       return (amount * exchangeRates.USD_TO_XOF) / exchangeRates.EUR_TO_XOF;
+    } else if (fromCurrency === 'XOF' && targetCurrency === 'MAD') {
+      // XOF to MAD via EUR
+      return (amount / exchangeRates.EUR_TO_XOF) * exchangeRates.EUR_TO_MAD;
+    } else if (fromCurrency === 'MAD' && targetCurrency === 'XOF') {
+      // MAD to XOF via EUR
+      return (amount / exchangeRates.EUR_TO_MAD) * exchangeRates.EUR_TO_XOF;
     }
 
     return amount;
@@ -163,6 +184,11 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
           minimumFractionDigits: 2,
           maximumFractionDigits: 2,
         });
+        break;
+        
+      case 'MAD':
+        // Dirham marocain avec 2 décimales
+        formatted = Math.round(amount * 100) / 100 + ' DHS';
         break;
         
       default:

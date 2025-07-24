@@ -24,14 +24,18 @@ const sizeClasses = {
 export function PriceDisplay({
   amount,
   currency,
-  showSecondary = true,
+  showSecondary = true, // eslint-disable-line @typescript-eslint/no-unused-vars
   className,
   size = 'md',
   showCommissionLabel = false,
 }: PriceDisplayProps) {
-  const { currentCurrency, formatPrice } = useCurrency();
+  const { currentCurrency, formatPrice, convertPrice } = useCurrency();
 
-  const formattedPrice = formatPrice(amount, currency, showSecondary && currency !== currentCurrency);
+  // Convertir le montant dans la devise actuelle
+  const convertedAmount = currentCurrency !== currency ? convertPrice(amount, currency, currentCurrency) : amount;
+  
+  // Afficher uniquement dans la devise actuelle sans conversion secondaire
+  const formattedPrice = formatPrice(convertedAmount, currentCurrency, false);
 
   return (
     <div className={cn('price-display', className)}>

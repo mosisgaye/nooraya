@@ -4,6 +4,8 @@ import { createClient } from '@/lib/supabase/server';
 const DEFAULT_RATES = {
   EUR_TO_XOF: 655.957,
   USD_TO_XOF: 615.5,
+  EUR_TO_MAD: 10.8,
+  USD_TO_MAD: 10.1,
   lastUpdated: new Date().toISOString(),
 };
 
@@ -31,6 +33,8 @@ export async function GET() {
         return NextResponse.json({
           EUR_TO_XOF: cachedRates.eur_to_xof,
           USD_TO_XOF: cachedRates.usd_to_xof,
+          EUR_TO_MAD: cachedRates.eur_to_mad || DEFAULT_RATES.EUR_TO_MAD,
+          USD_TO_MAD: cachedRates.usd_to_mad || DEFAULT_RATES.USD_TO_MAD,
           lastUpdated: cachedRates.created_at,
         });
       }
@@ -43,6 +47,8 @@ export async function GET() {
     await supabase.from('exchange_rates').insert({
       eur_to_xof: freshRates.EUR_TO_XOF,
       usd_to_xof: freshRates.USD_TO_XOF,
+      eur_to_mad: freshRates.EUR_TO_MAD,
+      usd_to_mad: freshRates.USD_TO_MAD,
     });
 
     return NextResponse.json(freshRates);
@@ -69,6 +75,8 @@ export async function POST(request: NextRequest) {
     await supabase.from('exchange_rates').insert({
       eur_to_xof: freshRates.EUR_TO_XOF,
       usd_to_xof: freshRates.USD_TO_XOF,
+      eur_to_mad: freshRates.EUR_TO_MAD,
+      usd_to_mad: freshRates.USD_TO_MAD,
     });
 
     return NextResponse.json({
@@ -101,14 +109,18 @@ async function fetchFreshRates() {
     // Calculate XOF rates
     // Note: XOF might not be directly available, so we use the fixed rate
     const EUR_TO_XOF = eurData.conversion_rates?.XOF || DEFAULT_RATES.EUR_TO_XOF;
+    const EUR_TO_MAD = eurData.conversion_rates?.MAD || DEFAULT_RATES.EUR_TO_MAD;
     
-    // Calculate USD to XOF using EUR as intermediate
+    // Calculate USD to XOF and MAD using EUR as intermediate
     const EUR_TO_USD = eurData.conversion_rates?.USD || 1.1;
     const USD_TO_XOF = EUR_TO_XOF / EUR_TO_USD;
+    const USD_TO_MAD = EUR_TO_MAD / EUR_TO_USD;
 
     return {
       EUR_TO_XOF,
       USD_TO_XOF,
+      EUR_TO_MAD,
+      USD_TO_MAD,
       lastUpdated: new Date().toISOString(),
     };
   } catch (error) {

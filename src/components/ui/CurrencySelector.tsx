@@ -23,6 +23,7 @@ const currencies: CurrencyOption[] = [
   { code: 'XOF', name: 'Franc CFA', symbol: 'FCFA', flag: '🇸🇳' },
   { code: 'EUR', name: 'Euro', symbol: '€', flag: '🇪🇺' },
   { code: 'USD', name: 'Dollar US', symbol: '$', flag: '🇺🇸' },
+  { code: 'MAD', name: 'Dirham', symbol: 'DHS', flag: '🇲🇦' },
 ];
 
 export function CurrencySelector() {
